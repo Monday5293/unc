@@ -45,17 +45,250 @@
       <view class="title-line"></view>
     </view>
 
-    <view class="form-container parchment-card ink-border">
-      <dynamic-form
-        wx:if="{{effectiveRule && effectiveRule.length > 0}}"
-        rule="{{effectiveRule}}"
-        value="{{formData}}"
-        bind:change="onFormChange"
-      />
-      <view wx:else class="form-empty">
+    <!-- ============================================ -->
+    <!-- COC 7e 调查员卡 手动属性表 -->
+    <!-- ============================================ -->
+    <view wx:if="{{system === 'COC'}}" class="sheet-block">
+      <!-- 基本信息 -->
+      <view class="sheet-card" style="background: linear-gradient(135deg, {{accentColor}}15 0%, {{accentColor}}05 100%); border: 1px solid {{accentColor}}22;">
+        <view class="sheet-card-title" style="color: {{accentColor}};">基本信息</view>
+        <view class="info-grid-2">
+          <view class="info-row"><text class="info-label">姓名</text><text class="info-value">{{card.formData.name || '-'}}</text></view>
+          <view class="info-row"><text class="info-label">职业</text><text class="info-value">{{card.formData.occupation || '-'}}</text></view>
+          <view class="info-row"><text class="info-label">年龄</text><text class="info-value">{{card.formData.age || '-'}}</text></view>
+          <view class="info-row"><text class="info-label">性别</text><text class="info-value">{{card.formData.gender || '-'}}</text></view>
+          <view class="info-row info-row-full"><text class="info-label">居住地</text><text class="info-value">{{card.formData.residence || '-'}}</text></view>
+        </view>
+      </view>
+
+      <!-- 8 项属性 -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <view class="sheet-card-header">
+          <text class="sheet-card-title" style="color: {{accentColor}};">基础属性 · ATTRIBUTES</text>
+          <text class="sheet-card-sub">1 – 99</text>
+        </view>
+        <view class="attr-grid-4">
+          <view wx:for="{{cocAttributes}}" wx:key="key" class="attr-cell">
+            <text class="attr-abbr">{{item.abbr}}</text>
+            <text class="attr-value" style="color: {{item.color}};">{{item.value}}</text>
+            <text class="attr-label">{{item.label}}</text>
+            <view class="attr-bar-bg"><view class="attr-bar" style="width: {{item.value < 99 ? item.value : 99}}%; background: {{item.color}}; opacity: 0.5;"></view></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- HP · MP · SAN -->
+      <view class="stat-row-3">
+        <view class="stat-card" style="background: linear-gradient(180deg, #ef444418 0%, #ef444408 100%); border: 1px solid #ef444433;">
+          <text class="stat-card-label">生命值</text>
+          <text class="stat-card-val hp-color">{{card.formData.hp || '-'}}<text class="stat-card-max"> / {{card.formData.hpMax || '-'}}</text></text>
+          <text class="stat-card-abbr">HP</text>
+        </view>
+        <view class="stat-card" style="background: linear-gradient(180deg, #6366f118 0%, #6366f108 100%); border: 1px solid #6366f133;">
+          <text class="stat-card-label">魔法值</text>
+          <text class="stat-card-val mp-color">{{card.formData.mp || '-'}}</text>
+          <text class="stat-card-abbr">MP</text>
+        </view>
+        <view class="stat-card" style="background: linear-gradient(180deg, #8b5cf618 0%, #8b5cf608 100%); border: 1px solid #8b5cf633;">
+          <text class="stat-card-label">理智值</text>
+          <text class="stat-card-val san-color">{{card.formData.san || '-'}}</text>
+          <text class="stat-card-abbr">SAN</text>
+        </view>
+      </view>
+
+      <!-- 技能 -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <view class="sheet-card-header">
+          <text class="sheet-card-title" style="color: {{accentColor}};">技能 · SKILLS</text>
+        </view>
+        <view wx:for="{{cocSkills}}" wx:key="key" class="skill-row">
+          <view class="skill-header">
+            <text class="skill-label">{{item.label}}</text>
+            <text class="skill-pct" style="color: {{accentColor}};">{{item.value}}%</text>
+          </view>
+          <view class="skill-bar-bg"><view class="skill-bar" style="width: {{item.value < 99 ? item.value : 99}}%; background: {{item.value >= 70 ? '#f59e0b' : (item.value >= 50 ? accentColor : '#64748b')}}; opacity: 0.7;"></view></view>
+        </view>
+      </view>
+
+      <!-- 背景故事 -->
+      <view wx:if="{{card.formData.backstory}}" class="sheet-card" style="background: {{accentColor}}06; border-left: 3px solid {{accentColor}}55;">
+        <view class="sheet-card-header">
+          <text class="section-icon">📜</text>
+          <text class="sheet-card-title" style="color: {{accentColor}};">背景故事</text>
+        </view>
+        <text class="story-text">{{card.formData.backstory}}</text>
+      </view>
+    </view>
+
+    <!-- ============================================ -->
+    <!-- DND 5e 冒险者卡 手动属性表 -->
+    <!-- ============================================ -->
+    <view wx:if="{{system === 'DND'}}" class="sheet-block">
+      <!-- 基本信息 -->
+      <view class="sheet-card" style="background: linear-gradient(135deg, {{accentColor}}18 0%, {{accentColor}}06 100%); border: 1px solid {{accentColor}}28;">
+        <view class="dnd-id-row">
+          <view class="dnd-id-icon" style="background: linear-gradient(135deg, {{accentColor}}20, {{accentColor}}0A); box-shadow: 0 0 0 2px {{accentColor}}33;">🐉</view>
+          <view class="dnd-id-info">
+            <text class="dnd-id-name">{{card.formData.name || '无名冒险者'}}</text>
+            <view class="dnd-id-sub">
+              <view class="dnd-level-tag" style="background: {{accentColor}}18; color: {{accentColor}};">Lv.{{card.formData.level || '?'}}</view>
+              <text class="dnd-id-race">{{card.formData.race || '?'}}</text>
+            </view>
+            <view class="dnd-id-extra">
+              <text>{{card.formData.background || '?'}}</text>
+              <text class="dot-sep">·</text>
+              <text>{{card.formData.alignment || '?'}}</text>
+              <text class="dot-sep">·</text>
+              <text>熟练 +{{card.formData.profBonus || '?'}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 六项属性 -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <text class="sheet-card-title" style="color: {{accentColor}};">六项属性 · ABILITY SCORES</text>
+        <view class="dnd-attr-grid">
+          <view wx:for="{{dndAbilities}}" wx:key="key" class="dnd-attr-cell">
+            <text class="dnd-attr-mod" style="color: {{item.modColor}};">{{item.mod}}</text>
+            <text class="dnd-attr-val">{{item.value}}</text>
+            <text class="dnd-attr-abbr">{{item.abbr}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 战斗数据 -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <text class="sheet-card-title" style="color: {{accentColor}};">战斗数据 · COMBAT</text>
+        <!-- HP 条 -->
+        <view class="hp-bar-section">
+          <view class="hp-bar-header">
+            <text class="hp-bar-label">生命值 HP</text>
+            <text class="hp-bar-val" style="color: {{dndHpColor}};">{{card.formData.hp || '-'}} / {{card.formData.hpMax || '-'}}</text>
+          </view>
+          <view class="hp-bar-bg"><view class="hp-bar-fill" style="width: {{dndHpPercent}}%; background: {{dndHpColor}};"></view></view>
+        </view>
+        <!-- 数据卡片 -->
+        <view class="combat-row">
+          <view class="combat-card"><text class="combat-val" style="color: {{accentColor}};">{{card.formData.ac || '-'}}</text><text class="combat-abbr">AC</text></view>
+          <view class="combat-card"><text class="combat-val" style="color: {{accentColor}};">{{card.formData.hitDice || '-'}}</text><text class="combat-abbr">HD</text></view>
+          <view class="combat-card"><text class="combat-val" style="color: {{accentColor}};">+{{card.formData.profBonus || '?'}}</text><text class="combat-abbr">PROF</text></view>
+        </view>
+      </view>
+
+      <!-- 豁免与技能 -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <text class="sheet-card-title" style="color: {{accentColor}};">豁免 · 技能 · SAVES &amp; SKILLS</text>
+        <view wx:if="{{dndSavingThrows.length > 0}}" class="tag-section">
+          <text class="tag-section-label">SAVING THROWS</text>
+          <view class="tag-row">
+            <view wx:for="{{dndSavingThrows}}" wx:key="key" class="tag-item" style="background: {{accentColor}}18; color: {{accentColor}}; border: 1px solid {{accentColor}}22;">{{item.label}}</view>
+          </view>
+        </view>
+        <view wx:if="{{dndSkillProfs.length > 0}}" class="tag-section">
+          <text class="tag-section-label">SKILL PROFICIENCIES</text>
+          <view class="tag-row">
+            <view wx:for="{{dndSkillProfs}}" wx:key="key" class="tag-item" style="background: {{accentColor}}10; color: {{accentColor}}; border: 1px solid {{accentColor}}18;">{{item.label}}</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 特性与专长 -->
+      <view wx:if="{{card.formData.features}}" class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <text class="sheet-card-title" style="color: {{accentColor}};">特性与专长 · FEATURES</text>
+        <text class="story-text">{{card.formData.features}}</text>
+      </view>
+
+      <!-- 背景故事 -->
+      <view wx:if="{{card.formData.backstory}}" class="sheet-card" style="background: linear-gradient(90deg, {{accentColor}}08 0%, transparent 100%); border-left: 3px solid {{accentColor}}55;">
+        <view class="sheet-card-header">
+          <text class="section-icon">⚔️</text>
+          <text class="sheet-card-title" style="color: {{accentColor}};">背景故事</text>
+        </view>
+        <text class="story-text">{{card.formData.backstory}}</text>
+      </view>
+    </view>
+
+    <!-- ============================================ -->
+    <!-- Daggerheart 英雄卡 手动属性表 -->
+    <!-- ============================================ -->
+    <view wx:if="{{system === 'DAGGERHEART'}}" class="sheet-block">
+      <!-- 基本信息 -->
+      <view class="sheet-card" style="background: linear-gradient(135deg, {{accentColor}}15 0%, {{accentColor}}05 100%); border: 1px solid {{accentColor}}22;">
+        <view class="dnd-id-row">
+          <view class="dnd-id-icon" style="background: linear-gradient(135deg, {{accentColor}}20, {{accentColor}}0A); box-shadow: 0 0 0 2px {{accentColor}}33;">🗡️</view>
+          <view class="dnd-id-info">
+            <text class="dnd-id-name">{{card.formData.name || '无名英雄'}}</text>
+            <view class="dnd-id-sub">
+              <view class="dnd-level-tag" style="background: {{accentColor}}18; color: {{accentColor}};">阶层 {{card.formData.tier || '?'}}</view>
+              <text class="dnd-id-race">{{card.formData.community || '?'}}</text>
+            </view>
+            <view class="dnd-id-extra">
+              <text>Lv.{{card.formData.level || '?'}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 六项属性 -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <text class="sheet-card-title" style="color: {{accentColor}};">属性 · ATTRIBUTES</text>
+        <view class="dh-attr-grid">
+          <view wx:for="{{dhAttributes}}" wx:key="key" class="dh-attr-cell">
+            <view class="dh-attr-top">
+              <text class="dh-attr-label">{{item.label}}</text>
+              <text class="dh-attr-abbr">{{item.abbr}}</text>
+            </view>
+            <text class="dh-attr-val" style="color: {{item.color}};">{{item.fmt}}</text>
+            <view class="attr-bar-bg"><view class="attr-bar" style="width: {{item.barPct}}%; background: {{item.color}}; opacity: 0.5;"></view></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 耐力与压力 -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <text class="sheet-card-title" style="color: {{accentColor}};">耐力 · 压力 · STAMINA &amp; STRESS</text>
+        <!-- 耐力 -->
+        <view class="hp-bar-section">
+          <view class="hp-bar-header">
+            <text class="hp-bar-label">耐力 STAMINA</text>
+            <text class="hp-bar-val" style="color: #22c55e;">{{card.formData.stamina || '-'}} / {{card.formData.staminaMax || '-'}}</text>
+          </view>
+          <view class="hp-bar-bg"><view class="hp-bar-fill" style="width: {{dhStaminaPct}}%; background: #22c55e; opacity: 0.7;"></view></view>
+        </view>
+        <!-- 压力 -->
+        <view class="hp-bar-section">
+          <view class="hp-bar-header">
+            <text class="hp-bar-label">压力 STRESS</text>
+            <text class="hp-bar-val" style="color: #ef4444;">{{card.formData.stress || '-'}} / {{card.formData.stressMax || '-'}}</text>
+          </view>
+          <view class="hp-bar-bg"><view class="hp-bar-fill" style="width: {{dhStressPct}}%; background: #ef4444; opacity: 0.7;"></view></view>
+        </view>
+      </view>
+
+      <!-- 经验标记 -->
+      <view wx:if="{{card.formData.experience}}" class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <text class="sheet-card-title" style="color: {{accentColor}};">经验标记 · EXPERIENCE</text>
+        <text class="story-text">{{card.formData.experience}}</text>
+      </view>
+
+      <!-- 英雄过往 -->
+      <view wx:if="{{card.formData.backstory}}" class="sheet-card" style="background: linear-gradient(90deg, {{accentColor}}08 0%, transparent 100%); border-left: 3px solid {{accentColor}}55;">
+        <view class="sheet-card-header">
+          <text class="section-icon">📖</text>
+          <text class="sheet-card-title" style="color: {{accentColor}};">英雄过往</text>
+        </view>
+        <text class="story-text">{{card.formData.backstory}}</text>
+      </view>
+    </view>
+
+    <!-- ============================================ -->
+    <!-- 未知规则系统 -->
+    <!-- ============================================ -->
+    <view wx:if="{{system !== 'COC' && system !== 'DND' && system !== 'DAGGERHEART'}}" class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+      <view class="form-empty">
         <text class="empty-icon">📋</text>
-        <text class="empty-text">该规则系统暂无表单配置</text>
-        <text class="empty-desc">请使用网页设计器创建表单模板</text>
+        <text class="empty-text">暂不支持该规则系统的属性表展示</text>
       </view>
     </view>
 

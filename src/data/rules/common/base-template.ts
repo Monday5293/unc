@@ -3,7 +3,7 @@
  * 所有规则系统的表单模板共享相同的结构
  * 提供通用的 option 配置和模板构建辅助函数
  */
-import type { FormTemplate } from '@/types/card'
+import type { FormRule, FormTemplate } from '@/types/card'
 
 // ==================== 通用表单选项 ====================
 
@@ -37,7 +37,7 @@ export function createFormTemplate(
   system: string,
   name: string,
   description: string,
-  rule: unknown[],
+  rule: FormRule[],
   option?: Record<string, unknown>,
 ): FormTemplate {
   return {
@@ -55,7 +55,7 @@ export function createFormTemplate(
 /**
  * 创建标题组件（用于表单顶部）
  */
-export function createTitleField(title: string, description: string) {
+export function createTitleField(title: string, description: string): FormRule {
   return {
     type: 'title',
     title,
@@ -66,8 +66,8 @@ export function createTitleField(title: string, description: string) {
 /**
  * 创建文本输入组件
  */
-export function createInputField(field: string, title: string, placeholder = '', required = false) {
-  const rule: Record<string, unknown> = {
+export function createInputField(field: string, title: string, placeholder = '', required = false): FormRule {
+  const rule: FormRule = {
     type: 'input',
     field,
     title,
@@ -89,16 +89,16 @@ export function createInputNumberField(
   defaultValue = 0,
   min?: number,
   max?: number,
-) {
-  const rule: Record<string, unknown> = {
+): FormRule {
+  const rule: FormRule = {
     type: 'inputNumber',
     field,
     title,
     value: defaultValue,
     props: {} as Record<string, unknown>,
   }
-  if (min !== undefined) (rule.props as Record<string, unknown>).min = min
-  if (max !== undefined) (rule.props as Record<string, unknown>).max = max
+  if (min !== undefined) rule.props = { ...rule.props, min }
+  if (max !== undefined) rule.props = { ...rule.props, max }
   return rule
 }
 
@@ -111,7 +111,7 @@ export function createSliderField(
   defaultValue = 50,
   min = 1,
   max = 99,
-) {
+): FormRule {
   return {
     type: 'slider',
     field,
@@ -129,7 +129,7 @@ export function createSelectField(
   title: string,
   options: { label: string; value: string }[],
   placeholder = '请选择',
-) {
+): FormRule {
   return {
     type: 'select',
     field,
@@ -147,7 +147,7 @@ export function createTextareaField(
   title: string,
   placeholder = '',
   rows = 4,
-) {
+): FormRule {
   return {
     type: 'textarea',
     field,
@@ -160,7 +160,7 @@ export function createTextareaField(
 /**
  * 创建折叠分组组件
  */
-export function createGroupField(title: string, children: unknown[]) {
+export function createGroupField(title: string, children: FormRule[]): FormRule {
   return {
     type: 'fcGroup',
     title,
@@ -171,7 +171,7 @@ export function createGroupField(title: string, children: unknown[]) {
 /**
  * 创建栅格行组件
  */
-export function createRowField(children: unknown[]) {
+export function createRowField(children: FormRule[]): FormRule {
   return {
     type: 'row',
     children,
@@ -181,7 +181,7 @@ export function createRowField(children: unknown[]) {
 /**
  * 创建栅格列组件
  */
-export function createColField(span: number, children: unknown[]) {
+export function createColField(span: number, children: FormRule[]): FormRule {
   return {
     type: 'col',
     props: { span },
@@ -196,7 +196,7 @@ export function createCheckboxField(
   field: string,
   title: string,
   options: { label: string; value: string }[],
-) {
+): FormRule {
   return {
     type: 'checkbox',
     field,

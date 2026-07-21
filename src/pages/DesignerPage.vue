@@ -274,35 +274,36 @@ onMounted(async () => {
 })
 
 // ==================== 小程序预览 ====================
+// TODO: 暂时隐藏 JSON 渲染功能 - 小程序预览
 // 保存当前表单并跳转到小程序预览
-async function goMiniApp() {
-  if (!designerRef.value) {
-    showToast('设计器未就绪')
-    return
-  }
-  const rule = JSON.parse(designerRef.value.getJson())
-  if (!rule || !rule.length) {
-    showToast('请先添加表单组件')
-    return
-  }
-  previewing.value = true
-  try {
-    const option = designerRef.value.getOptions()
-    const saved = await saveForm({
-      name: saveFormName.value.trim() || '预览规则',
-      system: 'CUSTOM',
-      description: saveFormDescription.value.trim(),
-      rule,
-      option,
-    })
-    // 跳转到小程序自定义表单预览页
-    router.push({ name: 'miniapp-custom-card', params: { formId: saved.id } })
-  } catch (e) {
-    showToast('预览失败：' + (e as Error).message)
-  } finally {
-    previewing.value = false
-  }
-}
+// async function goMiniApp() {
+//   if (!designerRef.value) {
+//     showToast('设计器未就绪')
+//     return
+//   }
+//   const rule = JSON.parse(designerRef.value.getJson())
+//   if (!rule || !rule.length) {
+//     showToast('请先添加表单组件')
+//     return
+//   }
+//   previewing.value = true
+//   try {
+//     const option = designerRef.value.getOptions()
+//     const saved = await saveForm({
+//       name: saveFormName.value.trim() || '预览规则',
+//       system: 'CUSTOM',
+//       description: saveFormDescription.value.trim(),
+//       rule,
+//       option,
+//     })
+//     // 跳转到小程序自定义表单预览页
+//     router.push({ name: 'miniapp-custom-card', params: { formId: saved.id } })
+//   } catch (e) {
+//     showToast('预览失败：' + (e as Error).message)
+//   } finally {
+//     previewing.value = false
+//   }
+// }
 </script>
 
 <template>
@@ -380,13 +381,14 @@ async function goMiniApp() {
 
         <div class="mx-2 h-5 w-px bg-ink-600" />
 
-        <button
+        <!-- TODO: 暂时隐藏 JSON 渲染功能 - 小程序预览按钮 -->
+        <!-- <button
           class="rounded-md border border-coc px-3 py-1.5 text-xs text-coc transition hover:bg-coc hover:text-ink-900 disabled:opacity-50"
           :disabled="previewing"
           @click="goMiniApp"
         >
           {{ previewing ? '生成中...' : '→ 小程序预览' }}
-        </button>
+        </button> -->
       </div>
     </header>
 

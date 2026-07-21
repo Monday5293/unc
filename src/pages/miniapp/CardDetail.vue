@@ -1,14 +1,17 @@
 <script setup lang="ts">
 /**
  * 角色卡详情页
- * 展示角色卡完整信息 + 表单渲染
+ * 展示角色卡完整信息 + 手动属性表（替换 JSON 表单渲染）
  * 支持 COC / DND / Daggerheart 三种规则系统
  */
-import { computed, ref, watch } from 'vue'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCardStore } from '@/stores/cards'
 import { computePreviewStats } from '@/data/rules/common/preview-stats'
 import { loggerPage } from '@/utils/logger'
+import CocSheet from '@/components/CocSheet.vue'
+import DndSheet from '@/components/DndSheet.vue'
+import DaggerheartSheet from '@/components/DaggerheartSheet.vue'
 const logger = loggerPage('CardDetail')
 
 const route = useRoute()
@@ -26,33 +29,16 @@ const systemInfo = computed(() =>
   card.value ? store.getSystemInfo(card.value.system) : null,
 )
 
-/** 表单规则（深拷贝以避免修改原数据） */
-const formRule = computed(() => {
-  if (!systemInfo.value?.rule) return []
-  return JSON.parse(JSON.stringify(systemInfo.value.rule))
+/** 选择对应规则的手动属性表组件 */
+const sheetComponent = computed(() => {
+  if (!card.value) return null
+  switch (card.value.system) {
+    case 'COC': return CocSheet
+    case 'DND': return DndSheet
+    case 'DAGGERHEART': return DaggerheartSheet
+    default: return null
+  }
 })
-
-/** 表单配置选项 */
-const formOption = computed(() => ({
-  ...(systemInfo.value?.option || {}),
-  submitBtn: false,
-  resetBtn: false,
-}))
-
-/** 表单数据双向绑定 */
-const formData = ref<Record<string, unknown>>({})
-
-// 监听卡片数据变化，同步表单数据
-watch(
-  card,
-  (c) => {
-    logger.info('card加载', { id: c?.id, system: c?.system, name: c?.name })
-    if (c) {
-      formData.value = { ...c.formData }
-    }
-  },
-  { immediate: true },
-)
 
 function goBack() {
   router.back()
@@ -75,18 +61,6 @@ const previewStats = computed(() => {
 
 /** 强调色 */
 const accentColor = computed(() => systemInfo.value?.accentColor || '#C8A046')
-
-/** 表单数据变更时同步到 store */
-function onFormChange(data: Record<string, unknown>) {
-  logger.info('onFormChange', { cardId: card.value?.id, fieldCount: Object.keys(data).length })
-  if (card.value) {
-    store.updateCardFormData(card.value.id, data)
-  }
-}
-
-watch(formData, (v) => {
-  onFormChange(v)
-}, { deep: true })
 </script>
 
 <template>
@@ -142,7 +116,7 @@ watch(formData, (v) => {
       </button>
     </header>
 
-    <template v-if="card && systemInfo && formRule.length">
+    <template v-if="card && systemInfo">
       <section
         class="relative overflow-hidden px-5 pb-6 pt-6"
         :style="{
@@ -240,14 +214,12 @@ watch(formData, (v) => {
           <div class="h-px flex-1 bg-ink-700" />
         </div>
 
-        <div
-          class="parchment-card ink-border animate-scale-in rounded-xl p-4 text-ink-900"
-        >
-          <FormCreate
-            v-model="formData"
-            :rule="formRule"
-            :option="formOption"
-          />
+        <!-- 手动属性表（按规则系统渲染） -->
+        <template v-if="sheetComponent">
+          <component :is="sheetComponent" :card="card" :accent-color="accentColor" />
+        </template>
+        <div v-else class="rounded-lg bg-ink-900/50 p-6 text-center text-xs text-parchment-200/50">
+          暂不支持该规则系统的属性表展示
         </div>
 
         <div class="mt-4 space-y-1 text-[10px] text-parchment-200/40">

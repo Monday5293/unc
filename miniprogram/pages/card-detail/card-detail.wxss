@@ -150,12 +150,455 @@
   background-color: rgba(232, 220, 196, 0.1);
 }
 
-.form-container {
-  padding: 32rpx;
-  border-radius: 24rpx;
-  color: #1A1714;
+/* ============================================ */
+/* 手动属性表通用样式 */
+/* ============================================ */
+.sheet-block {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
 }
 
+.sheet-card {
+  padding: 24rpx;
+  border-radius: 16rpx;
+}
+
+.sheet-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.sheet-card-title {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+}
+
+.sheet-card-sub {
+  font-size: 18rpx;
+  color: rgba(232, 220, 196, 0.2);
+}
+
+.section-icon {
+  font-size: 20rpx;
+  opacity: 0.3;
+  margin-right: 8rpx;
+}
+
+/* ===== 基本信息网格 ===== */
+.info-grid-2 {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.info-row {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  padding: 8rpx 0;
+  box-sizing: border-box;
+}
+
+.info-row:nth-child(odd) {
+  padding-right: 16rpx;
+}
+
+.info-row:nth-child(even) {
+  padding-left: 16rpx;
+}
+
+.info-row-full {
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.info-label {
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.4);
+  flex-shrink: 0;
+  margin-right: 16rpx;
+}
+
+.info-value {
+  font-size: 22rpx;
+  color: #E8DCC4;
+  text-align: right;
+}
+
+/* ===== COC 4列属性 ===== */
+.attr-grid-4 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.attr-cell {
+  width: calc(25% - 12rpx);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 4rpx;
+  border-radius: 12rpx;
+  background-color: rgba(255, 255, 255, 0.03);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.attr-abbr {
+  font-size: 16rpx;
+  letter-spacing: 2rpx;
+  color: rgba(232, 220, 196, 0.2);
+}
+
+.attr-value {
+  font-size: 36rpx;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 4rpx;
+}
+
+.attr-label {
+  font-size: 18rpx;
+  color: rgba(232, 220, 196, 0.4);
+  margin-top: 2rpx;
+}
+
+.attr-bar-bg {
+  width: 100%;
+  height: 4rpx;
+  border-radius: 100rpx;
+  background-color: rgba(232, 220, 196, 0.08);
+  margin-top: 8rpx;
+  overflow: hidden;
+}
+
+.attr-bar {
+  height: 100%;
+  border-radius: 100rpx;
+}
+
+/* ===== COC HP/MP/SAN 三列卡片 ===== */
+.stat-row-3 {
+  display: flex;
+  gap: 16rpx;
+}
+
+.stat-card {
+  flex: 1;
+  padding: 24rpx 16rpx;
+  border-radius: 16rpx;
+  text-align: center;
+}
+
+.stat-card-label {
+  display: block;
+  font-size: 18rpx;
+  letter-spacing: 2rpx;
+  color: rgba(232, 220, 196, 0.3);
+}
+
+.stat-card-val {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  margin-top: 8rpx;
+}
+
+.stat-card-max {
+  font-size: 24rpx;
+  color: rgba(232, 220, 196, 0.2);
+}
+
+.stat-card-abbr {
+  display: block;
+  font-size: 18rpx;
+  color: rgba(232, 220, 196, 0.2);
+  margin-top: 4rpx;
+}
+
+.hp-color { color: #ef4444; }
+.mp-color { color: #818cf8; }
+.san-color { color: #a78bfa; }
+
+/* ===== 技能行 ===== */
+.skill-row {
+  margin-bottom: 16rpx;
+}
+
+.skill-row:last-child {
+  margin-bottom: 0;
+}
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.skill-label {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.5);
+}
+
+.skill-pct {
+  font-size: 20rpx;
+  font-weight: 700;
+}
+
+.skill-bar-bg {
+  height: 12rpx;
+  border-radius: 100rpx;
+  background-color: rgba(232, 220, 196, 0.08);
+  overflow: hidden;
+}
+
+.skill-bar {
+  height: 100%;
+  border-radius: 100rpx;
+}
+
+/* ===== DND 身份卡 ===== */
+.dnd-id-row {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+}
+
+.dnd-id-icon {
+  width: 128rpx;
+  height: 128rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24rpx;
+  font-size: 70rpx;
+}
+
+.dnd-id-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.dnd-id-name {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #E8DCC4;
+}
+
+.dnd-id-sub {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 8rpx;
+}
+
+.dnd-level-tag {
+  padding: 4rpx 16rpx;
+  border-radius: 100rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.dnd-id-race {
+  font-size: 24rpx;
+  color: rgba(232, 220, 196, 0.5);
+}
+
+.dnd-id-extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 12rpx;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.3);
+}
+
+.dot-sep {
+  color: rgba(232, 220, 196, 0.15);
+}
+
+/* ===== DND 6项属性 ===== */
+.dnd-attr-grid {
+  display: flex;
+  gap: 12rpx;
+}
+
+.dnd-attr-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 4rpx;
+  border-radius: 12rpx;
+  background-color: rgba(255, 255, 255, 0.03);
+  text-align: center;
+}
+
+.dnd-attr-mod {
+  font-size: 36rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.dnd-attr-val {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: rgba(232, 220, 196, 0.6);
+  margin-top: 4rpx;
+}
+
+.dnd-attr-abbr {
+  font-size: 16rpx;
+  letter-spacing: 2rpx;
+  color: rgba(232, 220, 196, 0.2);
+  margin-top: 4rpx;
+}
+
+/* ===== HP 进度条 ===== */
+.hp-bar-section {
+  margin-bottom: 24rpx;
+}
+
+.hp-bar-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.hp-bar-label {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.4);
+}
+
+.hp-bar-val {
+  font-size: 20rpx;
+  font-weight: 700;
+}
+
+.hp-bar-bg {
+  height: 20rpx;
+  border-radius: 100rpx;
+  background-color: rgba(232, 220, 196, 0.08);
+  overflow: hidden;
+}
+
+.hp-bar-fill {
+  height: 100%;
+  border-radius: 100rpx;
+}
+
+/* ===== 战斗数据卡片 ===== */
+.combat-row {
+  display: flex;
+  gap: 16rpx;
+}
+
+.combat-card {
+  flex: 1;
+  padding: 16rpx;
+  border-radius: 12rpx;
+  background-color: rgba(255, 255, 255, 0.04);
+  text-align: center;
+}
+
+.combat-val {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.combat-abbr {
+  display: block;
+  font-size: 16rpx;
+  letter-spacing: 2rpx;
+  color: rgba(232, 220, 196, 0.25);
+  margin-top: 4rpx;
+}
+
+/* ===== 标签区域 ===== */
+.tag-section {
+  margin-bottom: 16rpx;
+}
+
+.tag-section:last-child {
+  margin-bottom: 0;
+}
+
+.tag-section-label {
+  display: block;
+  font-size: 18rpx;
+  letter-spacing: 2rpx;
+  color: rgba(232, 220, 196, 0.25);
+  margin-bottom: 12rpx;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.tag-item {
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+}
+
+/* ===== Daggerheart 3列属性 ===== */
+.dh-attr-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.dh-attr-cell {
+  width: calc(33.33% - 11rpx);
+  padding: 16rpx;
+  border-radius: 12rpx;
+  background-color: rgba(255, 255, 255, 0.03);
+  box-sizing: border-box;
+}
+
+.dh-attr-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dh-attr-label {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.4);
+}
+
+.dh-attr-abbr {
+  font-size: 16rpx;
+  letter-spacing: 2rpx;
+  color: rgba(232, 220, 196, 0.15);
+}
+
+.dh-attr-val {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  margin-top: 8rpx;
+}
+
+/* ===== 故事文本 ===== */
+.story-text {
+  display: block;
+  font-size: 22rpx;
+  line-height: 1.6;
+  color: rgba(232, 220, 196, 0.55);
+}
+
+/* ===== 空状态 ===== */
 .form-empty {
   padding: 80rpx 40rpx;
   text-align: center;
@@ -171,16 +614,17 @@
   display: block;
   font-size: 28rpx;
   font-weight: 500;
-  color: #2A2724;
+  color: rgba(232, 220, 196, 0.5);
   margin-bottom: 8rpx;
 }
 
 .empty-desc {
   display: block;
   font-size: 22rpx;
-  color: rgba(26, 23, 20, 0.6);
+  color: rgba(232, 220, 196, 0.3);
 }
 
+/* ===== 元信息 ===== */
 .meta-info {
   margin-top: 32rpx;
   padding: 0 8rpx;
