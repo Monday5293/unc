@@ -1,0 +1,366 @@
+{
+  "id": "form-1784149730467",
+  "name": "CC",
+  "system": "CUSTOM",
+  "description": "",
+  "rule": [
+    {
+      "type": "fcTable",
+      "props": {
+        "rule": {
+          "row": 2,
+          "col": 2,
+          "style": {
+            "0:2": {
+              "width": "288px"
+            },
+            "1:0": {
+              "height": "undefinedpx"
+            },
+            "0:0": {
+              "width": "undefinedpx"
+            }
+          },
+          "class": {},
+          "layout": []
+        },
+        "border": true,
+        "mini": false
+      },
+      "children": [
+        {
+          "type": "elImage",
+          "title": "",
+          "style": {
+            "marginTop": "60px",
+            "marginBottom": "60px",
+            "height": "100px",
+            "width": "100px"
+          },
+          "props": {
+            "src": "https://static.form-create.com/example.png"
+          },
+          "_fc_id": "id_Fhl7mrmkfad8b6c",
+          "name": "ref_Fc9amrmkfad8b7c",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "elImage",
+          "slot": "0:0"
+        },
+        {
+          "type": "fcTable",
+          "props": {
+            "rule": {
+              "row": 3,
+              "col": 2,
+              "style": {
+                "0:0": {
+                  "width": "79px"
+                }
+              },
+              "class": {},
+              "layout": []
+            }
+          },
+          "children": [
+            {
+              "type": "div",
+              "title": "",
+              "native": true,
+              "style": {
+                "whiteSpace": "pre-line",
+                "width": "100%"
+              },
+              "children": [
+                "姓名："
+              ],
+              "_fc_id": "id_F3ximrmkg1ciboc",
+              "name": "ref_Fd5rmrmkg1cibpc",
+              "display": true,
+              "hidden": false,
+              "_fc_drag_tag": "text",
+              "slot": "0:0"
+            },
+            {
+              "type": "input",
+              "field": "Fvmlmrmkj7vgc2c",
+              "title": "输入框",
+              "info": "",
+              "$required": false,
+              "_fc_id": "id_Fplsmrmkj7vgc3c",
+              "name": "ref_Fc4omrmkj7vgc4c",
+              "display": true,
+              "hidden": false,
+              "_fc_drag_tag": "input",
+              "slot": "0:1"
+            },
+            {
+              "type": "div",
+              "title": "",
+              "native": true,
+              "style": {
+                "whiteSpace": "pre-line",
+                "width": "100%"
+              },
+              "children": [
+                "玩家："
+              ],
+              "_fc_id": "id_Fpupmrmkidkgbvc",
+              "name": "ref_F7hymrmkidkgbwc",
+              "display": true,
+              "hidden": false,
+              "_fc_drag_tag": "text",
+              "slot": "1:0"
+            },
+            {
+              "type": "input",
+              "field": "Fet0mrmkjan3c5c",
+              "title": "输入框",
+              "info": "",
+              "$required": false,
+              "_fc_id": "id_Fl3cmrmkjan3c6c",
+              "name": "ref_Fepfmrmkjan3c7c",
+              "display": true,
+              "hidden": false,
+              "_fc_drag_tag": "input",
+              "slot": "1:1"
+            },
+            {
+              "type": "div",
+              "title": "",
+              "native": true,
+              "style": {
+                "whiteSpace": "pre-line",
+                "width": "100%"
+              },
+              "children": [
+                "职业："
+              ],
+              "_fc_id": "id_Fsammrmkij4bbzc",
+              "name": "ref_F1frmrmkij4bc0c",
+              "display": true,
+              "hidden": false,
+              "_fc_drag_tag": "text",
+              "slot": "2:0"
+            },
+            {
+              "type": "input",
+              "field": "Fe1pmrmkjbj3c8c",
+              "title": "输入框",
+              "info": "",
+              "$required": false,
+              "_fc_id": "id_F4jvmrmkjbj3c9c",
+              "name": "ref_Fac7mrmkjbj3cac",
+              "display": true,
+              "hidden": false,
+              "_fc_drag_tag": "input",
+              "slot": "2:1"
+            }
+          ],
+          "_fc_id": "id_Fhlkmrmkfpbib9c",
+          "name": "ref_F33smrmkfpbibac",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "fcTable",
+          "slot": "0:1"
+        },
+        {
+          "type": "fcTable",
+          "props": {
+            "rule": {
+              "row": 2,
+              "col": 2,
+              "style": {
+                "0:0": {
+                  "width": "73px"
+                }
+              },
+              "class": {},
+              "layout": []
+            }
+          },
+          "children": [
+            {
+              "type": "div",
+              "title": "",
+              "native": true,
+              "style": {
+                "whiteSpace": "pre-line",
+                "width": "100%"
+              },
+              "children": [
+                "年龄："
+              ],
+              "_fc_id": "id_F43gmrmkkurkdec",
+              "name": "ref_Ft3umrmkkurkdfc",
+              "display": true,
+              "hidden": true,
+              "_fc_drag_tag": "text",
+              "slot": "0:0"
+            },
+            {
+              "type": "input",
+              "field": "Fszfmrmkktgtdbc",
+              "title": "输入框",
+              "info": "",
+              "$required": false,
+              "_fc_id": "id_Fru1mrmkktgtdcc",
+              "name": "ref_F3p9mrmkktgtddc",
+              "display": true,
+              "hidden": true,
+              "_fc_drag_tag": "input",
+              "slot": "0:1"
+            },
+            {
+              "type": "div",
+              "title": "",
+              "native": true,
+              "style": {
+                "whiteSpace": "pre-line",
+                "width": "100%"
+              },
+              "children": [
+                "住地："
+              ],
+              "_fc_id": "id_Fahcmrmkkvmodgc",
+              "name": "ref_F0tpmrmkkvmodhc",
+              "display": true,
+              "hidden": true,
+              "_fc_drag_tag": "text",
+              "slot": "1:0"
+            },
+            {
+              "type": "input",
+              "field": "F9zamrmkkwumdic",
+              "title": "输入框",
+              "info": "",
+              "$required": false,
+              "_fc_id": "id_F97tmrmkkwumdjc",
+              "name": "ref_Fru0mrmkkwumdkc",
+              "display": true,
+              "hidden": true,
+              "_fc_drag_tag": "input",
+              "slot": "1:1"
+            }
+          ],
+          "_fc_id": "id_F406mrmkkjt5ctc",
+          "name": "ref_Fsa0mrmkkjt5cuc",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "fcTable",
+          "slot": "1:0"
+        },
+        {
+          "type": "fcTable",
+          "props": {
+            "rule": {
+              "row": 2,
+              "col": 2,
+              "style": {
+                "0:0": {
+                  "width": "76px"
+                }
+              },
+              "class": {},
+              "layout": []
+            }
+          },
+          "children": [
+            {
+              "type": "div",
+              "title": "",
+              "native": true,
+              "style": {
+                "whiteSpace": "pre-line",
+                "width": "100%"
+              },
+              "children": [
+                "性别："
+              ],
+              "_fc_id": "id_Fvk0mrmklfppe5c",
+              "name": "ref_Fqo8mrmklfppe6c",
+              "display": true,
+              "hidden": true,
+              "_fc_drag_tag": "text",
+              "slot": "0:0"
+            },
+            {
+              "type": "input",
+              "field": "F1qemrmklimne9c",
+              "title": "输入框",
+              "info": "",
+              "$required": false,
+              "_fc_id": "id_Fnx3mrmklimneac",
+              "name": "ref_F5acmrmklimnebc",
+              "display": true,
+              "hidden": true,
+              "_fc_drag_tag": "input",
+              "slot": "0:1"
+            },
+            {
+              "type": "div",
+              "title": "",
+              "native": true,
+              "style": {
+                "whiteSpace": "pre-line",
+                "width": "100%"
+              },
+              "children": [
+                "出身："
+              ],
+              "_fc_id": "id_F1vjmrmklgkue7c",
+              "name": "ref_Ffb7mrmklgkue8c",
+              "display": true,
+              "hidden": true,
+              "_fc_drag_tag": "text",
+              "slot": "1:0"
+            },
+            {
+              "type": "input",
+              "field": "Ft1vmrmkljwkecc",
+              "title": "输入框",
+              "info": "",
+              "$required": false,
+              "_fc_id": "id_F6uemrmkljwkedc",
+              "name": "ref_Fynpmrmkljwkeec",
+              "display": true,
+              "hidden": true,
+              "_fc_drag_tag": "input",
+              "slot": "1:1"
+            }
+          ],
+          "_fc_id": "id_F2vsmrmkl4qvdnc",
+          "name": "ref_F6romrmkl4qvdoc",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "fcTable",
+          "slot": "1:1"
+        }
+      ],
+      "_fc_id": "id_Fbixmrmkdmr6aec",
+      "name": "ref_Fhmqmrmkdmr6afc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "fcTable"
+    }
+  ],
+  "option": {
+    "form": {
+      "inline": false,
+      "hideRequiredAsterisk": false,
+      "labelPosition": "right",
+      "size": "default",
+      "labelWidth": "125px"
+    },
+    "resetBtn": {
+      "show": false,
+      "innerText": "重置"
+    },
+    "submitBtn": {
+      "show": true,
+      "innerText": "提交"
+    }
+  },
+  "createdAt": "2026-07-15T21:08:50.467Z",
+  "updatedAt": "2026-07-15T21:08:50.467Z"
+}

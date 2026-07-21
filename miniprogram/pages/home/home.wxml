@@ -1,0 +1,183 @@
+<view class="home-page">
+  <view class="header" style="box-shadow: inset 0 -2px 0 {{currentSystemInfo.accentColor}}55">
+    <view class="header-top">
+      <view class="header-title-row">
+        <text class="header-title">跑团角色卡</text>
+        <view class="system-tag" style="color: {{currentSystemInfo.accentColor}}; background-color: {{currentSystemInfo.accentColor}}22;">
+          {{currentSystemInfo.logo}} {{currentSystemInfo.fullName}}
+        </view>
+      </view>
+    </view>
+
+    <view class="search-section">
+      <view class="search-box">
+        <text class="search-icon">🔍</text>
+        <input
+          class="search-input"
+          placeholder="搜索角色名 / 职业 / 关键词..."
+          placeholder-class="search-placeholder"
+          value="{{searchInput}}"
+          bindinput="onSearchInput"
+        />
+        <text wx:if="{{searchInput}}" class="search-clear" bindtap="onClearSearch">清除</text>
+      </view>
+    </view>
+
+    <view class="tab-section">
+      <rule-tab
+        systems="{{systems}}"
+        current="{{currentSystem}}"
+        bind:change="onSystemChange"
+        bind:add="goImport"
+        bind:pressSystem="onSystemPress"
+      />
+    </view>
+  </view>
+
+  <view class="content">
+    <view class="content-header">
+      <text class="card-count">共 {{filteredCards.length}} 张角色卡</text>
+      <view class="add-btn" bindtap="openAddDialog">
+        <text class="add-icon">+</text>
+        <text class="add-text">新建角色卡</text>
+      </view>
+    </view>
+
+    <view wx:if="{{filteredCards.length > 0}}" class="card-grid">
+      <view wx:for="{{filteredCards}}" wx:key="id" class="card-grid-item">
+        <card-item
+          card="{{item}}"
+          system="{{currentSystemInfo}}"
+          bind:click="onCardClick"
+          bind:toggleFav="onToggleFav"
+          bind:longPress="onCardLongPress"
+        />
+      </view>
+    </view>
+
+    <view wx:else class="empty-state">
+      <text class="empty-logo">{{currentSystemInfo.logo}}</text>
+      <text class="empty-text">没有匹配的角色卡</text>
+      <view class="empty-btn" bindtap="openAddDialog">+ 新建一张</view>
+    </view>
+  </view>
+
+  <view wx:if="{{addDialogVisible}}" class="dialog-mask" bindtap="cancelAddDialog">
+    <view class="dialog-box" catchtap="stopPropagation">
+      <view class="dialog-header">
+        <text class="dialog-title">✨ 新建角色卡</text>
+        <text class="dialog-close" bindtap="cancelAddDialog">✕</text>
+      </view>
+      <view class="dialog-body">
+        <view class="dialog-tip">
+          <text style="color: {{currentSystemInfo.accentColor}}">{{currentSystemInfo.logo}} {{currentSystemInfo.name}}</text>
+          <text> · 将基于此规则系统的表单创建新角色卡</text>
+        </view>
+        <view class="form-item">
+          <text class="form-label">角色名称 *</text>
+          <input
+            class="form-input"
+            placeholder="输入角色名称"
+            placeholder-class="input-placeholder"
+            value="{{newCardName}}"
+            bindinput="onNewCardNameInput"
+          />
+        </view>
+        <view class="form-item">
+          <text class="form-label">简介</text>
+          <textarea
+            class="form-textarea"
+            placeholder="角色的简短描述..."
+            placeholder-class="input-placeholder"
+            value="{{newCardDesc}}"
+            bindinput="onNewCardDescInput"
+          />
+        </view>
+        <view class="dialog-actions">
+          <view class="btn-cancel" bindtap="cancelAddDialog">取消</view>
+          <view class="btn-primary {{!newCardName.trim() ? 'disabled' : ''}}" bindtap="doAddCard">创建</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{deleteDialogVisible}}" class="dialog-mask" bindtap="cancelDeleteDialog">
+    <view class="dialog-box dialog-danger" catchtap="stopPropagation">
+      <view class="dialog-body text-center">
+        <text class="dialog-icon">⚠️</text>
+        <text class="dialog-title">删除角色卡？</text>
+        <text wx:if="{{cardToDelete}}" class="dialog-desc">「{{cardToDelete.name}}」将被永久删除，此操作不可撤销。</text>
+      </view>
+      <view class="dialog-bottom-actions">
+        <view class="bottom-btn" bindtap="cancelDeleteDialog">取消</view>
+        <view class="bottom-btn danger" bindtap="confirmDelete">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{systemActionDialogVisible && systemActionTarget}}" class="dialog-mask" bindtap="cancelSystemActionDialog">
+    <view class="dialog-box action-sheet" catchtap="stopPropagation">
+      <view class="action-header">
+        <text class="dialog-close" bindtap="cancelSystemActionDialog">✕</text>
+        <view class="action-icon" style="background-color: {{systemActionTarget.accentColor}}22; box-shadow: 0 0 0 2px {{systemActionTarget.accentColor}}55 inset;">
+          {{systemActionTarget.logo}}
+        </view>
+        <text class="action-title">{{systemActionTarget.fullName}}</text>
+        <text class="action-subtitle">{{systemActionTarget.isCustom ? '自定义规则' : '预置规则'}}</text>
+      </view>
+
+      <view class="action-list">
+        <view class="action-item" bindtap="exportCurrentSystem">
+          <view class="action-icon-wrap export">
+            <text>📤</text>
+          </view>
+          <view class="action-info">
+            <text class="action-name">导出 JSON</text>
+            <text class="action-desc">将规则表单导出为 JSON 文件</text>
+          </view>
+          <text class="action-arrow">›</text>
+        </view>
+
+        <view class="action-item danger" bindtap="openDeleteSystemDialog">
+          <view class="action-icon-wrap delete">
+            <text>🗑️</text>
+          </view>
+          <view class="action-info">
+            <text class="action-name danger">{{systemActionTarget.isCustom ? '删除规则' : '隐藏规则'}}</text>
+            <text class="action-desc">
+              {{systemActionTarget.isCustom ? '永久删除此规则及其角色卡' : '从列表中隐藏此规则'}}
+            </text>
+          </view>
+          <text class="action-arrow">›</text>
+        </view>
+      </view>
+
+      <view class="action-cancel" bindtap="cancelSystemActionDialog">
+        取消
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{deleteSystemDialogVisible}}" class="dialog-mask" bindtap="cancelDeleteSystemDialog">
+    <view class="dialog-box dialog-danger" catchtap="stopPropagation">
+      <view class="dialog-body text-center">
+        <text class="dialog-icon">⚠️</text>
+        <text class="dialog-title">{{systemToDelete.isCustom ? '删除规则系统？' : '隐藏规则系统？'}}</text>
+        <text wx:if="{{systemToDelete}}" class="dialog-desc">
+          <block wx:if="{{systemToDelete.isCustom}}">
+            「{{systemToDelete.name}}」及其下所有角色卡将被永久删除，此操作不可撤销。
+          </block>
+          <block wx:else>
+            「{{systemToDelete.name}}」将从列表中隐藏，可通过重置恢复。
+          </block>
+        </text>
+      </view>
+      <view class="dialog-bottom-actions">
+        <view class="bottom-btn" bindtap="cancelDeleteSystemDialog">取消</view>
+        <view class="bottom-btn danger" bindtap="confirmDeleteSystem">
+          {{systemToDelete.isCustom ? '删除' : '隐藏'}}
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

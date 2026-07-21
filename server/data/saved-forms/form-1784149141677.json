@@ -1,0 +1,41 @@
+{
+  "id": "form-1784149141677",
+  "name": "预览规则",
+  "system": "CUSTOM",
+  "description": "",
+  "rule": [
+    {
+      "type": "slider",
+      "field": "F0gemrmkb8ycabc",
+      "title": "滑块",
+      "info": "",
+      "$required": false,
+      "_fc_id": "id_F55umrmkb8ycacc",
+      "name": "ref_Fcxfmrmkb8ycadc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "slider"
+    }
+  ],
+  "option": {
+    "form": {
+      "inline": false,
+      "hideRequiredAsterisk": false,
+      "labelPosition": "right",
+      "size": "default",
+      "labelWidth": "125px",
+      "class": "的啊"
+    },
+    "resetBtn": {
+      "show": false,
+      "innerText": "重置"
+    },
+    "submitBtn": {
+      "show": true,
+      "innerText": "提交"
+    },
+    "formName": "的"
+  },
+  "createdAt": "2026-07-15T20:59:01.677Z",
+  "updatedAt": "2026-07-15T20:59:01.677Z"
+}

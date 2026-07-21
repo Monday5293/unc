@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "跑团角色卡",
+  "navigationBarBackgroundColor": "#1A1714",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#1A1714",
+  "usingComponents": {
+    "rule-tab": "/components/rule-tab/rule-tab",
+    "card-item": "/components/card-item/card-item"
+  }
+}

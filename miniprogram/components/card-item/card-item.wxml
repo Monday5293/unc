@@ -1,0 +1,35 @@
+<view
+  class="card-item parchment-card ink-border {{pressing ? 'pressing' : ''}}"
+  style="--accent: {{system.accentColor}}"
+  bindtap="onClickCard"
+  bindtouchstart="onTouchStart"
+  bindtouchend="onTouchEnd"
+  bindtouchcancel="onTouchCancel"
+>
+  <view class="accent-bar" style="background-color: {{system.accentColor}}"></view>
+
+  <view class="fav-btn" catchtap="onToggleFav">
+    <text wx:if="{{card.favorite}}" class="fav-icon active" style="color: {{system.accentColor}}">★</text>
+    <text wx:else class="fav-icon" style="color: #1A1714">☆</text>
+  </view>
+
+  <view class="card-header">
+    <view class="card-avatar" style="background-color: {{system.accentColor}}22; box-shadow: 0 0 0 1px {{system.accentColor}}55 inset">
+      <text wx:if="{{!card.avatar}}" class="avatar-text">{{system.logo}}</text>
+      <image wx:else src="{{card.avatar}}" class="avatar-img" mode="aspectFill"></image>
+    </view>
+    <view class="card-info">
+      <text class="card-name">{{card.name}}</text>
+      <text class="card-player">{{card.player}}</text>
+    </view>
+  </view>
+
+  <view class="card-desc" wx:if="{{card.description}}">{{card.description}}</view>
+
+  <view class="card-fields" wx:if="{{firstFields.length > 0}}">
+    <view wx:for="{{firstFields}}" wx:key="label" class="field-tag">
+      <text class="field-label">{{item.label}}</text>
+      <text class="field-value">{{item.value}}</text>
+    </view>
+  </view>
+</view>

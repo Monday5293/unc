@@ -1,0 +1,114 @@
+{
+  "id": "form-1784145353579",
+  "name": "预览表单",
+  "system": "COC",
+  "description": "",
+  "rule": [
+    {
+      "type": "checkbox",
+      "field": "Fwnjmrmi2ptmabc",
+      "title": "多选框",
+      "info": "",
+      "effect": {
+        "fetch": ""
+      },
+      "$required": false,
+      "options": [
+        {
+          "label": "选项01",
+          "value": "1"
+        },
+        {
+          "label": "选项02",
+          "value": "2"
+        },
+        {
+          "label": "选项03",
+          "value": "3"
+        }
+      ],
+      "_fc_id": "id_Ffkzmrmi2ptmacc",
+      "name": "ref_Fu32mrmi2ptmadc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "checkbox"
+    },
+    {
+      "type": "checkbox",
+      "field": "Fzn3mrmi2qemaec",
+      "title": "多选框",
+      "info": "",
+      "effect": {
+        "fetch": ""
+      },
+      "$required": false,
+      "options": [
+        {
+          "label": "选项01",
+          "value": "1"
+        },
+        {
+          "label": "选项02",
+          "value": "2"
+        },
+        {
+          "label": "选项03",
+          "value": "3"
+        }
+      ],
+      "_fc_id": "id_Fxxjmrmi2qemafc",
+      "name": "ref_Fukjmrmi2qemagc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "checkbox"
+    },
+    {
+      "type": "checkbox",
+      "field": "Frewmrmi2rdkahc",
+      "title": "多选框",
+      "info": "",
+      "effect": {
+        "fetch": ""
+      },
+      "$required": false,
+      "options": [
+        {
+          "label": "选项01",
+          "value": "1"
+        },
+        {
+          "label": "选项02",
+          "value": "2"
+        },
+        {
+          "label": "选项03",
+          "value": "3"
+        }
+      ],
+      "_fc_id": "id_Fw9mmrmi2rdkaic",
+      "name": "ref_F5armrmi2rdkajc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "checkbox"
+    }
+  ],
+  "option": {
+    "form": {
+      "inline": false,
+      "hideRequiredAsterisk": false,
+      "labelPosition": "right",
+      "size": "default",
+      "labelWidth": "125px"
+    },
+    "resetBtn": {
+      "show": false,
+      "innerText": "重置"
+    },
+    "submitBtn": {
+      "show": true,
+      "innerText": "提交"
+    }
+  },
+  "createdAt": "2026-07-15T19:55:53.579Z",
+  "updatedAt": "2026-07-15T19:55:53.579Z"
+}

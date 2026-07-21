@@ -1,0 +1,171 @@
+.custom-form-page {
+  min-height: 100vh;
+  background-color: #1A1714;
+}
+
+.detail-header {
+  position: relative;
+  overflow: hidden;
+  padding: 48rpx 40rpx;
+}
+
+.header-decoration {
+  position: absolute;
+  right: -16rpx;
+  top: -8rpx;
+  font-size: 200rpx;
+  line-height: 1;
+  opacity: 0.05;
+}
+
+.header-content {
+  position: relative;
+}
+
+.system-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-bottom: 32rpx;
+}
+
+.system-badge {
+  padding: 6rpx 16rpx;
+  border-radius: 100rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.custom-tag {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.4);
+}
+
+.form-title {
+  display: block;
+  font-size: 56rpx;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #E8DCC4;
+}
+
+.form-desc {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  border-left: 4rpx solid;
+  background-color: rgba(26, 23, 20, 0.4);
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: rgba(232, 220, 196, 0.7);
+}
+
+.field-count {
+  margin-top: 24rpx;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.4);
+}
+
+.detail-content {
+  padding: 0 32rpx 64rpx;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.title-line {
+  flex: 1;
+  height: 1rpx;
+  background-color: rgba(232, 220, 196, 0.1);
+}
+
+.form-container {
+  padding: 32rpx;
+  border-radius: 24rpx;
+  color: #1A1714;
+}
+
+.loading-state,
+.error-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 192rpx 40rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background-color: #1A1714;
+}
+
+.loading-icon,
+.error-icon,
+.empty-icon {
+  font-size: 64rpx;
+  margin-bottom: 24rpx;
+}
+
+.loading-icon {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: rgba(232, 220, 196, 0.4);
+}
+
+.error-icon {
+  opacity: 0.6;
+}
+
+.error-title {
+  font-size: 28rpx;
+  color: #F87171;
+  margin-bottom: 8rpx;
+}
+
+.error-desc {
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.5);
+  margin-bottom: 24rpx;
+}
+
+.retry-btn,
+.back-btn {
+  padding: 12rpx 24rpx;
+  border-radius: 12rpx;
+  border: 1rpx solid #C8A046;
+  font-size: 24rpx;
+  color: #C8A046;
+}
+
+.empty-icon {
+  opacity: 0.4;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: rgba(232, 220, 196, 0.4);
+  margin-bottom: 8rpx;
+}
+
+.empty-hint {
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.3);
+  margin-bottom: 24rpx;
+  text-align: center;
+}

@@ -1,0 +1,92 @@
+<view class="detail-page" wx:if="{{!cardNotFound && card}}">
+  <view class="detail-header" style="background: linear-gradient(180deg, {{accentColor}}22 0%, transparent 100%);">
+    <view class="header-decoration">{{systemInfo.logo}}</view>
+
+    <view class="header-content">
+      <view class="system-badge-row">
+        <view class="system-badge" style="color: {{accentColor}}; background-color: {{accentColor}}22;">
+          {{systemInfo.logo}} {{systemInfo.fullName}}
+        </view>
+        <text wx:if="{{systemInfo.isCustom}}" class="custom-tag">· 自定义规则</text>
+      </view>
+
+      <view class="card-main">
+        <view class="card-avatar" style="background-color: {{accentColor}}22; box-shadow: 0 0 0 2px {{accentColor}}55 inset;">
+          <image wx:if="{{card.avatar}}" src="{{card.avatar}}" class="avatar-img" mode="aspectFill"></image>
+          <text wx:else class="avatar-text">{{systemInfo.logo}}</text>
+        </view>
+        <view class="card-info">
+          <text class="card-name">{{card.name}}</text>
+          <text class="card-player">玩家：{{card.player}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{card.description}}" class="card-desc" style="border-color: {{accentColor}};">
+        {{card.description}}
+      </view>
+
+      <view wx:if="{{previewStats.length > 0}}" class="preview-stats">
+        <view
+          wx:for="{{previewStats}}"
+          wx:key="label"
+          class="stat-item"
+          style="box-shadow: 0 0 0 1px {{accentColor}}33;"
+        >
+          <text class="stat-value" style="color: {{accentColor}}">{{item.value}}</text>
+          <text class="stat-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="detail-content">
+    <view class="section-header">
+      <text class="section-title" style="color: {{accentColor}};">完整属性表</text>
+      <view class="title-line"></view>
+    </view>
+
+    <view class="form-container parchment-card ink-border">
+      <dynamic-form
+        wx:if="{{effectiveRule && effectiveRule.length > 0}}"
+        rule="{{effectiveRule}}"
+        value="{{formData}}"
+        bind:change="onFormChange"
+      />
+      <view wx:else class="form-empty">
+        <text class="empty-icon">📋</text>
+        <text class="empty-text">该规则系统暂无表单配置</text>
+        <text class="empty-desc">请使用网页设计器创建表单模板</text>
+      </view>
+    </view>
+
+    <view class="meta-info">
+      <view class="meta-row">
+        <text class="meta-label">创建时间</text>
+        <text class="meta-value">{{createdAtText}}</text>
+      </view>
+      <view class="meta-row">
+        <text class="meta-label">最后更新</text>
+        <text class="meta-value">{{updatedAtText}}</text>
+      </view>
+    </view>
+
+    <view class="action-buttons">
+      <view class="action-btn secondary" bindtap="exportCard">
+        <text>📤 导出 JSON</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view wx:elif="{{cardNotFound}}" class="not-found">
+  <text class="not-found-icon">🔍</text>
+  <text class="not-found-text">未找到角色卡</text>
+  <view class="not-found-btn" bindtap="goBack">返回列表</view>
+</view>
+
+<view wx:else class="not-found">
+  <text class="not-found-icon">⏳</text>
+  <text class="not-found-text">页面状态异常</text>
+  <text class="not-found-desc">cardNotFound={{cardNotFound}}</text>
+  <view class="not-found-btn" bindtap="goBack">返回列表</view>
+</view>

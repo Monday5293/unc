@@ -1,0 +1,542 @@
+<view class="dynamic-form">
+  <block wx:for="{{flatRule}}" wx:key="_key">
+    <view wx:if="{{item.type !== 'hidden'}}" class="form-field">
+
+      <!-- 标签 -->
+      <view wx:if="{{item.title || item.field}}" class="field-label">
+        <text>{{item.title || item.field}}</text>
+        <text wx:if="{{item.required}}" class="required-mark"> *</text>
+      </view>
+
+      <!-- ===== 图片 ===== -->
+      <image
+        wx:if="{{item.type === 'elImage' || item._isImage}}"
+        class="field-image"
+        src="{{item.src}}"
+        mode="widthFix"
+        style="{{item._styleStr}}"
+      />
+
+      <!-- ===== 文本类 ===== -->
+      <input
+        wx:elif="{{item.type === 'input' || item.type === 'text' || item.type === 'url' || item.type === 'email' || item.type === 'date' || item.type === 'password' || item.type === 'autoComplete' || !item.type}}"
+        class="field-input"
+        type="{{item.type === 'password' ? 'password' : 'text'}}"
+        placeholder="{{item.placeholder}}"
+        placeholder-class="field-placeholder"
+        value="{{formData[item.field]}}"
+        data-field="{{item.field}}"
+        bindinput="onFieldInput"
+        style="{{item._styleStr}}"
+      />
+
+      <!-- ===== 数字计数器 ===== -->
+      <view wx:elif="{{item.type === 'inputNumber'}}" class="field-counter">
+        <view class="counter-btn" data-field="{{item.field}}" data-delta="-1" catchtap="onCounterChange">−</view>
+        <input
+          class="counter-input"
+          type="number"
+          value="{{formData[item.field] || 0}}"
+          data-field="{{item.field}}"
+          bindinput="onFieldInput"
+        />
+        <view class="counter-btn" data-field="{{item.field}}" data-delta="1" catchtap="onCounterChange">+</view>
+      </view>
+
+      <!-- ===== 数字类（兜底） ===== -->
+      <input
+        wx:elif="{{item.type === 'number' || item.type === 'digit'}}"
+        class="field-input"
+        type="number"
+        placeholder="{{item.placeholder}}"
+        placeholder-class="field-placeholder"
+        value="{{formData[item.field]}}"
+        data-field="{{item.field}}"
+        bindinput="onFieldInput"
+        style="{{item._styleStr}}"
+      />
+
+      <!-- ===== 文本域 ===== -->
+      <textarea
+        wx:elif="{{item.type === 'textarea'}}"
+        class="field-textarea"
+        placeholder="{{item.placeholder}}"
+        placeholder-class="field-placeholder"
+        value="{{formData[item.field]}}"
+        data-field="{{item.field}}"
+        bindinput="onFieldInput"
+        auto-height
+        style="{{item._styleStr}}"
+      />
+
+      <!-- ===== 下拉 ===== -->
+      <view wx:elif="{{item.type === 'select' || item.type === 'selectOne'}}" class="field-select">
+        <picker
+          range="{{item.options || []}}"
+          range-key="label"
+          value="{{selectIndices[item.field] || 0}}"
+          data-field="{{item.field}}"
+          bindchange="onSelectChange"
+        >
+          <view class="select-value">
+            <text class="{{formData[item.field] ? '' : 'placeholder-text'}}">{{getDisplayValue(item)}}</text>
+          </view>
+        </picker>
+      </view>
+
+      <!-- ===== 单选 ===== -->
+      <view wx:elif="{{item.type === 'radio'}}" class="field-radio-group">
+        <view
+          wx:for="{{item.options || []}}"
+          wx:for-item="opt"
+          wx:key="value"
+          class="radio-item {{radioValues[item.field] === opt.value ? 'radio-active' : ''}}"
+          data-field="{{item.field}}"
+          data-value="{{opt.value}}"
+          bindtap="onRadioChange"
+        >
+          <view class="radio-dot {{radioValues[item.field] === opt.value ? 'radio-dot-active' : ''}}"></view>
+          <text class="radio-label">{{opt.label}}</text>
+        </view>
+      </view>
+
+      <!-- ===== 多选 ===== -->
+      <view wx:elif="{{item.type === 'checkbox'}}" class="field-checkbox-group">
+        <view
+          wx:for="{{item.options || []}}"
+          wx:for-item="opt"
+          wx:key="value"
+          class="checkbox-item"
+          data-field="{{item.field}}"
+          data-value="{{opt.value}}"
+          bindtap="onCheckboxChange"
+        >
+          <view class="checkbox-box">
+            <text wx:if="{{checkboxValues[item.field].indexOf(opt.value) > -1}}" class="checkbox-check">✓</text>
+          </view>
+          <text class="checkbox-label">{{opt.label}}</text>
+        </view>
+      </view>
+
+      <!-- ===== 开关 ===== -->
+      <view wx:elif="{{item.type === 'switch'}}" class="field-switch-wrap">
+        <switch
+          checked="{{formData[item.field]}}"
+          data-field="{{item.field}}"
+          bindchange="onSwitchChange"
+          color="{{item.props && item.props.activeColor || '#C8A046'}}"
+        />
+      </view>
+
+      <!-- ===== 滑块 ===== -->
+      <view wx:elif="{{item.type === 'slider' || item.type === 'sliderRange'}}" class="field-slider-wrap">
+        <slider
+          value="{{formData[item.field]}}"
+          min="{{item.props && item.props.min || 0}}"
+          max="{{item.props && item.props.max || 100}}"
+          step="{{item.props && item.props.step || 1}}"
+          show-value
+          data-field="{{item.field}}"
+          bindchange="onSliderChange"
+          activeColor="{{item.props && item.props.activeColor || '#C8A046'}}"
+          backgroundColor="rgba(26, 23, 20, 0.1)"
+        />
+      </view>
+
+      <!-- ===== 评分 ===== -->
+      <view wx:elif="{{item.type === 'rate'}}" class="field-rate">
+        <view class="rate-stars">
+          <text
+            wx:for="{{[1,2,3,4,5]}}"
+            wx:for-item="star"
+            wx:key="*this"
+            class="rate-star {{star <= formData[item.field] ? 'rate-star-active' : ''}}"
+            data-field="{{item.field}}"
+            data-value="{{star}}"
+            bindtap="onRadioChange"
+          >★</text>
+        </view>
+        <text wx:if="{{formData[item.field]}}" class="rate-value">{{formData[item.field]}}分</text>
+      </view>
+
+      <!-- ===== 日期器 ===== -->
+      <view wx:elif="{{item.type === 'datePicker' || item.type === 'date' || item.type === 'dateTime' || item.type === 'year' || item.type === 'month'}}" class="field-select">
+        <picker
+          mode="{{item.type === 'year' ? 'date' : (item.type === 'month' ? 'date' : 'date')}}"
+          fields="{{item.type === 'year' ? 'year' : (item.type === 'month' ? 'month' : 'day')}}"
+          value="{{datePickerValues[item.field] || ''}}"
+          data-field="{{item.field}}"
+          bindchange="onDatePickerChange"
+        >
+          <view class="select-value">
+            <text class="{{formData[item.field] ? '' : 'placeholder-text'}}">{{formData[item.field] || item.placeholder || '请日期'}}</text>
+          </view>
+        </picker>
+      </view>
+
+      <!-- ===== 时间器 ===== -->
+      <view wx:elif="{{item.type === 'timePicker' || item.type === 'time' || item.type === 'timeRange'}}" class="field-select">
+        <picker
+          mode="time"
+          value="{{formData[item.field] || ''}}"
+          data-field="{{item.field}}"
+          bindchange="onDatePickerChange"
+        >
+          <view class="select-value">
+            <text class="{{formData[item.field] ? '' : 'placeholder-text'}}">{{formData[item.field] || item.placeholder || '请时间'}}</text>
+          </view>
+        </picker>
+      </view>
+
+      <!-- ===== 颜色器（降级文本） ===== -->
+      <view wx:elif="{{item.type === 'colorPicker' || item.type === 'color'}}" class="field-color-wrap">
+        <view class="color-preview" style="background-color: {{formData[item.field] || '#ccc'}}"></view>
+        <input
+          class="field-input"
+          type="text"
+          placeholder="{{item.placeholder || '#000000'}}"
+          placeholder-class="field-placeholder"
+          value="{{formData[item.field]}}"
+          data-field="{{item.field}}"
+          bindinput="onFieldInput"
+        />
+      </view>
+
+      <!-- ===== 级联 / 树 / 上传（降级文本） ===== -->
+      <input
+        wx:elif="{{item.type === 'cascader' || item.type === 'tree' || item.type === 'upload' || item.type === 'uploadImage' || item.type === 'uploadFile' || item.type === 'uploadImageOne' || item.type === 'uploadFileOne' || item.type === 'frame' || item.type === 'frameInputs' || item.type === 'frameInputOne' || item.type === 'frameFiles' || item.type === 'frameFileOne' || item.type === 'frameImages' || item.type === 'frameImageOne'}}"
+        class="field-input"
+        type="text"
+        placeholder="{{item.placeholder || '该字段类型暂不支持编辑，可查看已有值'}}"
+        placeholder-class="field-placeholder"
+        value="{{getStringValue(formData[item.field])}}"
+        data-field="{{item.field}}"
+        bindinput="onFieldInput"
+      />
+
+      <!-- ===== 分组 / 对象（嵌套渲染） ===== -->
+      <view wx:elif="{{item.type === 'group' || item.type === 'object'}}" class="field-group">
+        <view class="group-header">
+          <text class="group-title">{{item.title || item.field}}</text>
+        </view>
+        <view class="group-body">
+          <block wx:if="{{item.props && item.props.rules && item.props.rules.length > 0}}">
+            <block wx:for="{{item.props.rules}}" wx:for-item="subRule" wx:key="field">
+              <view wx:if="{{subRule.type !== 'hidden'}}" class="form-field">
+                <view wx:if="{{subRule.title}}" class="field-label">
+                  <text>{{subRule.title}}</text>
+                  <text wx:if="{{subRule.required}}" class="required-mark"> *</text>
+                </view>
+                <input
+                  wx:if="{{subRule.type === 'input' || subRule.type === 'text' || subRule.type === 'url' || subRule.type === 'email' || subRule.type === 'password' || subRule.type === 'auto' || !subRule.type}}"
+                  class="field-input"
+                  type="{{subRule.type === 'password' ? 'password' : 'text'}}"
+                  placeholder="{{subRule.placeholder}}"
+                  placeholder-class="field-placeholder"
+                  value="{{formData[item.field][subRule.field]}}"
+                  data-field="{{subRule.field}}"
+                  data-parent-field="{{item.field}}"
+                  bindinput="onFieldInput"
+                />
+                <input
+                  wx:elif="{{subRule.type === 'inputNumber' || subRule.type === 'number' || subRule.type === 'digit'}}"
+                  class="field-input"
+                  type="number"
+                  placeholder="{{subRule.placeholder}}"
+                  placeholder-class="field-placeholder"
+                  value="{{formData[item.field][subRule.field]}}"
+                  data-field="{{subRule.field}}"
+                  data-parent-field="{{item.field}}"
+                  bindinput="onFieldInput"
+                />
+                <textarea
+                  wx:elif="{{subRule.type === 'textarea'}}"
+                  class="field-textarea"
+                  placeholder="{{subRule.placeholder}}"
+                  placeholder-class="field-placeholder"
+                  value="{{formData[item.field][subRule.field]}}"
+                  data-field="{{subRule.field}}"
+                  data-parent-field="{{item.field}}"
+                  bindinput="onFieldInput"
+                  auto-height
+                />
+                <view wx:elif="{{subRule.type === 'select' || subRule.type === 'selectOne'}}" class="field-select">
+                  <picker
+                    range="{{subRule.options || []}}"
+                    range-key="label"
+                    value="{{selectIndices[subRule.field] || 0}}"
+                    data-field="{{subRule.field}}"
+                    bindchange="onSelectChange"
+                  >
+                    <view class="select-value">
+                      <text class="{{formData[item.field][subRule.field] ? '' : 'placeholder-text'}}">{{subRule.placeholder || '请'}}</text>
+                    </view>
+                  </picker>
+                </view>
+                <input
+                  wx:else
+                  class="field-input"
+                  type="text"
+                  placeholder="{{subRule.placeholder}}"
+                  placeholder-class="field-placeholder"
+                  value="{{formData[item.field][subRule.field]}}"
+                  data-field="{{subRule.field}}"
+                  data-parent-field="{{item.field}}"
+                  bindinput="onFieldInput"
+                />
+              </view>
+            </block>
+          </block>
+          <text wx:else class="group-empty">暂无子字段</text>
+        </view>
+      </view>
+
+      <!-- ===== 栅格行布局 (fcRow) ===== -->
+      <view wx:elif="{{item._isRow}}" class="field-row-layout">
+        <view
+          wx:for="{{item._rowCols}}"
+          wx:for-item="col"
+          wx:key="_key"
+          class="row-col"
+          style="flex: {{col.span}};"
+        >
+          <block wx:for="{{col.items}}" wx:for-item="colItem" wx:key="_key">
+            <!-- 列内：图片 -->
+            <image
+              wx:if="{{colItem.type === 'elImage' || colItem._isImage}}"
+              class="field-image"
+              src="{{colItem.src}}"
+              mode="widthFix"
+              style="{{colItem._styleStr}}"
+            />
+            <!-- 列内：计数器 -->
+            <view wx:elif="{{colItem.type === 'inputNumber'}}" class="field-counter">
+              <view class="counter-btn" data-field="{{colItem.field}}" data-delta="-1" catchtap="onCounterChange">−</view>
+              <input
+                class="counter-input"
+                type="number"
+                value="{{formData[colItem.field] || 0}}"
+                data-field="{{colItem.field}}"
+                bindinput="onFieldInput"
+              />
+              <view class="counter-btn" data-field="{{colItem.field}}" data-delta="1" catchtap="onCounterChange">+</view>
+            </view>
+            <!-- 列内：布局网格 -->
+            <view wx:elif="{{colItem._isLayoutGrid}}" class="field-grid-layout" style="grid-template-columns: repeat({{colItem._gridCols}}, 1fr); grid-template-rows: repeat({{colItem._gridRows}}, auto);">
+              <block wx:for="{{colItem._gridCells}}" wx:for-item="cell" wx:key="_key">
+                <view class="grid-cell" style="grid-row: {{cell.row + 1}}; grid-column: {{cell.col + 1}}; {{cell._styleStr}}">
+                  <image wx:if="{{cell.type === 'elImage' || cell._isImage}}" class="grid-cell-image" src="{{cell.src}}" mode="widthFix" style="{{cell._styleStr}}" />
+                  <text wx:elif="{{cell.type === 'text'}}" class="grid-cell-text" style="{{cell._styleStr}}">{{cell.text}}</text>
+                  <view wx:elif="{{cell.type === 'inputNumber'}}" class="grid-cell-counter" style="{{cell._styleStr}}">
+                    <view class="counter-btn counter-btn-sm" data-field="{{cell.field}}" data-delta="-1" catchtap="onCounterChange">−</view>
+                    <input class="counter-input counter-input-sm" type="number" value="{{formData[cell.field] || 0}}" data-field="{{cell.field}}" bindinput="onFieldInput" />
+                    <view class="counter-btn counter-btn-sm" data-field="{{cell.field}}" data-delta="1" catchtap="onCounterChange">+</view>
+                  </view>
+                  <input wx:elif="{{cell.type === 'input' || cell.type === 'number' || cell.type === 'textarea' || !cell.type}}" class="field-input" type="{{cell.type === 'number' ? 'number' : 'text'}}" placeholder="{{cell.placeholder || cell.title}}" placeholder-class="field-placeholder" value="{{formData[cell.field]}}" data-field="{{cell.field}}" bindinput="onFieldInput" style="{{cell._styleStr}}" />
+                  <text wx:else class="grid-cell-text" style="{{cell._styleStr}}">{{cell.text}}</text>
+                </view>
+              </block>
+            </view>
+            <!-- 列内：输入框 -->
+            <input
+              wx:elif="{{colItem.type === 'input' || colItem.type === 'text' || colItem.type === 'number' || !colItem.type}}"
+              class="field-input"
+              type="{{colItem.type === 'number' ? 'number' : 'text'}}"
+              placeholder="{{colItem.placeholder}}"
+              placeholder-class="field-placeholder"
+              value="{{formData[colItem.field]}}"
+              data-field="{{colItem.field}}"
+              bindinput="onFieldInput"
+              style="{{colItem._styleStr}}"
+            />
+            <!-- 列内：其他 -->
+            <text wx:elif="{{colItem.type === 'div'}}" class="grid-cell-text" style="{{colItem._styleStr}}">{{colItem.title}}</text>
+          </block>
+        </view>
+      </view>
+
+      <!-- ===== 布局网格 (fcTable as layout grid) ===== -->
+      <view wx:elif="{{item._isLayoutGrid}}" class="field-grid-layout" style="grid-template-columns: repeat({{item._gridCols}}, 1fr); grid-template-rows: repeat({{item._gridRows}}, auto);">
+        <block wx:for="{{item._gridCells}}" wx:for-item="cell" wx:key="_key">
+          <view class="grid-cell" style="grid-row: {{cell.row + 1}}; grid-column: {{cell.col + 1}}; {{cell._styleStr}}">
+            <!-- 单元格：图片 -->
+            <image
+              wx:if="{{cell.type === 'elImage' || cell._isImage}}"
+              class="grid-cell-image"
+              src="{{cell.src}}"
+              mode="widthFix"
+              style="{{cell._styleStr}}"
+            />
+            <!-- 单元格：文本 -->
+            <text wx:elif="{{cell.type === 'text'}}" class="grid-cell-text" style="{{cell._styleStr}}">{{cell.text}}</text>
+            <!-- 单元格：计数器 -->
+            <view wx:elif="{{cell.type === 'inputNumber'}}" class="grid-cell-counter" style="{{cell._styleStr}}">
+              <view class="counter-btn counter-btn-sm" data-field="{{cell.field}}" data-delta="-1" catchtap="onCounterChange">−</view>
+              <input
+                class="counter-input counter-input-sm"
+                type="number"
+                value="{{formData[cell.field] || 0}}"
+                data-field="{{cell.field}}"
+                bindinput="onFieldInput"
+              />
+              <view class="counter-btn counter-btn-sm" data-field="{{cell.field}}" data-delta="1" catchtap="onCounterChange">+</view>
+            </view>
+            <!-- 单元格：输入框 -->
+            <input
+              wx:elif="{{cell.type === 'input' || cell.type === 'number' || cell.type === 'textarea' || !cell.type}}"
+              class="field-input"
+              type="{{cell.type === 'number' ? 'number' : 'text'}}"
+              placeholder="{{cell.placeholder || cell.title}}"
+              placeholder-class="field-placeholder"
+              value="{{formData[cell.field]}}"
+              data-field="{{cell.field}}"
+              bindinput="onFieldInput"
+              style="{{cell._styleStr}}"
+            />
+            <!-- 单元格：嵌套 fcTable 布局网格 -->
+            <view wx:elif="{{cell._isLayoutGrid}}" class="field-grid-layout field-grid-nested" style="grid-template-columns: repeat({{cell._gridCols}}, 1fr); grid-template-rows: repeat({{cell._gridRows}}, auto);">
+              <block wx:for="{{cell._gridCells}}" wx:for-item="subCell" wx:key="_key">
+                <view class="grid-cell" style="grid-row: {{subCell.row + 1}}; grid-column: {{subCell.col + 1}}; {{subCell._styleStr}}">
+                  <image
+                    wx:if="{{subCell.type === 'elImage' || subCell._isImage}}"
+                    class="grid-cell-image"
+                    src="{{subCell.src}}"
+                    mode="widthFix"
+                    style="{{subCell._styleStr}}"
+                  />
+                  <text wx:elif="{{subCell.type === 'text'}}" class="grid-cell-text" style="{{subCell._styleStr}}">{{subCell.text}}</text>
+                  <view wx:elif="{{subCell.type === 'inputNumber'}}" class="grid-cell-counter" style="{{subCell._styleStr}}">
+                    <view class="counter-btn counter-btn-sm" data-field="{{subCell.field}}" data-delta="-1" catchtap="onCounterChange">−</view>
+                    <input
+                      class="counter-input counter-input-sm"
+                      type="number"
+                      value="{{formData[subCell.field] || 0}}"
+                      data-field="{{subCell.field}}"
+                      bindinput="onFieldInput"
+                    />
+                    <view class="counter-btn counter-btn-sm" data-field="{{subCell.field}}" data-delta="1" catchtap="onCounterChange">+</view>
+                  </view>
+                  <input
+                    wx:elif="{{subCell.type === 'input' || subCell.type === 'number' || subCell.type === 'textarea' || !subCell.type}}"
+                    class="field-input"
+                    type="{{subCell.type === 'number' || subCell.type === 'inputNumber' ? 'number' : 'text'}}"
+                    placeholder="{{subCell.placeholder || subCell.title}}"
+                    placeholder-class="field-placeholder"
+                    value="{{formData[subCell.field]}}"
+                    data-field="{{subCell.field}}"
+                    bindinput="onFieldInput"
+                    style="{{subCell._styleStr}}"
+                  />
+                  <text wx:else class="grid-cell-text" style="{{subCell._styleStr}}">{{subCell.text}}</text>
+                </view>
+              </block>
+            </view>
+            <!-- 单元格：默认文本 -->
+            <text wx:else class="grid-cell-text" style="{{cell._styleStr}}">{{cell.text}}</text>
+          </view>
+        </block>
+      </view>
+
+      <!-- ===== 数据表格 (fcTable / table) ===== -->
+      <view wx:elif="{{item.type === 'fcTable' || item.type === 'table'}}" class="field-table">
+        <view class="table-header">
+          <text class="table-title">{{item.title || item.field}}</text>
+          <view class="table-add-btn" data-field="{{item.field}}" bindtap="addTableRow">
+            <text class="table-add-icon">+</text>
+            <text class="table-add-text">新增行</text>
+          </view>
+        </view>
+        <scroll-view class="table-scroll" scroll-x enable-flex>
+          <view class="table-wrap">
+            <!-- 表头 -->
+            <view class="table-row table-head-row">
+              <view
+                wx:for="{{getTableColumns(item)}}"
+                wx:for-item="col"
+                wx:key="key"
+                class="table-cell table-head-cell"
+                style="min-width: {{col.width || 120}}rpx; flex: {{col.width ? 'none' : '1'}}"
+              >{{col.title || col.label || col.key}}</view>
+              <view class="table-cell table-head-cell table-action-cell">操作</view>
+            </view>
+            <!-- 数据行 -->
+            <view
+              wx:for="{{getTableData(item)}}"
+              wx:for-item="row"
+              wx:for-index="rowIdx"
+              wx:key="rowIdx"
+              class="table-row"
+            >
+              <view
+                wx:for="{{getTableColumns(item)}}"
+                wx:for-item="col"
+                wx:key="key"
+                class="table-cell"
+                style="min-width: {{col.width || 120}}rpx; flex: {{col.width ? 'none' : '1'}}"
+              >
+                <!-- 表格单元格：框 -->
+                <input
+                  wx:if="{{getTableColumnRenderType(col) === 'input' || getTableColumnRenderType(col) === 'text' || getTableColumnRenderType(col) === 'number' || !getTableColumnRenderType(col)}}"
+                  class="table-input"
+                  type="{{getTableColumnRenderType(col) === 'number' ? 'number' : 'text'}}"
+                  value="{{row[col.key] || ''}}"
+                  data-table-field="{{item.field}}"
+                  data-row-index="{{rowIdx}}"
+                  data-col-key="{{col.key}}"
+                  bindinput="onTableCellInput"
+                />
+                <!-- 表格单元格：下拉 -->
+                <picker
+                  wx:elif="{{getTableColumnRenderType(col) === 'select'}}"
+                  range="{{getTableColumnOptions(col)}}"
+                  range-key="label"
+                  value="{{tableSelectIndices[item.field + '_' + rowIdx + '_' + col.key] || 0}}"
+                  data-table-field="{{item.field}}"
+                  data-row-index="{{rowIdx}}"
+                  data-col-key="{{col.key}}"
+                  bindchange="onTableSelectChange"
+                >
+                  <view class="table-select">
+                    <text>{{getTableSelectValue(getTableData(item), rowIdx, col)}}</text>
+                  </view>
+                </picker>
+                <!-- 表格单元格：默认 -->
+                <input
+                  wx:else
+                  class="table-input"
+                  type="text"
+                  value="{{row[col.key] || ''}}"
+                  data-table-field="{{item.field}}"
+                  data-row-index="{{rowIdx}}"
+                  data-col-key="{{col.key}}"
+                  bindinput="onTableCellInput"
+                />
+              </view>
+              <view class="table-cell table-action-cell">
+                <text class="table-remove-btn" data-field="{{item.field}}" data-row-index="{{rowIdx}}" bindtap="removeTableRow">删除</text>
+              </view>
+            </view>
+            <view wx:if="{{getTableData(item).length === 0}}" class="table-empty">
+              <text class="table-empty-text">暂无数据，点击新增行添加</text>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- ===== 未支持类型（最后的兜底） ===== -->
+      <input
+        wx:else
+        class="field-input"
+        type="text"
+        placeholder="{{item.placeholder || '字段类型: ' + item.type}}"
+        placeholder-class="field-placeholder"
+        value="{{formData[item.field]}}"
+        data-field="{{item.field}}"
+        bindinput="onFieldInput"
+      />
+
+      <!-- 字段描述 -->
+      <text wx:if="{{item.info && item.type !== 'group' && item.type !== 'object' && item.type !== 'fcTable' && item.type !== 'table' && !item._isLayoutGrid}}" class="field-info">{{item.info}}</text>
+    </view>
+  </block>
+</view>

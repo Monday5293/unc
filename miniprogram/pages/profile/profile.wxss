@@ -1,0 +1,285 @@
+.profile-page {
+  min-height: 100vh;
+  background-color: #1A1714;
+}
+
+.profile-header {
+  position: relative;
+  overflow: hidden;
+  padding: 64rpx 40rpx 48rpx;
+  background: linear-gradient(180deg, #221F1C 0%, #1A1714 100%);
+}
+
+.header-glow {
+  position: absolute;
+  top: -80rpx;
+  right: 0;
+  width: 320rpx;
+  height: 320rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 160, 70, 0.3) 0%, transparent 70%);
+  opacity: 0.6;
+}
+
+.user-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+}
+
+.user-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 4rpx solid #C8A046;
+  background-color: #2A2724;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-placeholder {
+  font-size: 48rpx;
+}
+
+.user-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.user-name {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #E8DCC4;
+  margin-bottom: 4rpx;
+}
+
+.user-desc {
+  display: block;
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.5);
+  margin-bottom: 16rpx;
+}
+
+.system-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.system-tag {
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  font-size: 18rpx;
+}
+
+.stats-grid {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 40rpx;
+}
+
+.stat-card {
+  width: calc(33.33% - 11rpx);
+  padding: 16rpx 8rpx;
+  border-radius: 16rpx;
+  background-color: rgba(26, 23, 20, 0.6);
+  border: 1rpx solid rgba(232, 220, 196, 0.1);
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  margin-bottom: 4rpx;
+}
+
+.stat-label {
+  display: block;
+  font-size: 18rpx;
+  color: rgba(232, 220, 196, 0.5);
+}
+
+.profile-content {
+  padding: 32rpx 32rpx 48rpx;
+}
+
+.section {
+  margin-bottom: 32rpx;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #E8DCC4;
+}
+
+.section-more {
+  font-size: 20rpx;
+  color: #C8A046;
+}
+
+.card-group {
+  margin-bottom: 32rpx;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+  font-size: 22rpx;
+}
+
+.group-logo {
+  font-size: 32rpx;
+  line-height: 1;
+}
+
+.group-name {
+  font-weight: 600;
+}
+
+.group-count {
+  color: rgba(232, 220, 196, 0.4);
+}
+
+.group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.card-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background-color: rgba(34, 31, 28, 0.6);
+  border: 1rpx solid rgba(232, 220, 196, 0.08);
+}
+
+.card-row-icon {
+  width: 80rpx;
+  height: 80rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+}
+
+.card-row-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.card-row-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.card-row-name {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #E8DCC4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-fav {
+  font-size: 24rpx;
+  flex-shrink: 0;
+}
+
+.card-row-desc {
+  display: block;
+  margin-top: 4rpx;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-row-arrow {
+  font-size: 32rpx;
+  color: rgba(232, 220, 196, 0.3);
+  flex-shrink: 0;
+}
+
+.menu-list {
+  overflow: hidden;
+  border-radius: 24rpx;
+  background-color: rgba(34, 31, 28, 0.6);
+  border: 1rpx solid rgba(232, 220, 196, 0.1);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 24rpx 32rpx;
+  border-bottom: 1rpx solid rgba(232, 220, 196, 0.08);
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-icon {
+  font-size: 36rpx;
+  flex-shrink: 0;
+}
+
+.menu-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.menu-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #E8DCC4;
+  margin-bottom: 4rpx;
+}
+
+.menu-title.import {
+  color: #3B6B4A;
+}
+
+.menu-desc {
+  display: block;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.4);
+}
+
+.menu-arrow {
+  font-size: 28rpx;
+  color: rgba(232, 220, 196, 0.4);
+  flex-shrink: 0;
+}

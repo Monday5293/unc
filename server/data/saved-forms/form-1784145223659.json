@@ -1,0 +1,84 @@
+{
+  "id": "form-1784145223659",
+  "name": "111111111",
+  "system": "COC",
+  "description": "克苏鲁的呼唤 7 版调查员角色卡模板，含 8 项基础属性、生命理智与常用技能",
+  "rule": [
+    {
+      "type": "input",
+      "field": "Fecsmrmhijqqbrc",
+      "title": "输入框",
+      "info": "",
+      "$required": false,
+      "_fc_id": "id_F1nimrmhijqqbsc",
+      "name": "ref_Fvq1mrmhijqqbtc",
+      "_fc_drag_tag": "input",
+      "display": true,
+      "hidden": false
+    },
+    {
+      "type": "input",
+      "field": "Fvxvmrmhikcobuc",
+      "title": "多行输入框",
+      "info": "",
+      "$required": false,
+      "props": {
+        "type": "textarea"
+      },
+      "_fc_id": "id_F0jwmrmhikcobvc",
+      "name": "ref_Fc16mrmhikcobwc",
+      "_fc_drag_tag": "textarea",
+      "display": true,
+      "hidden": false
+    },
+    {
+      "type": "input",
+      "field": "Fjn0mrmhil1vbxc",
+      "title": "多行输入框",
+      "info": "",
+      "$required": false,
+      "props": {
+        "type": "textarea"
+      },
+      "_fc_id": "id_Fy5lmrmhil1vbyc",
+      "name": "ref_Fnpxmrmhil1vbzc",
+      "_fc_drag_tag": "textarea",
+      "display": true,
+      "hidden": false
+    },
+    {
+      "type": "input",
+      "field": "Fqqumrmhilkgc0c",
+      "title": "多行输入框",
+      "info": "",
+      "$required": false,
+      "props": {
+        "type": "textarea"
+      },
+      "_fc_id": "id_F9bmmrmhilkgc1c",
+      "name": "ref_Faf7mrmhilkgc2c",
+      "_fc_drag_tag": "textarea",
+      "display": true,
+      "hidden": false
+    }
+  ],
+  "option": {
+    "form": {
+      "inline": false,
+      "hideRequiredAsterisk": false,
+      "labelPosition": "right",
+      "size": "default",
+      "labelWidth": "125px"
+    },
+    "resetBtn": {
+      "show": false,
+      "innerText": "重置"
+    },
+    "submitBtn": {
+      "show": true,
+      "innerText": "提交"
+    }
+  },
+  "createdAt": "2026-07-15T19:53:43.659Z",
+  "updatedAt": "2026-07-15T19:53:43.659Z"
+}

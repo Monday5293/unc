@@ -1,0 +1,21 @@
+<view class="rule-tab-container">
+  <scroll-view class="tab-scroll" scroll-x enable-flex scroll-with-animation>
+    <view class="tabs-wrapper">
+      <view
+        wx:for="{{systems}}"
+        wx:key="code"
+        class="tab-item {{current === item.code ? 'active' : ''}}"
+        data-system="{{item}}"
+        bindtap="onSystemTap"
+        bindlongpress="onSystemLongPress"
+      >
+        <text class="tab-logo">{{item.logo}}</text>
+        <text class="tab-name">{{item.name}}</text>
+        <view wx:if="{{current === item.code}}" class="tab-indicator" style="background-color: {{item.accentColor}}"></view>
+      </view>
+      <view class="add-btn" bindtap="onAddTap">
+        <text class="add-icon">+</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

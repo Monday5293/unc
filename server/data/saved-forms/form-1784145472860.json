@@ -1,0 +1,110 @@
+{
+  "id": "form-1784145472860",
+  "name": "自定义表单 2026/7/15 19:57:50",
+  "system": "COC",
+  "description": "",
+  "rule": [
+    {
+      "type": "input",
+      "field": "Futzmrmi55ylazc",
+      "title": "输入框",
+      "info": "",
+      "$required": false,
+      "_fc_id": "id_Fa8pmrmi55ylb0c",
+      "name": "ref_Fnybmrmi55ylb1c",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "input"
+    },
+    {
+      "type": "input",
+      "field": "Fy4cmrmi56q5b2c",
+      "title": "多行输入框",
+      "info": "",
+      "$required": false,
+      "props": {
+        "type": "textarea"
+      },
+      "_fc_id": "id_Fwgbmrmi56q5b3c",
+      "name": "ref_Fwm2mrmi56q5b4c",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "textarea"
+    },
+    {
+      "type": "tableForm",
+      "field": "Ffqzmrmi57mdb5c",
+      "title": "表格表单",
+      "info": "",
+      "props": {
+        "columns": [
+          {
+            "label": "自定义名称",
+            "hidden": false,
+            "style": {
+              "width": "auto"
+            },
+            "rule": [
+              {
+                "type": "switch",
+                "field": "Fsazmrmi58vtbac",
+                "title": "开关",
+                "info": "",
+                "$required": false,
+                "props": {
+                  "activeValue": true,
+                  "inactiveValue": false
+                },
+                "_fc_id": "id_Fyt3mrmi58vtbbc",
+                "name": "ref_Fbbzmrmi58vtbcc",
+                "display": true,
+                "hidden": false,
+                "_fc_drag_tag": "switch"
+              },
+              {
+                "type": "switch",
+                "field": "F383mrmi5a3obdc",
+                "title": "开关",
+                "info": "",
+                "$required": false,
+                "props": {
+                  "activeValue": true,
+                  "inactiveValue": false
+                },
+                "_fc_id": "id_F4yxmrmi5a3obec",
+                "name": "ref_Ftzymrmi5a3obfc",
+                "display": true,
+                "hidden": false,
+                "_fc_drag_tag": "switch"
+              }
+            ]
+          }
+        ]
+      },
+      "_fc_id": "id_Fvdbmrmi57meb6c",
+      "name": "ref_Fru9mrmi57meb7c",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "tableForm"
+    }
+  ],
+  "option": {
+    "form": {
+      "inline": false,
+      "hideRequiredAsterisk": false,
+      "labelPosition": "right",
+      "size": "default",
+      "labelWidth": "125px"
+    },
+    "resetBtn": {
+      "show": false,
+      "innerText": "重置"
+    },
+    "submitBtn": {
+      "show": true,
+      "innerText": "提交"
+    }
+  },
+  "createdAt": "2026-07-15T19:57:52.860Z",
+  "updatedAt": "2026-07-15T19:57:52.860Z"
+}

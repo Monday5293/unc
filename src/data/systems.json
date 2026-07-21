@@ -1,0 +1,26 @@
+[
+  {
+    "code": "COC",
+    "name": "克苏鲁的呼唤",
+    "fullName": "Call of Cthulhu",
+    "accentColor": "#3B6B4A",
+    "logo": "🌿",
+    "description": "霍华德·菲利普·洛夫克拉夫特笔下的宇宙恐怖世界，调查员在禁忌古卷与古老神祇之间挣扎求生。"
+  },
+  {
+    "code": "DND",
+    "name": "龙与地下城",
+    "fullName": "Dungeons & Dragons",
+    "accentColor": "#C8A046",
+    "logo": "🐉",
+    "description": "经典奇幻跑团规则，冒险者组成小队探索地下城、对抗巨龙、追寻宝藏与荣耀。"
+  },
+  {
+    "code": "DAGGERHEART",
+    "name": "匕首之心",
+    "fullName": "Daggerheart",
+    "accentColor": "#9BA8B5",
+    "logo": "🗡️",
+    "description": "Critical Role 出品的奇幻跑团新规则，以双骰子系统与英雄叙事见长。"
+  }
+]

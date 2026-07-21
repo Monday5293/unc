@@ -1,0 +1,19 @@
+{
+  "id": "form-1784144286166",
+  "name": "测试COC表单",
+  "system": "COC",
+  "description": "联调测试",
+  "rule": [
+    {
+      "type": "input",
+      "field": "name",
+      "title": "姓名",
+      "value": ""
+    }
+  ],
+  "option": {
+    "submitBtn": false
+  },
+  "createdAt": "2026-07-15T19:38:06.166Z",
+  "updatedAt": "2026-07-15T19:38:06.166Z"
+}

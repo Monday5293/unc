@@ -1,0 +1,172 @@
+<view class="import-page">
+  <view class="info-banner">
+    <text class="info-text">
+      <text class="info-title">ℹ️ 说明：</text>
+      从服务器导入表单 JSON，或通过本地文件/粘贴 JSON 导入规则，保存为新的规则系统，与 COC / DND 同级。导入后可在该规则下创建多张角色卡。
+    </text>
+  </view>
+
+  <view class="import-actions">
+    <view class="import-action-btn json-btn" bindtap="openJsonImport">
+      <text class="import-action-icon">📄</text>
+      <text class="import-action-text">导入 JSON</text>
+    </view>
+  </view>
+
+  <view class="content">
+    <view wx:if="{{loading}}" class="loading-state">
+      <text class="loading-icon">☁️</text>
+      <text class="loading-text">正在从服务器读取...</text>
+    </view>
+
+    <view wx:elif="{{error}}" class="error-state">
+      <text class="error-icon">⚠️</text>
+      <text class="error-text">读取失败：{{error}}</text>
+      <text class="error-hint">请确认后端服务已启动（默认端口 3001）</text>
+      <view class="retry-btn" bindtap="refresh">重试</view>
+    </view>
+
+    <view wx:elif="{{filteredList.length === 0}}" class="empty-state">
+      <text class="empty-icon">📭</text>
+      <text class="empty-text">服务器上还没有保存的表单</text>
+      <text class="empty-hint">请前往网页设计器保存一个</text>
+    </view>
+
+    <view wx:else class="form-list">
+      <view
+        wx:for="{{filteredList}}"
+        wx:key="id"
+        class="form-card parchment-card ink-border"
+        data-id="{{item.id}}"
+        bindtap="importAsSystem"
+      >
+        <view
+          class="form-icon"
+          style="background-color: {{item.systemColor}}22; box-shadow: 0 0 0 1px {{item.systemColor}}55 inset;"
+        >
+          <text>{{item.systemLogo}}</text>
+        </view>
+
+        <view class="form-info">
+          <view class="form-title-row">
+            <text class="form-name">{{item.name}}</text>
+            <view
+              class="form-system-tag"
+              style="color: {{item.systemColor}}; background-color: {{item.systemColor}}22;"
+            >
+              {{item.system}}
+            </view>
+          </view>
+          <text wx:if="{{item.description}}" class="form-desc">{{item.description}}</text>
+          <view class="form-meta">
+            <text class="meta-item">📋 {{item.fieldCount}} 字段</text>
+            <text class="meta-item">🕒 {{item.updatedAtText}}</text>
+          </view>
+        </view>
+
+        <view class="import-btn">
+          <text wx:if="{{importingId === item.id}}" class="importing">导入中...</text>
+          <text wx:else class="import-text">+ 导入为新规则</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{showJsonDialog}}" class="dialog-mask" bindtap="cancelJsonImport">
+    <view class="dialog-box" catchtap="stopPropagation">
+      <view class="dialog-header">
+        <text class="dialog-title">📄 导入 JSON 规则</text>
+        <text class="dialog-close" bindtap="cancelJsonImport">✕</text>
+      </view>
+      <view class="dialog-body">
+        <view class="json-source-row">
+          <view class="json-source-btn" bindtap="chooseJsonFile">
+            <text class="json-source-icon">📁</text>
+            <text class="json-source-text">选择文件</text>
+          </view>
+          <view class="json-source-btn" bindtap="pasteJson">
+            <text class="json-source-icon">📋</text>
+            <text class="json-source-text">粘贴 JSON</text>
+          </view>
+        </view>
+        <view class="input-section">
+          <view class="input-header">
+            <text class="input-label">JSON 内容</text>
+            <text wx:if="{{jsonInput}}" class="input-clear" bindtap="clearJsonInput">清空</text>
+          </view>
+          <textarea
+            class="json-textarea"
+            placeholder="粘贴 JSON 内容到此处..."
+            placeholder-class="textarea-placeholder"
+            value="{{jsonInput}}"
+            bindinput="onJsonInput"
+            auto-height
+          />
+        </view>
+        <view class="dialog-actions">
+          <view class="btn-cancel" bindtap="cancelJsonImport">取消</view>
+          <view class="btn-primary" bindtap="previewJson">预览</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{showPreviewDialog}}" class="dialog-mask" catchtap="cancelPreview">
+    <view class="preview-dialog" catchtap="stopPropagation">
+      <view class="preview-dialog-header">
+        <text class="preview-dialog-title">📄 角色卡预览</text>
+        <text class="dialog-close" bindtap="cancelPreview">✕</text>
+      </view>
+
+      <scroll-view class="preview-scroll" scroll-y>
+        <!-- 模拟角色卡详情头部 -->
+        <view class="preview-card">
+          <view class="preview-card-header" style="background: linear-gradient(180deg, {{previewAccentColor}}22 0%, transparent 100%);">
+            <view class="preview-header-deco">{{previewLogo}}</view>
+            <view class="preview-card-main">
+              <view class="preview-card-avatar" style="background-color: {{previewAccentColor}}22; box-shadow: 0 0 0 2px {{previewAccentColor}}55 inset;">
+                <text>{{previewLogo}}</text>
+              </view>
+              <view class="preview-card-info">
+                <text class="preview-card-name">样例</text>
+                <text class="preview-card-player">玩家：我</text>
+              </view>
+            </view>
+            <view class="preview-system-badge" style="color: {{previewAccentColor}}; background-color: {{previewAccentColor}}22;">
+              {{previewLogo}} {{previewSystemName}}
+            </view>
+          </view>
+
+          <!-- 动态表单 -->
+          <view class="preview-form-wrap">
+            <dynamic-form rule="{{previewRule}}" value="{{previewFormData}}" />
+          </view>
+        </view>
+
+        <!-- JSON 编辑区 -->
+        <view class="preview-json-section">
+          <view class="json-toggle" bindtap="toggleJsonEditor">
+            <text class="json-toggle-icon">{{showJsonEditor ? '▼' : '▶'}}</text>
+            <text class="json-toggle-text">编辑 JSON 源码</text>
+          </view>
+          <view wx:if="{{showJsonEditor}}" class="json-editor-wrap">
+            <textarea
+              class="json-textarea preview-textarea"
+              placeholder-class="textarea-placeholder"
+              value="{{previewJsonText}}"
+              bindinput="onPreviewJsonInput"
+              auto-height
+            />
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="preview-dialog-footer">
+        <view class="btn-cancel" bindtap="cancelPreview">取消</view>
+        <view class="btn-primary {{jsonImporting ? 'disabled' : ''}}" bindtap="confirmJsonImport">
+          {{jsonImporting ? '导入中...' : '确认导入'}}
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

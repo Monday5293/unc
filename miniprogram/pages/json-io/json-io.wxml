@@ -1,0 +1,88 @@
+<view class="json-io-page">
+  <view class="section">
+    <view class="section-title">📥 导入 JSON</view>
+
+    <view class="type-tabs">
+      <view
+        class="type-tab {{importType === 'system' ? 'active' : ''}}"
+        data-type="system"
+        bindtap="onImportTypeChange"
+      >
+        规则系统
+      </view>
+      <view
+        class="type-tab {{importType === 'card' ? 'active' : ''}}"
+        data-type="card"
+        bindtap="onImportTypeChange"
+      >
+        角色卡
+      </view>
+    </view>
+
+    <view class="input-section">
+      <view class="input-header">
+        <text class="input-label">JSON 内容</text>
+        <view class="input-actions">
+          <text class="action-link" bindtap="pasteFromClipboard">粘贴</text>
+          <text class="action-link danger" bindtap="clearInput">清空</text>
+        </view>
+      </view>
+      <textarea
+        class="json-textarea"
+        placeholder="粘贴 JSON 内容到此处..."
+        placeholder-class="textarea-placeholder"
+        value="{{jsonInput}}"
+        bindinput="onJsonInput"
+        auto-height
+      />
+    </view>
+
+    <view class="action-btn primary" bindtap="doImport">
+      导入
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">📤 导出 JSON</view>
+
+    <view class="type-tabs">
+      <view
+        class="type-tab {{exportType === 'system' ? 'active' : ''}}"
+        data-type="system"
+        bindtap="onExportTypeChange"
+      >
+        规则系统
+      </view>
+      <view
+        class="type-tab {{exportType === 'allCards' ? 'active' : ''}}"
+        data-type="allCards"
+        bindtap="onExportTypeChange"
+      >
+        全部角色卡
+      </view>
+    </view>
+
+    <view wx:if="{{exportType === 'system'}}" class="select-section">
+      <text class="select-label">选择规则系统</text>
+      <picker
+        range="{{systems}}"
+        range-key="name"
+        value="{{selectedSystemIndex}}"
+        bindchange="onSystemChange"
+      >
+        <view class="picker-value">
+          {{systems[selectedSystemIndex].logo}} {{systems[selectedSystemIndex].name}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="action-btn secondary" bindtap="doExport">
+      导出并复制
+    </view>
+
+    <view class="export-hint">
+      💡 导出的 JSON 将复制到剪贴板，可粘贴到其他设备或保存到文件
+    </view>
+  </view>
+</view>

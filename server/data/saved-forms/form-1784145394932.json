@@ -1,0 +1,43 @@
+{
+  "id": "form-1784145394932",
+  "name": "预览表单",
+  "system": "COC",
+  "description": "",
+  "rule": [
+    {
+      "type": "switch",
+      "field": "Flwjmrmi3omvawc",
+      "title": "开关",
+      "info": "",
+      "$required": false,
+      "props": {
+        "activeValue": true,
+        "inactiveValue": false
+      },
+      "_fc_id": "id_F6g0mrmi3omvaxc",
+      "name": "ref_F43umrmi3omvayc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "switch"
+    }
+  ],
+  "option": {
+    "form": {
+      "inline": false,
+      "hideRequiredAsterisk": false,
+      "labelPosition": "right",
+      "size": "default",
+      "labelWidth": "125px"
+    },
+    "resetBtn": {
+      "show": false,
+      "innerText": "重置"
+    },
+    "submitBtn": {
+      "show": true,
+      "innerText": "提交"
+    }
+  },
+  "createdAt": "2026-07-15T19:56:34.932Z",
+  "updatedAt": "2026-07-15T19:56:34.932Z"
+}

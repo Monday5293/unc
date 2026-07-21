@@ -1,0 +1,75 @@
+.rule-tab-container {
+  display: flex;
+  align-items: center;
+}
+
+.tab-scroll {
+  flex: 1;
+  white-space: nowrap;
+}
+
+.tabs-wrapper {
+  display: inline-flex;
+  gap: 8rpx;
+  padding-bottom: 8rpx;
+  align-items: center;
+}
+
+.tab-item {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  padding: 16rpx 32rpx;
+  border-radius: 16rpx;
+  background-color: rgba(26, 23, 20, 0.2);
+  color: #6B6560;
+}
+
+.tab-item.active {
+  background-color: #1A1714;
+  color: #E8DCC4;
+}
+
+.tab-logo {
+  font-size: 36rpx;
+  line-height: 1;
+}
+
+.tab-name {
+  font-size: 20rpx;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: -8rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64rpx;
+  height: 8rpx;
+  border-radius: 4rpx;
+}
+
+.add-btn {
+  flex-shrink: 0;
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16rpx;
+  border: 1rpx dashed rgba(200, 160, 70, 0.4);
+  background-color: rgba(200, 160, 70, 0.08);
+}
+
+.add-icon {
+  font-size: 32rpx;
+  color: #C8A046;
+  font-weight: 300;
+}

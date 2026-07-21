@@ -1,0 +1,56 @@
+{
+  "id": "form-1784150926061",
+  "name": "预览规则",
+  "system": "CUSTOM",
+  "description": "",
+  "rule": [
+    {
+      "type": "radio",
+      "field": "F547mrmle8nmbrc",
+      "title": "单选框",
+      "info": "",
+      "effect": {
+        "fetch": ""
+      },
+      "$required": false,
+      "options": [
+        {
+          "label": "选项01",
+          "value": "1"
+        },
+        {
+          "label": "选项02",
+          "value": "2"
+        },
+        {
+          "label": "选项03",
+          "value": "3"
+        }
+      ],
+      "_fc_id": "id_Fhrymrmle8nmbsc",
+      "name": "ref_Fsrdmrmle8nmbtc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "radio"
+    }
+  ],
+  "option": {
+    "form": {
+      "inline": false,
+      "hideRequiredAsterisk": false,
+      "labelPosition": "right",
+      "size": "default",
+      "labelWidth": "125px"
+    },
+    "resetBtn": {
+      "show": false,
+      "innerText": "重置"
+    },
+    "submitBtn": {
+      "show": true,
+      "innerText": "提交"
+    }
+  },
+  "createdAt": "2026-07-15T21:28:46.061Z",
+  "updatedAt": "2026-07-15T21:28:46.061Z"
+}

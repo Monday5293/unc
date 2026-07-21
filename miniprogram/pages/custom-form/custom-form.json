@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "自定义表单渲染",
+  "navigationBarBackgroundColor": "#1A1714",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#1A1714",
+  "usingComponents": {
+    "dynamic-form": "/components/dynamic-form/dynamic-form"
+  }
+}

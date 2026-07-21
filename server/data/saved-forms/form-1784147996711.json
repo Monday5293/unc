@@ -1,0 +1,255 @@
+{
+  "id": "form-1784147996711",
+  "name": "BCA",
+  "system": "COC",
+  "description": "",
+  "rule": [
+    {
+      "type": "slider",
+      "field": "Fzemmrmjlrd4abc",
+      "title": "滑块",
+      "info": "",
+      "$required": false,
+      "_fc_id": "id_Fjzsmrmjlrd4acc",
+      "name": "ref_Fad3mrmjlrd4adc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "slider"
+    },
+    {
+      "type": "input",
+      "field": "F7vtmrmjlsejaec",
+      "title": "输入框",
+      "info": "",
+      "$required": false,
+      "_fc_id": "id_F9u7mrmjlsejafc",
+      "name": "ref_Fiuumrmjlsejagc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "input"
+    },
+    {
+      "type": "input",
+      "field": "Ffmfmrmjlsx4ahc",
+      "title": "多行输入框",
+      "info": "",
+      "$required": false,
+      "props": {
+        "type": "textarea"
+      },
+      "_fc_id": "id_Fttzmrmjlsx4aic",
+      "name": "ref_Fji7mrmjlsx4ajc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "textarea"
+    },
+    {
+      "type": "fcTable",
+      "props": {
+        "rule": {
+          "row": 3,
+          "col": 4,
+          "style": {},
+          "class": {},
+          "layout": []
+        }
+      },
+      "children": [
+        {
+          "type": "input",
+          "field": "Fdoumrmjlxowayc",
+          "title": "多行输入框",
+          "info": "",
+          "$required": false,
+          "props": {
+            "type": "textarea"
+          },
+          "_fc_id": "id_Ffi3mrmjlxowazc",
+          "name": "ref_Fsy0mrmjlxowb0c",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "textarea",
+          "slot": "1:0"
+        },
+        {
+          "type": "input",
+          "field": "F09lmrmjm0ujbac",
+          "title": "密码输入框",
+          "info": "",
+          "$required": false,
+          "props": {
+            "type": "password"
+          },
+          "_fc_id": "id_Fjx2mrmjm0ujbbc",
+          "name": "ref_Fibxmrmjm0ujbcc",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "password",
+          "slot": "1:1"
+        },
+        {
+          "type": "input",
+          "field": "Fxytmrmjlzg2b4c",
+          "title": "多行输入框",
+          "info": "",
+          "$required": false,
+          "props": {
+            "type": "textarea"
+          },
+          "_fc_id": "id_Fn4cmrmjlzg2b5c",
+          "name": "ref_Fw9fmrmjlzg2b6c",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "textarea",
+          "slot": "1:2"
+        },
+        {
+          "type": "checkbox",
+          "field": "F9rkmrmjm1v2bdc",
+          "title": "多选框",
+          "info": "",
+          "effect": {
+            "fetch": ""
+          },
+          "$required": false,
+          "options": [
+            {
+              "label": "选项01",
+              "value": "1"
+            },
+            {
+              "label": "选项02",
+              "value": "2"
+            },
+            {
+              "label": "选项03",
+              "value": "3"
+            }
+          ],
+          "_fc_id": "id_Fxjwmrmjm1v2bec",
+          "name": "ref_Fdf4mrmjm1v2bfc",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "checkbox",
+          "slot": "1:3"
+        },
+        {
+          "type": "input",
+          "field": "F3bqmrmjlypqb1c",
+          "title": "多行输入框",
+          "info": "",
+          "$required": false,
+          "props": {
+            "type": "textarea"
+          },
+          "_fc_id": "id_F04cmrmjlypqb2c",
+          "name": "ref_F594mrmjlypqb3c",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "textarea",
+          "slot": "2:0"
+        },
+        {
+          "type": "checkbox",
+          "field": "Fbxcmrmjm3h3bjc",
+          "title": "多选框",
+          "info": "",
+          "effect": {
+            "fetch": ""
+          },
+          "$required": false,
+          "options": [
+            {
+              "label": "选项01",
+              "value": "1"
+            },
+            {
+              "label": "选项02",
+              "value": "2"
+            },
+            {
+              "label": "选项03",
+              "value": "3"
+            }
+          ],
+          "_fc_id": "id_Fk1zmrmjm3h3bkc",
+          "name": "ref_Funimrmjm3h3blc",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "checkbox",
+          "slot": "2:1"
+        },
+        {
+          "type": "input",
+          "field": "Fmiwmrmjm054b7c",
+          "title": "多行输入框",
+          "info": "",
+          "$required": false,
+          "props": {
+            "type": "textarea"
+          },
+          "_fc_id": "id_F7atmrmjm055b8c",
+          "name": "ref_Fhyimrmjm055b9c",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "textarea",
+          "slot": "2:2"
+        },
+        {
+          "type": "checkbox",
+          "field": "F8cfmrmjm2nsbgc",
+          "title": "多选框",
+          "info": "",
+          "effect": {
+            "fetch": ""
+          },
+          "$required": false,
+          "options": [
+            {
+              "label": "选项01",
+              "value": "1"
+            },
+            {
+              "label": "选项02",
+              "value": "2"
+            },
+            {
+              "label": "选项03",
+              "value": "3"
+            }
+          ],
+          "_fc_id": "id_Fribmrmjm2nsbhc",
+          "name": "ref_F298mrmjm2nsbic",
+          "display": true,
+          "hidden": false,
+          "_fc_drag_tag": "checkbox",
+          "slot": "2:3"
+        }
+      ],
+      "_fc_id": "id_Fn8ymrmjluzxakc",
+      "name": "ref_F7htmrmjluzxalc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "fcTable"
+    }
+  ],
+  "option": {
+    "form": {
+      "inline": false,
+      "hideRequiredAsterisk": false,
+      "labelPosition": "right",
+      "size": "default",
+      "labelWidth": "125px"
+    },
+    "resetBtn": {
+      "show": false,
+      "innerText": "重置"
+    },
+    "submitBtn": {
+      "show": true,
+      "innerText": "提交"
+    }
+  },
+  "createdAt": "2026-07-15T20:39:56.711Z",
+  "updatedAt": "2026-07-15T20:39:56.711Z"
+}

@@ -1,0 +1,312 @@
+page {
+  background-color: #1A1714;
+  color: #E8DCC4;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+view, text {
+  box-sizing: border-box;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.min-h-full {
+  min-height: 100%;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.sticky {
+  position: sticky;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.top-0 {
+  top: 0;
+}
+
+.left-0 {
+  left: 0;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.bottom-0 {
+  bottom: 0;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.z-20 {
+  z-index: 20;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+/* 羊皮纸风格卡片 */
+.parchment-card {
+  background: linear-gradient(135deg, #E8DCC4 0%, #DFD0B0 100%);
+  position: relative;
+  color: #1A1714;
+}
+
+.parchment-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="2" height="2" fill="rgba(58,50,43,0.015)"/></svg>');
+}
+
+.ink-border {
+  border: 1rpx solid rgba(15, 14, 12, 0.4);
+  box-shadow: 0 0 0 1rpx rgba(232, 220, 196, 0.05) inset, 0 8px 24px -8px rgba(0,0,0,0.4);
+}
+
+/* 主题色变量 */
+.page-bg {
+  background-color: #1A1714;
+}
+
+.text-parchment {
+  color: #E8DCC4;
+}
+
+.text-parchment-2 {
+  color: rgba(232, 220, 196, 0.7);
+}
+
+.text-parchment-3 {
+  color: rgba(232, 220, 196, 0.5);
+}
+
+.text-parchment-4 {
+  color: rgba(232, 220, 196, 0.4);
+}
+
+.ink-700 {
+  background-color: #2A2724;
+}
+
+.ink-800 {
+  background-color: #221F1C;
+}
+
+.ink-900 {
+  background-color: #1A1714;
+}
+
+.border-ink {
+  border-color: rgba(232, 220, 196, 0.1);
+}
+
+/* 间距 */
+.p-2 { padding: 16rpx; }
+.p-3 { padding: 24rpx; }
+.p-4 { padding: 32rpx; }
+.p-5 { padding: 40rpx; }
+.px-2 { padding-left: 16rpx; padding-right: 16rpx; }
+.px-3 { padding-left: 24rpx; padding-right: 24rpx; }
+.px-4 { padding-left: 32rpx; padding-right: 32rpx; }
+.px-5 { padding-left: 40rpx; padding-right: 40rpx; }
+.py-2 { padding-top: 16rpx; padding-bottom: 16rpx; }
+.py-3 { padding-top: 24rpx; padding-bottom: 24rpx; }
+.py-4 { padding-top: 32rpx; padding-bottom: 32rpx; }
+.pt-2 { padding-top: 16rpx; }
+.pt-3 { padding-top: 24rpx; }
+.pt-4 { padding-top: 32rpx; }
+.pt-6 { padding-top: 48rpx; }
+.pt-8 { padding-top: 64rpx; }
+.pb-2 { padding-bottom: 16rpx; }
+.pb-3 { padding-bottom: 24rpx; }
+.pb-4 { padding-bottom: 32rpx; }
+.pb-6 { padding-bottom: 48rpx; }
+.pb-8 { padding-bottom: 64rpx; }
+.mt-1 { margin-top: 8rpx; }
+.mt-2 { margin-top: 16rpx; }
+.mt-3 { margin-top: 24rpx; }
+.mt-4 { margin-top: 32rpx; }
+.mt-5 { margin-top: 40rpx; }
+.mb-1 { margin-bottom: 8rpx; }
+.mb-2 { margin-bottom: 16rpx; }
+.mb-3 { margin-bottom: 24rpx; }
+.mb-4 { margin-bottom: 32rpx; }
+.mb-5 { margin-bottom: 40rpx; }
+.ml-1 { margin-left: 8rpx; }
+.ml-2 { margin-left: 16rpx; }
+.mr-1 { margin-right: 8rpx; }
+.mr-2 { margin-right: 16rpx; }
+.gap-1 { gap: 8rpx; }
+.gap-2 { gap: 16rpx; }
+.gap-3 { gap: 24rpx; }
+.gap-4 { gap: 32rpx; }
+
+/* 圆角 */
+.rounded {
+  border-radius: 8rpx;
+}
+
+.rounded-lg {
+  border-radius: 16rpx;
+}
+
+.rounded-xl {
+  border-radius: 24rpx;
+}
+
+.rounded-full {
+  border-radius: 9999rpx;
+}
+
+/* 字体大小 */
+.text-xs {
+  font-size: 20rpx;
+}
+
+.text-sm {
+  font-size: 24rpx;
+}
+
+.text-base {
+  font-size: 28rpx;
+}
+
+.text-lg {
+  font-size: 32rpx;
+}
+
+.text-xl {
+  font-size: 36rpx;
+}
+
+.text-2xl {
+  font-size: 48rpx;
+}
+
+.text-3xl {
+  font-size: 64rpx;
+}
+
+.text-4xl {
+  font-size: 80rpx;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+/* 主题色 */
+.color-coc {
+  color: #3B6B4A;
+}
+
+.color-dnd {
+  color: #C8A046;
+}
+
+.color-daggerheart {
+  color: #9BA8B5;
+}
+
+.bg-coc {
+  background-color: #3B6B4A;
+}
+
+.bg-dnd {
+  background-color: #C8A046;
+}
+
+.bg-daggerheart {
+  background-color: #9BA8B5;
+}

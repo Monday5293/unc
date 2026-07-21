@@ -1,0 +1,36 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/profile/profile",
+    "pages/card-detail/card-detail",
+    "pages/import-list/import-list",
+    "pages/custom-form/custom-form",
+    "pages/json-io/json-io"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#1A1714",
+    "navigationBarTitleText": "跑团角色卡",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#1A1714"
+  },
+  "tabBar": {
+    "color": "#8B857E",
+    "selectedColor": "#C8A046",
+    "backgroundColor": "#1A1714",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "卡面"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "form-1784149958313",
+  "name": "预览规则",
+  "system": "CUSTOM",
+  "description": "",
+  "rule": [
+    {
+      "type": "input",
+      "field": "Fcxumrmkthuthec",
+      "title": "密码输入框",
+      "info": "",
+      "$required": false,
+      "props": {
+        "type": "password"
+      },
+      "_fc_id": "id_F6jgmrmkthuthfc",
+      "name": "ref_Fdo5mrmkthuthgc",
+      "display": true,
+      "hidden": false,
+      "_fc_drag_tag": "password"
+    }
+  ],
+  "option": {
+    "form": {
+      "inline": false,
+      "hideRequiredAsterisk": false,
+      "labelPosition": "right",
+      "size": "default",
+      "labelWidth": "125px"
+    },
+    "resetBtn": {
+      "show": false,
+      "innerText": "重置"
+    },
+    "submitBtn": {
+      "show": true,
+      "innerText": "提交"
+    }
+  },
+  "createdAt": "2026-07-15T21:12:38.313Z",
+  "updatedAt": "2026-07-15T21:12:38.313Z"
+}

@@ -1,0 +1,560 @@
+{
+  "id": "card-1784565044120",
+  "system": "CUSTOM",
+  "name": "新建角色卡",
+  "player": "KP",
+  "avatar": "",
+  "description": "通过设计器创建的角色卡",
+  "formData": {},
+  "rule": [
+    {
+      "type": "fcRow",
+      "children": [
+        {
+          "type": "col",
+          "props": {
+            "span": 12
+          },
+          "children": [
+            {
+              "type": "elImage",
+              "title": "",
+              "style": {
+                "paddingBottom": "248px",
+                "height": "100px",
+                "width": "100px"
+              },
+              "props": {
+                "src": "https://static.form-create.com/example.png"
+              },
+              "_fc_id": "id_Fb7rmrtf6kujbzc",
+              "name": "ref_F0dwmrtf6kujc0c",
+              "_fc_drag_tag": "elImage",
+              "display": true,
+              "hidden": false
+            }
+          ],
+          "_fc_id": "id_F9vemrtf6ewmbhc",
+          "name": "ref_F7kqmrtf6ewmbic",
+          "_fc_drag_tag": "col",
+          "display": true,
+          "hidden": false
+        },
+        {
+          "type": "col",
+          "props": {
+            "span": 12,
+            "offset": 0
+          },
+          "children": [
+            {
+              "type": "fcTable",
+              "props": {
+                "rule": {
+                  "row": 1,
+                  "col": 2,
+                  "style": {
+                    "0:0": {
+                      "width": "63px"
+                    }
+                  },
+                  "class": {},
+                  "layout": []
+                },
+                "border": false
+              },
+              "children": [
+                {
+                  "type": "div",
+                  "title": "",
+                  "native": true,
+                  "style": {
+                    "whiteSpace": "pre-line",
+                    "width": "100%",
+                    "fontFamily": "Microsoft YaHei"
+                  },
+                  "children": [
+                    "名称："
+                  ],
+                  "_fc_id": "id_F49xmrtffoxoe0c",
+                  "name": "ref_Fmsrmrtffoxoe1c",
+                  "_fc_drag_tag": "text",
+                  "display": true,
+                  "hidden": false,
+                  "slot": "0:0"
+                },
+                {
+                  "type": "input",
+                  "field": "F3kjmrtfbumyd1c",
+                  "title": "",
+                  "info": "",
+                  "$required": false,
+                  "_fc_id": "id_Fq2qmrtfbumyd2c",
+                  "name": "ref_F6hqmrtfbumyd3c",
+                  "_fc_drag_tag": "input",
+                  "props": {
+                    "type": "text",
+                    "placeholder": "角色名称"
+                  },
+                  "wrap": {
+                    "labelWidth": "0px"
+                  },
+                  "style": {
+                    "marginTop": "18px"
+                  },
+                  "display": true,
+                  "hidden": false,
+                  "slot": "0:1"
+                }
+              ],
+              "_fc_id": "id_Fjnamrtf7910c4c",
+              "name": "ref_F91bmrtf7910c5c",
+              "_fc_drag_tag": "fcTable",
+              "display": true,
+              "hidden": false
+            },
+            {
+              "type": "fcTable",
+              "props": {
+                "rule": {
+                  "row": 1,
+                  "col": 2,
+                  "style": {
+                    "0:0": {
+                      "width": "63px"
+                    }
+                  },
+                  "class": {},
+                  "layout": []
+                },
+                "mini": false,
+                "border": false
+              },
+              "children": [
+                {
+                  "type": "div",
+                  "title": "",
+                  "native": true,
+                  "style": {
+                    "whiteSpace": "pre-line",
+                    "width": "100%"
+                  },
+                  "children": [
+                    "职业："
+                  ],
+                  "_fc_id": "id_Fl94mrtfh9xcetc",
+                  "name": "ref_Fd1tmrtfh9xcewc",
+                  "_fc_drag_tag": "text",
+                  "display": true,
+                  "hidden": false,
+                  "slot": "0:0"
+                },
+                {
+                  "type": "input",
+                  "field": "Fkoimrtfh9xcesc",
+                  "title": "",
+                  "info": "",
+                  "$required": false,
+                  "_fc_id": "id_Fqdlmrtfh9xceuc",
+                  "name": "ref_Frlimrtfh9xcexc",
+                  "_fc_drag_tag": "input",
+                  "props": {
+                    "type": "text",
+                    "placeholder": "主要职业"
+                  },
+                  "wrap": {
+                    "labelWidth": "0px"
+                  },
+                  "style": {
+                    "marginTop": "18px"
+                  },
+                  "display": true,
+                  "hidden": false,
+                  "slot": "0:1"
+                }
+              ],
+              "_fc_id": "id_Fekymrtfh9xcevc",
+              "name": "ref_F5vbmrtfh9xceyc",
+              "_fc_drag_tag": "fcTable",
+              "display": true,
+              "hidden": false
+            },
+            {
+              "type": "fcTable",
+              "props": {
+                "rule": {
+                  "row": 1,
+                  "col": 2,
+                  "style": {
+                    "0:0": {
+                      "width": "63px"
+                    }
+                  },
+                  "class": {},
+                  "layout": []
+                },
+                "border": false
+              },
+              "children": [
+                {
+                  "type": "div",
+                  "title": "",
+                  "native": true,
+                  "style": {
+                    "whiteSpace": "pre-line",
+                    "width": "100%"
+                  },
+                  "children": [
+                    "子职："
+                  ],
+                  "_fc_id": "id_F7bdmrtfh91cekc",
+                  "name": "ref_Fo6xmrtfh91cenc",
+                  "_fc_drag_tag": "text",
+                  "display": true,
+                  "hidden": false,
+                  "slot": "0:0"
+                },
+                {
+                  "type": "input",
+                  "field": "Flv5mrtfh91cejc",
+                  "title": "",
+                  "info": "",
+                  "$required": false,
+                  "_fc_id": "id_Fp9wmrtfh91celc",
+                  "name": "ref_Fw6tmrtfh91ceoc",
+                  "_fc_drag_tag": "input",
+                  "props": {
+                    "type": "text",
+                    "placeholder": "子职业"
+                  },
+                  "wrap": {
+                    "labelWidth": "0px"
+                  },
+                  "style": {
+                    "marginTop": "18px"
+                  },
+                  "display": true,
+                  "hidden": false,
+                  "slot": "0:1"
+                }
+              ],
+              "_fc_id": "id_Famsmrtfh91cemc",
+              "name": "ref_Fww7mrtfh91cepc",
+              "_fc_drag_tag": "fcTable",
+              "display": true,
+              "hidden": false
+            }
+          ],
+          "_fc_id": "id_Fezxmrtf6ewmbjc",
+          "name": "ref_F0eqmrtf6ewmbkc",
+          "_fc_drag_tag": "col",
+          "display": true,
+          "hidden": false
+        }
+      ],
+      "_fc_id": "id_F4yamrtf6ewmbfc",
+      "name": "ref_F8fpmrtf6ewmbgc",
+      "_fc_drag_tag": "fcRow",
+      "display": true,
+      "hidden": false
+    },
+    {
+      "type": "fcTable",
+      "props": {
+        "rule": {
+          "row": 2,
+          "col": 3,
+          "style": {
+            "0:0": {
+              "height": "42px"
+            }
+          },
+          "class": {},
+          "layout": []
+        }
+      },
+      "children": [
+        {
+          "type": "div",
+          "title": "",
+          "native": true,
+          "style": {
+            "whiteSpace": "pre-line",
+            "width": "100%"
+          },
+          "children": [
+            "种族1"
+          ],
+          "_fc_id": "id_Fu7rmrtflpc7h5c",
+          "name": "ref_F6jwmrtflpc7h6c",
+          "_fc_drag_tag": "text",
+          "display": true,
+          "hidden": false,
+          "slot": "0:0"
+        },
+        {
+          "type": "div",
+          "title": "",
+          "native": true,
+          "style": {
+            "whiteSpace": "pre-line",
+            "width": "100%"
+          },
+          "children": [
+            "种族2"
+          ],
+          "_fc_id": "id_Fzlpmrtflzfwh8c",
+          "name": "ref_Fet6mrtflzfwh9c",
+          "_fc_drag_tag": "text",
+          "display": true,
+          "hidden": false,
+          "slot": "0:1"
+        },
+        {
+          "type": "div",
+          "title": "",
+          "native": true,
+          "style": {
+            "whiteSpace": "pre-line",
+            "width": "100%"
+          },
+          "children": [
+            "社群"
+          ],
+          "_fc_id": "id_Fnqsmrtfm8a0hbc",
+          "name": "ref_Fbx4mrtfm8a0hcc",
+          "_fc_drag_tag": "text",
+          "display": true,
+          "hidden": false,
+          "slot": "0:2"
+        },
+        {
+          "type": "input",
+          "field": "Flwvmrtfmxm7hwc",
+          "title": "",
+          "info": "",
+          "$required": false,
+          "_fc_id": "id_F14kmrtfmxm7hxc",
+          "name": "ref_Fx9fmrtfmxm7hyc",
+          "_fc_drag_tag": "input",
+          "props": {
+            "type": "text",
+            "placeholder": "种族1"
+          },
+          "wrap": {
+            "labelWidth": "0px"
+          },
+          "style": {
+            "marginTop": "18px"
+          },
+          "display": true,
+          "hidden": false,
+          "slot": "1:0"
+        },
+        {
+          "type": "input",
+          "field": "Fiifmrtfmxzbi0c",
+          "title": "",
+          "info": "",
+          "$required": false,
+          "_fc_id": "id_F82hmrtfmxzbi1c",
+          "name": "ref_Fgycmrtfmxzbi2c",
+          "_fc_drag_tag": "input",
+          "props": {
+            "type": "text",
+            "placeholder": "种族2"
+          },
+          "wrap": {
+            "labelWidth": "0px"
+          },
+          "style": {
+            "marginTop": "18px"
+          },
+          "display": true,
+          "hidden": false,
+          "slot": "1:1"
+        },
+        {
+          "type": "input",
+          "field": "F7i2mrtfmychi4c",
+          "title": "",
+          "info": "",
+          "$required": false,
+          "_fc_id": "id_Fcarmrtfmychi5c",
+          "name": "ref_Fl50mrtfmychi6c",
+          "_fc_drag_tag": "input",
+          "props": {
+            "type": "text",
+            "placeholder": "社群"
+          },
+          "wrap": {
+            "labelWidth": "0px"
+          },
+          "style": {
+            "marginTop": "18px"
+          },
+          "display": true,
+          "hidden": false,
+          "slot": "1:2"
+        }
+      ],
+      "_fc_id": "id_Fz13mrtflhu5gnc",
+      "name": "ref_Fkkamrtflhu5goc",
+      "_fc_drag_tag": "fcTable",
+      "display": true,
+      "hidden": false
+    },
+    {
+      "type": "fcTable",
+      "props": {
+        "rule": {
+          "row": 2,
+          "col": 3,
+          "style": {},
+          "class": {},
+          "layout": []
+        }
+      },
+      "children": [
+        {
+          "type": "inputNumber",
+          "field": "Fg12mrtfs462ipc",
+          "title": "",
+          "info": "",
+          "$required": false,
+          "props": {
+            "controls": true
+          },
+          "_fc_id": "id_Fiv3mrtfs462iqc",
+          "name": "ref_Fhtbmrtfs462irc",
+          "_fc_drag_tag": "inputNumber",
+          "style": {
+            "position": "relative",
+            "right": "0px"
+          },
+          "display": true,
+          "hidden": false,
+          "slot": "1:0"
+        },
+        {
+          "type": "div",
+          "title": "",
+          "native": true,
+          "style": {
+            "whiteSpace": "pre-line",
+            "width": "100%"
+          },
+          "children": [
+            "生命"
+          ],
+          "_fc_id": "id_Fee1mrtftry9knc",
+          "name": "ref_Fp18mrtftry9koc",
+          "_fc_drag_tag": "text",
+          "display": true,
+          "hidden": false,
+          "slot": "0:0"
+        },
+        {
+          "type": "div",
+          "title": "",
+          "native": true,
+          "style": {
+            "whiteSpace": "pre-line",
+            "width": "100%"
+          },
+          "children": [
+            "压力"
+          ],
+          "_fc_id": "id_Fo7xmrtftt2ekqc",
+          "name": "ref_Fe7nmrtftt2ekrc",
+          "_fc_drag_tag": "text",
+          "display": true,
+          "hidden": false,
+          "slot": "0:1"
+        },
+        {
+          "type": "div",
+          "title": "",
+          "native": true,
+          "style": {
+            "whiteSpace": "pre-line",
+            "width": "100%"
+          },
+          "children": [
+            "护甲"
+          ],
+          "_fc_id": "id_Fp3gmrtftti2ktc",
+          "name": "ref_Fvncmrtftti2kuc",
+          "_fc_drag_tag": "text",
+          "display": true,
+          "hidden": false,
+          "slot": "0:2"
+        },
+        {
+          "type": "inputNumber",
+          "field": "Fzajmrtfxwmwmgc",
+          "title": "",
+          "info": "",
+          "$required": false,
+          "props": {
+            "controls": true
+          },
+          "_fc_id": "id_Fxyemrtfxwmwmhc",
+          "name": "ref_F4eumrtfxwmwmic",
+          "_fc_drag_tag": "inputNumber",
+          "style": {
+            "position": "relative",
+            "right": "0px"
+          },
+          "display": true,
+          "hidden": false,
+          "slot": "1:1"
+        },
+        {
+          "type": "inputNumber",
+          "field": "F8zxmrtfxx94mkc",
+          "title": "",
+          "info": "",
+          "$required": false,
+          "props": {
+            "controls": true
+          },
+          "_fc_id": "id_Fiiqmrtfxx94mlc",
+          "name": "ref_Fal4mrtfxx94mmc",
+          "_fc_drag_tag": "inputNumber",
+          "style": {
+            "position": "relative",
+            "right": "0px"
+          },
+          "display": true,
+          "hidden": false,
+          "slot": "1:2"
+        }
+      ],
+      "_fc_id": "id_Fyvdmrtfs15aibc",
+      "name": "ref_Fv7pmrtfs15aicc",
+      "_fc_drag_tag": "fcTable",
+      "display": true,
+      "hidden": false
+    }
+  ],
+  "option": {
+    "form": {
+      "inline": false,
+      "hideRequiredAsterisk": false,
+      "labelPosition": "right",
+      "size": "default",
+      "labelWidth": "125px"
+    },
+    "resetBtn": {
+      "show": false,
+      "innerText": "重置"
+    },
+    "submitBtn": {
+      "show": true,
+      "innerText": "提交"
+    }
+  },
+  "createdAt": "2026-07-20T16:30:44.120Z",
+  "updatedAt": "2026-07-20T16:30:44.120Z"
+}
