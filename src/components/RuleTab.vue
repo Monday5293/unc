@@ -1,3 +1,8 @@
+<!--
+  规则系统 Tab 切换组件
+  支持横向拖拽滚动切换规则系统，长按系统可触发额外操作（如删除），
+  当前"添加规则"按钮已注释隐藏。
+-->
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import type { RuleSystem, SystemInfo } from '@/types/card'
@@ -12,7 +17,7 @@ const emit = defineEmits<{
   (e: 'pressSystem', system: SystemInfo): void
 }>()
 
-// 拖拽滚动相关
+// ==================== 拖拽滚动 ====================
 const scrollContainer = ref<HTMLElement | null>(null)
 let isDragging = false
 let startX = 0
@@ -46,12 +51,13 @@ function onMouseLeave() {
   isDragging = false
 }
 
-// 长按相关
+// ==================== 长按 ====================
 let pressTimer: ReturnType<typeof setTimeout> | null = null
 const pressingCode = ref<string | null>(null)
 let pressStartX = 0
 let pressStartY = 0
 
+// 系统点击处理：若刚触发过长按则忽略本次点击，否则切换规则
 function onSystemClick(system: SystemInfo) {
   if (pressingCode.value === system.code) {
     pressingCode.value = null
@@ -139,6 +145,7 @@ onUnmounted(() => {
         />
       </button>
     </div>
+    <!-- TODO: 暂时隐藏新增规则功能
     <button
       class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-dnd/40 bg-dnd/10 text-dnd transition hover:bg-dnd/20"
       @click="emit('add')"
@@ -148,6 +155,7 @@ onUnmounted(() => {
         <path d="M12 5v14M5 12h14" stroke-linecap="round" />
       </svg>
     </button>
+    -->
   </div>
 </template>
 

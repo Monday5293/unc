@@ -1,16 +1,5 @@
-import type { FormTemplate } from '@/types/card'
-import { cocTemplate } from './coc-template'
-import { dndTemplate } from './dnd-template'
-import { daggerheartTemplate } from './daggerheart-template'
-
-export const formTemplates: FormTemplate[] = [
-  cocTemplate,
-  dndTemplate,
-  daggerheartTemplate,
-]
-
-export function getTemplateBySystem(system: FormTemplate['system']): FormTemplate {
-  return (
-    formTemplates.find((t) => t.system === system) ?? cocTemplate
-  )
-}
+/**
+ * 表单模板统一导出（兼容旧引用路径）
+ * 实际模板数据已迁移至 src/data/rules/ 各规则文件夹
+ */
+export { formTemplates, getTemplateBySystem } from '@/data/rules'

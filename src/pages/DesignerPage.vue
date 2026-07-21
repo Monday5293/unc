@@ -1,3 +1,8 @@
+<!--
+  表单设计器页面
+  基于 form-create-designer 构建，用于可视化设计 TRPG 角色卡表单，
+  支持 JSON 导入/导出、服务器保存/加载、小程序预览等功能。
+-->
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
@@ -7,29 +12,27 @@ import type { SavedFormItem } from '@/types/saved-form'
 
 const router = useRouter()
 
-// 设计器 ref
+// ==================== 设计器与状态管理 ====================
 const designerRef = ref<any>(null)
-// 导入文件 input ref
 const importFileInput = ref<HTMLInputElement | null>(null)
 
-// JSON 预览弹窗
+// ==================== JSON 预览弹窗 ====================
 const jsonPreviewVisible = ref(false)
 const jsonPreviewContent = ref('')
-// 表单配置预览
 const optionPreviewContent = ref('')
-// 保存到服务器弹窗
+// ==================== 保存到服务器弹窗 ====================
 const saveDialogVisible = ref(false)
 const saveFormName = ref('')
 const saveFormDescription = ref('')
 const saving = ref(false)
-// 已保存表单列表（侧边抽屉）
+// ==================== 已保存表单列表（侧边抽屉） ====================
 const savedListVisible = ref(false)
 const savedForms = ref<SavedFormItem[]>([])
 const loadingSaved = ref(false)
-// 跳转小程序加载状态
+// ==================== 小程序预览加载状态 ====================
 const previewing = ref(false)
 
-// Toast 提示
+// ==================== Toast 提示 ====================
 const toast = ref<{ visible: boolean; text: string }>({ visible: false, text: '' })
 let toastTimer: ReturnType<typeof setTimeout> | undefined
 function showToast(text: string) {
@@ -40,16 +43,17 @@ function showToast(text: string) {
   }, 2200)
 }
 
-// 自定义规则默认颜色
+// ==================== 自定义规则默认颜色 ====================
 const CUSTOM_COLOR = '#C8A046'
 
-// 清空设计器
+// ==================== 清空设计器 ====================
 function clearDesigner() {
   if (!designerRef.value) return
   designerRef.value.clearDragRule()
   showToast('已清空画布')
 }
 
+// ==================== JSON 导入 ====================
 // 触发导入JSON文件选择
 function triggerImportJson() {
   if (importFileInput.value) {
@@ -119,6 +123,7 @@ function onImportJson(e: Event) {
   reader.readAsText(file)
 }
 
+// ==================== JSON 预览与导出 ====================
 // 预览 JSON
 function previewJson() {
   if (!designerRef.value) return
@@ -180,6 +185,7 @@ async function copyJson() {
   }
 }
 
+// ==================== 保存到服务器 ====================
 // 打开"保存到服务器"弹窗
 function openSaveDialog() {
   if (!designerRef.value) {
@@ -218,6 +224,7 @@ async function doSaveToServer() {
   }
 }
 
+// ==================== 加载已保存表单 ====================
 // 加载已保存表单列表
 async function openSavedList() {
   savedListVisible.value = true
@@ -266,6 +273,7 @@ onMounted(async () => {
   await nextTick()
 })
 
+// ==================== 小程序预览 ====================
 // 保存当前表单并跳转到小程序预览
 async function goMiniApp() {
   if (!designerRef.value) {

@@ -1,3 +1,8 @@
+<!--
+  小程序外壳容器组件
+  模拟手机外框，包含顶部状态栏、底部 Tab Bar 以及路由出口，
+  为用户提供类手机的沉浸式浏览体验。
+-->
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -6,6 +11,7 @@ const route = useRoute()
 const router = useRouter()
 const activeTab = computed(() => (route.meta.tab as string) || 'home')
 
+// 底部 Tab 栏配置：卡面 / 我的
 const tabs = [
   {
     key: 'home',
@@ -21,6 +27,7 @@ const tabs = [
   },
 ]
 
+// 页面跳转：切换 Tab 或导航到其他页面
 function go(path: string) {
   router.push(path)
 }
@@ -43,7 +50,7 @@ function go(path: string) {
     <div
       class="relative z-10 flex h-[100dvh] w-full max-w-[420px] flex-col overflow-hidden bg-ink-900 shadow-2xl sm:h-[860px] sm:rounded-[2.5rem] sm:border-4 sm:border-ink-700 sm:shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)]"
     >
-      <!-- 顶部状态栏（模拟） -->
+      <!-- 顶部状态栏（模拟手机顶栏） -->
       <div
         class="flex h-7 flex-shrink-0 items-center justify-between bg-ink-900 px-5 text-[10px] text-parchment-200/60"
       >
@@ -54,7 +61,7 @@ function go(path: string) {
         </div>
       </div>
 
-      <!-- 路由出口 -->
+      <!-- 路由出口：渲染当前 Tab 对应的页面组件 -->
       <div class="relative flex-1 overflow-y-auto">
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">

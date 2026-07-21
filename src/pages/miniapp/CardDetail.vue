@@ -1,37 +1,52 @@
 <script setup lang="ts">
+/**
+ * 角色卡详情页
+ * 展示角色卡完整信息 + 表单渲染
+ * 支持 COC / DND / Daggerheart 三种规则系统
+ */
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCardStore } from '@/stores/cards'
+import { computePreviewStats } from '@/data/rules/common/preview-stats'
+import { loggerPage } from '@/utils/logger'
+const logger = loggerPage('CardDetail')
 
 const route = useRoute()
 const router = useRouter()
 const store = useCardStore()
 
+/** 当前角色卡数据 */
 const card = computed(() => {
   const id = route.params.id as string
   return store.getCardById(id)
 })
 
+/** 当前规则系统信息 */
 const systemInfo = computed(() =>
   card.value ? store.getSystemInfo(card.value.system) : null,
 )
 
+/** 表单规则（深拷贝以避免修改原数据） */
 const formRule = computed(() => {
   if (!systemInfo.value?.rule) return []
   return JSON.parse(JSON.stringify(systemInfo.value.rule))
 })
 
+/** 表单配置选项 */
 const formOption = computed(() => ({
   ...(systemInfo.value?.option || {}),
   submitBtn: false,
   resetBtn: false,
 }))
 
+/** 表单数据双向绑定 */
 const formData = ref<Record<string, unknown>>({})
 
+// 监听卡片数据变化，同步表单数据
 watch(
   card,
   (c) => {
+    logger.info('card加载', { id: c?.id, system: c?.system, name: c?.name })
     if (c) {
       formData.value = { ...c.formData }
     }
@@ -43,74 +58,27 @@ function goBack() {
   router.back()
 }
 
+/** 切换收藏状态 */
 function toggleFav() {
   if (card.value) {
+    logger.info('toggleFav', { id: card.value?.id, favorite: !card.value?.favorite })
     store.toggleFavorite(card.value.id)
   }
 }
 
+/** 预览统计项（使用通用工具函数） */
 const previewStats = computed(() => {
+  logger.debug('previewStats computed', { cardId: card.value?.id, system: card.value?.system })
   if (!card.value) return []
-  const fd = card.value.formData
-  const sys = card.value.system
-  if (sys === 'COC') {
-    return [
-      { label: '职业', value: fd.occupation ?? '—' },
-      { label: '年龄', value: fd.age ?? '—' },
-      { label: 'SAN', value: fd.san ?? '—' },
-      { label: 'HP', value: `${fd.hp}/${fd.hpMax}` },
-    ]
-  }
-  if (sys === 'DND') {
-    return [
-      { label: '职业', value: classLabel(fd.class as string) },
-      { label: '种族', value: fd.race ?? '—' },
-      { label: '等级', value: fd.level ?? '—' },
-      { label: 'AC/HP', value: `${fd.ac}/${fd.hp}` },
-    ]
-  }
-  if (sys === 'DAGGERHEART') {
-    return [
-      { label: '职业', value: dhClassLabel(fd.class as string) },
-      { label: '血脉', value: dhAncestryLabel(fd.ancestry as string) },
-      { label: '阶层', value: fd.tier ?? '—' },
-      { label: '耐力', value: `${fd.stamina}/${fd.staminaMax}` },
-    ]
-  }
-  const entries = Object.entries(fd).filter(
-    ([, v]) => v !== '' && v !== null && v !== undefined && typeof v !== 'object',
-  )
-  return entries.slice(0, 4).map(([k, v]) => ({
-    label: k,
-    value: String(v),
-  }))
+  return computePreviewStats(card.value)
 })
 
-function classLabel(v?: string) {
-  const map: Record<string, string> = {
-    fighter: '战士', wizard: '法师', ranger: '游侠', rogue: '盗贼',
-    cleric: '牧师', paladin: '圣武士', druid: '德鲁伊', bard: '吟游诗人',
-  }
-  return (v && map[v]) || v || '—'
-}
-function dhClassLabel(v?: string) {
-  const map: Record<string, string> = {
-    warrior: '战士', ranger: '游侠', rogue: '盗贼',
-    sorcerer: '法师', druid: '德鲁伊', binder: '缚灵者',
-  }
-  return (v && map[v]) || v || '—'
-}
-function dhAncestryLabel(v?: string) {
-  const map: Record<string, string> = {
-    human: '人类', elf: '精灵', orc: '半兽人',
-    dwarf: '矮人', halfling: '半身人',
-  }
-  return (v && map[v]) || v || '—'
-}
-
+/** 强调色 */
 const accentColor = computed(() => systemInfo.value?.accentColor || '#C8A046')
 
+/** 表单数据变更时同步到 store */
 function onFormChange(data: Record<string, unknown>) {
+  logger.info('onFormChange', { cardId: card.value?.id, fieldCount: Object.keys(data).length })
   if (card.value) {
     store.updateCardFormData(card.value.id, data)
   }

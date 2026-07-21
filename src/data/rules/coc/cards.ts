@@ -1,0 +1,81 @@
+/**
+ * 克苏鲁的呼唤 (COC) 预置角色卡数据
+ * 
+ * 包含 2 张示例调查员卡：
+ * - coc-001: 艾琳·哈丁（私家侦探）
+ * - coc-002: 维克多·克莱因（考古学教授）
+ */
+import type { CharacterCard } from '@/types/card'
+
+export const cocCards: CharacterCard[] = [
+  {
+    id: 'coc-001',
+    system: 'COC',
+    name: '艾琳·哈丁',
+    player: '玩家A',
+    avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Eileen&backgroundColor=1d3557',
+    description: '1920年代波士顿的私家侦探，因一桩离奇失踪案被卷入神秘学世界。',
+    formData: {
+      name: '艾琳·哈丁',
+      occupation: '私家侦探',
+      age: 32,
+      gender: '女',
+      residence: '波士顿',
+      str: 60,
+      con: 70,
+      siz: 55,
+      dex: 65,
+      app: 50,
+      int: 75,
+      pow: 60,
+      edu: 80,
+      hp: 12,
+      hpMax: 12,
+      mp: 12,
+      san: 60,
+      skill_libraryUse: 70,
+      skill_spotHidden: 65,
+      skill_listen: 55,
+      skill_dodge: 50,
+      backstory: '前警探转行私家侦探，三年前接手一桩艺术商失踪案，从此开始接触禁忌古籍与不可名状之物。',
+    },
+    createdAt: '2026-01-15T08:00:00Z',
+    updatedAt: '2026-03-02T10:30:00Z',
+    favorite: true,
+  },
+  {
+    id: 'coc-002',
+    system: 'COC',
+    name: '维克多·克莱因',
+    player: '玩家B',
+    avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Victor&backgroundColor=264653',
+    description: '米斯卡托尼克大学考古学教授，对古老文明有着近乎病态的执念。',
+    formData: {
+      name: '维克多·克莱因',
+      occupation: '大学教授',
+      age: 48,
+      gender: '男',
+      residence: '阿卡姆',
+      str: 45,
+      con: 50,
+      siz: 60,
+      dex: 50,
+      app: 55,
+      int: 85,
+      pow: 55,
+      edu: 90,
+      hp: 11,
+      hpMax: 11,
+      mp: 11,
+      san: 55,
+      skill_libraryUse: 85,
+      skill_spotHidden: 50,
+      skill_listen: 40,
+      skill_dodge: 35,
+      backstory: '专攻美索不达米亚文明的考古学教授，曾在乌尔遗址发掘出无法解读的泥板，从此被禁忌知识所吸引。',
+    },
+    createdAt: '2026-02-10T14:00:00Z',
+    updatedAt: '2026-02-10T14:00:00Z',
+    favorite: false,
+  },
+]

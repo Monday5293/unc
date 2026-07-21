@@ -1,21 +1,32 @@
+<!--
+  角色卡片展示组件
+  用于展示单个角色卡的基本信息（名称、玩家、描述、属性字段），
+  支持点击、收藏切换和长按操作。
+-->
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { CharacterCard, SystemInfo } from '@/types/card'
+import { loggerComp } from '@/utils/logger'
+const logger = loggerComp('CardItem')
 
+// 组件属性：接收角色卡数据及所属规则系统信息
 const props = defineProps<{
   card: CharacterCard
   system: SystemInfo
 }>()
+// 组件事件：点击、收藏切换、长按
 const emit = defineEmits<{
   (e: 'click', card: CharacterCard): void
   (e: 'toggleFav', card: CharacterCard): void
   (e: 'longPress', card: CharacterCard): void
 }>()
 
+// 触摸/鼠标长按处理
 const pressing = ref(false)
 let pressTimer: ReturnType<typeof setTimeout> | null = null
 
 function onTouchStart() {
+  logger.debug('onTouchStart', { cardId: props.card.id })
   pressing.value = true
   pressTimer = setTimeout(() => {
     if (pressing.value) {
@@ -34,10 +45,17 @@ function onTouchEnd() {
 }
 
 function onClickCard() {
+  logger.info('onClickCard', { cardId: props.card.id, name: props.card.name })
   if (pressing.value) return
   emit('click', props.card)
 }
 
+function onToggleFav() {
+  logger.info('toggleFav', { cardId: props.card.id, favorite: !props.card.favorite })
+  emit('toggleFav', props.card)
+}
+
+// 计算展示的前三个非空表单字段，用于卡片预览
 const firstFields = (() => {
   const fd = props.card.formData
   const entries = Object.entries(fd).filter(
@@ -71,7 +89,7 @@ const firstFields = (() => {
     <button
       class="absolute right-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-ink-900/10 backdrop-blur transition hover:bg-ink-900/20"
       :aria-label="card.favorite ? '取消收藏' : '收藏'"
-      @click.stop="emit('toggleFav', card)"
+      @click.stop="onToggleFav"
     >
       <svg
         v-if="card.favorite"

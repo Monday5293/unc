@@ -13,9 +13,10 @@
         <text class="tab-name">{{item.name}}</text>
         <view wx:if="{{current === item.code}}" class="tab-indicator" style="background-color: {{item.accentColor}}"></view>
       </view>
-      <view class="add-btn" bindtap="onAddTap">
+      <!-- TODO: 暂时隐藏新增规则按钮 -->
+      <!-- <view class="add-btn" bindtap="onAddTap">
         <text class="add-icon">+</text>
-      </view>
+      </view> -->
     </view>
   </scroll-view>
 </view>

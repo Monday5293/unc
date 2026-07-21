@@ -209,6 +209,7 @@ const topStats = computed(() => {
           </div>
           <span class="text-parchment-200/40">↗</span>
         </router-link>
+        <!-- TODO: 暂时隐藏新增规则功能
         <button
           class="flex w-full items-center gap-3 border-b border-ink-700/50 px-4 py-3 text-left hover:bg-ink-700/30"
           @click="router.push('/miniapp/import')"
@@ -220,6 +221,7 @@ const topStats = computed(() => {
           </div>
           <span class="text-parchment-200/40">↗</span>
         </button>
+        -->
         <button
           class="flex w-full items-center gap-3 border-b border-ink-700/50 px-4 py-3 text-left hover:bg-ink-700/30"
         >

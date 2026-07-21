@@ -5,6 +5,8 @@ import { useCardStore } from '@/stores/cards'
 import RuleTab from '@/components/RuleTab.vue'
 import CardItem from '@/components/CardItem.vue'
 import type { RuleSystem, CharacterCard, SystemInfo } from '@/types/card'
+import { loggerPage } from '@/utils/logger'
+const logger = loggerPage('MiniAppHome')
 
 const router = useRouter()
 const store = useCardStore()
@@ -25,21 +27,25 @@ function onSearch() {
 }
 
 function changeSystem(sys: RuleSystem) {
+  logger.info('changeSystem', { to: sys })
   store.setSystem(sys)
   searchInput.value = ''
   store.setSearch('')
 }
 
 function openCard(card: CharacterCard) {
+  logger.info('openCard', { cardId: card.id, name: card.name })
   router.push({ name: 'miniapp-card', params: { id: card.id } })
 }
 
 function toggleFav(card: CharacterCard) {
+  logger.info('toggleFav', { cardId: card.id, name: card.name })
   store.toggleFavorite(card.id)
 }
 
 function goImport() {
-  router.push('/miniapp/import')
+  // TODO: 暂时隐藏新增规则功能
+  // router.push('/miniapp/import')
 }
 
 function openAddDialog() {
@@ -49,6 +55,7 @@ function openAddDialog() {
 }
 
 function doAddCard() {
+  logger.info('doAddCard', { system: store.currentSystem, name: newCardName.value })
   if (!newCardName.value.trim()) return
   const card = store.addCard(store.currentSystem, newCardName.value.trim(), newCardDesc.value.trim())
   addDialogVisible.value = false
@@ -61,6 +68,7 @@ function onLongPress(card: CharacterCard) {
 }
 
 function confirmDelete() {
+  logger.info('confirmDelete', { cardId: cardToDelete.value?.id, name: cardToDelete.value?.name })
   if (cardToDelete.value) {
     store.deleteCard(cardToDelete.value.id)
   }
@@ -69,11 +77,13 @@ function confirmDelete() {
 }
 
 function onPressSystem(system: SystemInfo) {
+  logger.info('onPressSystem', { code: system.code, name: system.name })
   systemActionTarget.value = system
   systemActionDialogVisible.value = true
 }
 
 function exportCurrentSystem() {
+  logger.info('exportCurrentSystem', { system: systemActionTarget.value?.code, name: systemActionTarget.value?.name })
   if (!systemActionTarget.value) return
   const sys = systemActionTarget.value
   const rule = sys.rule || []
@@ -119,6 +129,7 @@ function openDeleteSystemDialog() {
 }
 
 function confirmDeleteSystem() {
+  logger.info('confirmDeleteSystem', { code: systemToDelete.value?.code, name: systemToDelete.value?.name, isCustom: systemToDelete.value?.isCustom })
   if (systemToDelete.value) {
     store.deleteSystem(systemToDelete.value.code)
   }
