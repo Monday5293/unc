@@ -2,6 +2,11 @@
   <view class="detail-header" style="background: linear-gradient(180deg, {{accentColor}}22 0%, transparent 100%);">
     <view class="header-decoration">{{systemInfo.logo}}</view>
 
+    <!-- 右上角 st 指令按钮 -->
+    <view class="st-btn" bindtap="openStDialog" style="border-color: {{accentColor}}55; color: {{accentColor}};">
+      <text>.st</text>
+    </view>
+
     <view class="header-content">
       <view class="system-badge-row">
         <view class="system-badge" style="color: {{accentColor}}; background-color: {{accentColor}}22;">
@@ -11,13 +16,13 @@
       </view>
 
       <view class="card-main">
-        <view class="card-avatar" style="background-color: {{accentColor}}22; box-shadow: 0 0 0 2px {{accentColor}}55 inset;">
+        <view class="card-avatar" style="background-color: {{accentColor}}22; box-shadow: 0 0 0 2px {{accentColor}}55 inset;" bindtap="onChooseAvatar">
           <image wx:if="{{card.avatar}}" src="{{card.avatar}}" class="avatar-img" mode="aspectFill"></image>
           <text wx:else class="avatar-text">{{systemInfo.logo}}</text>
         </view>
         <view class="card-info">
-          <text class="card-name">{{card.name}}</text>
-          <text class="card-player">玩家：{{card.player}}</text>
+          <text class="card-name">{{card.formData.name || card.name}}</text>
+          <text class="card-player">玩家：{{card.formData.player || card.player}}</text>
         </view>
       </view>
 
@@ -49,64 +54,210 @@
     <!-- COC 7e 调查员卡 手动属性表 -->
     <!-- ============================================ -->
     <view wx:if="{{system === 'COC'}}" class="sheet-block">
-      <!-- 基本信息 -->
-      <view class="sheet-card" style="background: linear-gradient(135deg, {{accentColor}}15 0%, {{accentColor}}05 100%); border: 1px solid {{accentColor}}22;">
-        <view class="sheet-card-title" style="color: {{accentColor}};">基本信息</view>
-        <view class="info-grid-2">
-          <view class="info-row"><text class="info-label">姓名</text><text class="info-value">{{card.formData.name || '-'}}</text></view>
+      <!-- 基本信息（4行2列） -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <view class="sheet-card-header">
+          <text class="sheet-card-title" style="color: {{accentColor}};">基本信息</text>
+          <view class="section-edit-btns">
+            <block wx:if="{{editingBasicInfo}}">
+              <text class="section-edit-btn" bindtap="cancelEditBasicInfo" style="color: {{accentColor}};">取消</text>
+              <text class="section-edit-btn primary" bindtap="applyEditBasicInfo" style="color: {{accentColor}};">保存</text>
+            </block>
+            <text wx:else class="section-edit-btn" bindtap="startEditBasicInfo" style="color: {{accentColor}};">✎</text>
+          </view>
+        </view>
+        <view wx:if="{{editingBasicInfo}}" class="info-grid-2">
+          <view class="info-row"><text class="info-label">姓名</text><input class="info-input" value="{{editBasicInfo.name}}" data-field="name" bindinput="onEditBasicInput" /></view>
+          <view class="info-row"><text class="info-label">职业</text><input class="info-input" value="{{editBasicInfo.occupation}}" data-field="occupation" bindinput="onEditBasicInput" /></view>
+          <view class="info-row"><text class="info-label">玩家</text><input class="info-input" value="{{editBasicInfo.player}}" data-field="player" bindinput="onEditBasicInput" /></view>
+          <view class="info-row"><text class="info-label">年龄</text><input class="info-input" value="{{editBasicInfo.age}}" data-field="age" bindinput="onEditBasicInput" /></view>
+          <view class="info-row"><text class="info-label">性别</text><input class="info-input" value="{{editBasicInfo.gender}}" data-field="gender" bindinput="onEditBasicInput" /></view>
+          <view class="info-row"><text class="info-label">年份</text><input class="info-input" value="{{editBasicInfo.year}}" data-field="year" bindinput="onEditBasicInput" /></view>
+          <view class="info-row info-row-full"><text class="info-label">居住地</text><input class="info-input" value="{{editBasicInfo.residence}}" data-field="residence" bindinput="onEditBasicInput" /></view>
+        </view>
+        <view wx:else class="info-grid-2">
+          <view class="info-row"><text class="info-label">姓名</text><text class="info-value">{{card.formData.name || card.name || '-'}}</text></view>
           <view class="info-row"><text class="info-label">职业</text><text class="info-value">{{card.formData.occupation || '-'}}</text></view>
+          <view class="info-row"><text class="info-label">玩家</text><text class="info-value">{{card.formData.player || card.player || '-'}}</text></view>
           <view class="info-row"><text class="info-label">年龄</text><text class="info-value">{{card.formData.age || '-'}}</text></view>
           <view class="info-row"><text class="info-label">性别</text><text class="info-value">{{card.formData.gender || '-'}}</text></view>
+          <view class="info-row"><text class="info-label">年份</text><text class="info-value">{{card.formData.year || '1920s'}}</text></view>
           <view class="info-row info-row-full"><text class="info-label">居住地</text><text class="info-value">{{card.formData.residence || '-'}}</text></view>
         </view>
       </view>
 
-      <!-- 8 项属性 -->
+      <!-- 9 项属性（3x3网格） -->
       <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
         <view class="sheet-card-header">
-          <text class="sheet-card-title" style="color: {{accentColor}};">基础属性 · ATTRIBUTES</text>
-          <text class="sheet-card-sub">1 – 99</text>
+          <text class="sheet-card-title" style="color: {{accentColor}};">基础属性</text>
+          <view class="section-edit-btns">
+            <block wx:if="{{editingAttrs}}">
+              <text class="section-edit-btn" bindtap="cancelEditAttrs" style="color: {{accentColor}};">取消</text>
+              <text class="section-edit-btn primary" bindtap="applyEditAttrs" style="color: {{accentColor}};">保存</text>
+            </block>
+            <text wx:else class="section-edit-btn" bindtap="startEditAttrs" style="color: {{accentColor}};">✎</text>
+          </view>
         </view>
-        <view class="attr-grid-4">
-          <view wx:for="{{cocAttributes}}" wx:key="key" class="attr-cell">
+        <view wx:if="{{editingAttrs}}" class="attr-edit-grid">
+          <view wx:for="{{attrEditList}}" wx:key="key" class="attr-edit-cell">
+            <text class="attr-edit-label">{{item.label}}</text>
+            <input class="attr-edit-input" type="number" value="{{editAttrs[item.key]}}" data-field="{{item.key}}" bindinput="onEditAttrInput" />
+          </view>
+        </view>
+        <view wx:else class="attr-grid-3">
+          <view wx:for="{{cocAttributes}}" wx:key="key" class="attr-cell-3">
             <text class="attr-abbr">{{item.abbr}}</text>
             <text class="attr-value" style="color: {{item.color}};">{{item.value}}</text>
             <text class="attr-label">{{item.label}}</text>
-            <view class="attr-bar-bg"><view class="attr-bar" style="width: {{item.value < 99 ? item.value : 99}}%; background: {{item.color}}; opacity: 0.5;"></view></view>
+            <view class="attr-bar-bg"><view class="attr-bar" style="width: {{item.value < 99 ? item.value : 99}}%; background: {{item.color}}; opacity: 0.45;"></view></view>
           </view>
         </view>
       </view>
 
-      <!-- HP · MP · SAN -->
-      <view class="stat-row-3">
-        <view class="stat-card" style="background: linear-gradient(180deg, #ef444418 0%, #ef444408 100%); border: 1px solid #ef444433;">
-          <text class="stat-card-label">生命值</text>
-          <text class="stat-card-val hp-color">{{card.formData.hp || '-'}}<text class="stat-card-max"> / {{card.formData.hpMax || '-'}}</text></text>
-          <text class="stat-card-abbr">HP</text>
-        </view>
-        <view class="stat-card" style="background: linear-gradient(180deg, #6366f118 0%, #6366f108 100%); border: 1px solid #6366f133;">
-          <text class="stat-card-label">魔法值</text>
-          <text class="stat-card-val mp-color">{{card.formData.mp || '-'}}</text>
-          <text class="stat-card-abbr">MP</text>
-        </view>
-        <view class="stat-card" style="background: linear-gradient(180deg, #8b5cf618 0%, #8b5cf608 100%); border: 1px solid #8b5cf633;">
-          <text class="stat-card-label">理智值</text>
-          <text class="stat-card-val san-color">{{card.formData.san || '-'}}</text>
-          <text class="stat-card-abbr">SAN</text>
-        </view>
-      </view>
-
-      <!-- 技能 -->
+      <!-- 当前状态（1行4列） -->
       <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
         <view class="sheet-card-header">
-          <text class="sheet-card-title" style="color: {{accentColor}};">技能 · SKILLS</text>
-        </view>
-        <view wx:for="{{cocSkills}}" wx:key="key" class="skill-row">
-          <view class="skill-header">
-            <text class="skill-label">{{item.label}}</text>
-            <text class="skill-pct" style="color: {{accentColor}};">{{item.value}}%</text>
+          <text class="sheet-card-title" style="color: {{accentColor}};">当前状态</text>
+          <view class="section-edit-btns">
+            <block wx:if="{{editingStatus}}">
+              <text class="section-edit-btn" bindtap="cancelEditStatus" style="color: {{accentColor}};">取消</text>
+              <text class="section-edit-btn primary" bindtap="applyEditStatus" style="color: {{accentColor}};">保存</text>
+            </block>
+            <text wx:else class="section-edit-btn" bindtap="startEditStatus" style="color: {{accentColor}};">✎</text>
           </view>
-          <view class="skill-bar-bg"><view class="skill-bar" style="width: {{item.value < 99 ? item.value : 99}}%; background: {{item.value >= 70 ? '#f59e0b' : (item.value >= 50 ? accentColor : '#64748b')}}; opacity: 0.7;"></view></view>
+        </view>
+        <view wx:if="{{editingStatus}}" class="stat-row-4">
+          <view class="stat-card" style="background: linear-gradient(180deg, #ef444414 0%, #ef444406 100%); box-shadow: 0 0 0 1px #ef444433;">
+            <input class="stat-edit-input hp-color" type="number" value="{{editStatus.hp}}" data-field="hp" bindinput="onEditStatusInput" />
+            <text class="stat-edit-sep">/</text>
+            <input class="stat-edit-input" type="number" value="{{editStatus.hpMax}}" data-field="hpMax" bindinput="onEditStatusInput" />
+            <text class="stat-card-abbr">体力 HP</text>
+          </view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #8b5cf614 0%, #8b5cf606 100%); box-shadow: 0 0 0 1px #8b5cf633;">
+            <input class="stat-edit-input san-color" type="number" value="{{editStatus.san}}" data-field="san" bindinput="onEditStatusInput" />
+            <text class="stat-edit-sep">/</text>
+            <input class="stat-edit-input" type="number" value="{{editStatus.sanMax}}" data-field="sanMax" bindinput="onEditStatusInput" />
+            <text class="stat-card-abbr">理智 SAN</text>
+          </view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #6366f114 0%, #6366f106 100%); box-shadow: 0 0 0 1px #6366f133;">
+            <input class="stat-edit-input mp-color" type="number" value="{{editStatus.mp}}" data-field="mp" bindinput="onEditStatusInput" />
+            <text class="stat-edit-sep">/</text>
+            <input class="stat-edit-input" type="number" value="{{editStatus.mpMax}}" data-field="mpMax" bindinput="onEditStatusInput" />
+            <text class="stat-card-abbr">魔法 MP</text>
+          </view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #22c55e14 0%, #22c55e06 100%); box-shadow: 0 0 0 1px #22c55e33;">
+            <input class="stat-edit-input ac-color" type="number" value="{{editStatus.ac}}" data-field="ac" bindinput="onEditStatusInput" />
+            <text class="stat-card-abbr">护甲 AC</text>
+          </view>
+        </view>
+        <view wx:else class="stat-row-4">
+          <view class="stat-card" style="background: linear-gradient(180deg, #ef444414 0%, #ef444406 100%); box-shadow: 0 0 0 1px #ef444433;">
+            <text class="stat-card-val hp-color">{{card.formData.hp || '-'}}<text class="stat-card-max">/{{card.formData.hpMax || '-'}}</text></text>
+            <text class="stat-card-abbr">体力 HP</text>
+          </view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #8b5cf614 0%, #8b5cf606 100%); box-shadow: 0 0 0 1px #8b5cf633;">
+            <text class="stat-card-val san-color">{{card.formData.san || '-'}}</text>
+            <text class="stat-card-abbr">理智 SAN</text>
+          </view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #6366f114 0%, #6366f106 100%); box-shadow: 0 0 0 1px #6366f133;">
+            <text class="stat-card-val mp-color">{{card.formData.mp || '-'}}</text>
+            <text class="stat-card-abbr">魔法 MP</text>
+          </view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #22c55e14 0%, #22c55e06 100%); box-shadow: 0 0 0 1px #22c55e33;">
+            <text class="stat-card-val ac-color">{{card.formData.ac || 0}}</text>
+            <text class="stat-card-abbr">护甲 AC</text>
+          </view>
+        </view>
+        <!-- 快速调整框架 -->
+        <view class="stat-adjust-bar">
+          <view class="stat-adjust-item" style="border-color: #ef444444; background: #ef444408;">
+            <text class="stat-adjust-btn" bindtap="onStatDecrement" data-field="hp">−</text>
+            <text class="stat-adjust-btn" bindtap="onStatIncrement" data-field="hp">+</text>
+          </view>
+          <view class="stat-adjust-item" style="border-color: #a78bfa44; background: #a78bfa08;">
+            <text class="stat-adjust-btn" bindtap="onStatDecrement" data-field="san">−</text>
+            <text class="stat-adjust-btn" bindtap="onStatIncrement" data-field="san">+</text>
+          </view>
+          <view class="stat-adjust-item" style="border-color: #818cf844; background: #818cf808;">
+            <text class="stat-adjust-btn" bindtap="onStatDecrement" data-field="mp">−</text>
+            <text class="stat-adjust-btn" bindtap="onStatIncrement" data-field="mp">+</text>
+          </view>
+          <view class="stat-adjust-item" style="border-color: #22c55e44; background: #22c55e08;">
+            <text class="stat-adjust-btn" bindtap="onStatDecrement" data-field="ac">−</text>
+            <text class="stat-adjust-btn" bindtap="onStatIncrement" data-field="ac">+</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 技能表（2列布局，保留初始/职业/兴趣/成功率） -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <view class="sheet-card-header">
+          <text class="sheet-card-title" style="color: {{accentColor}};">技能表</text>
+          <view class="skill-header-actions">
+            <view class="skill-edit-btn {{cocSkillMode === 'simple' ? 'disabled' : ''}}" bindtap="toggleSkillEdit" style="color: {{accentColor}}; background: {{accentColor}}15; border: 1px solid {{accentColor}}28;">
+              <text wx:if="{{!cocSkillEditing}}">✎ 编辑</text>
+              <text wx:else>✓ 完成</text>
+            </view>
+            <view class="skill-toggle-btn {{cocSkillEditing ? 'disabled' : ''}}" bindtap="toggleSkillMode" style="color: {{accentColor}}; background: {{accentColor}}15; border: 1px solid {{accentColor}}28;">
+              <text wx:if="{{cocSkillMode === 'detailed'}}">☰ 简单模式</text>
+              <text wx:else>☰ 详细模式</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="skill-two-col">
+          <!-- 左列 -->
+          <view class="skill-col">
+            <view class="skill-table-header" style="border-bottom: 1px solid {{accentColor}}15;">
+              <text class="skill-th-name">技能</text>
+              <text class="skill-th-num">成长</text>
+              <text class="skill-th-num">职业</text>
+              <text class="skill-th-num">兴趣</text>
+              <text class="skill-th-pct">成功率</text>
+            </view>
+            <block wx:for="{{cocSkillLeft}}" wx:key="key">
+              <view wx:if="{{item.isHeader}}" class="skill-table-row" style="border-bottom: 1px solid {{accentColor}}08;">
+                <text class="skill-td-name skill-td-header">{{item.zh}}</text>
+              </view>
+              <view wx:elif="{{cocSkillMode === 'detailed' || item.changed}}" class="skill-table-row" style="border-bottom: 1px solid {{accentColor}}08;">
+                <text class="skill-td-name skill-td-zh">{{item.displayName}}</text>
+                <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.growth || 0}}" data-col="left" data-idx="{{index}}" bindinput="onSkillGrowthInput" />
+                <text wx:else class="skill-td-num" style="color: {{item.growth > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.growth || 0}}</text>
+                <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.occ || 0}}" data-col="left" data-idx="{{index}}" bindinput="onSkillOccInput" />
+                <text wx:else class="skill-td-num" style="color: {{item.occ > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.occ || 0}}</text>
+                <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.int || 0}}" data-col="left" data-idx="{{index}}" bindinput="onSkillIntInput" />
+                <text wx:else class="skill-td-num" style="color: {{item.int > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.int || 0}}</text>
+                <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.current}}" data-col="left" data-idx="{{index}}" bindinput="onSkillCurrentInput" />
+                <text wx:else class="skill-td-pct" style="color: {{item.color}};">{{item.current}}%</text>
+              </view>
+            </block>
+          </view>
+          <!-- 右列 -->
+          <view class="skill-col">
+            <view class="skill-table-header" style="border-bottom: 1px solid {{accentColor}}15;">
+              <text class="skill-th-name">技能</text>
+              <text class="skill-th-num">成长</text>
+              <text class="skill-th-num">职业</text>
+              <text class="skill-th-num">兴趣</text>
+              <text class="skill-th-pct">成功率</text>
+            </view>
+            <block wx:for="{{cocSkillRight}}" wx:key="key">
+              <view wx:if="{{item.isHeader}}" class="skill-table-row" style="border-bottom: 1px solid {{accentColor}}08;">
+                <text class="skill-td-name skill-td-header">{{item.zh}}</text>
+              </view>
+              <view wx:elif="{{cocSkillMode === 'detailed' || item.changed}}" class="skill-table-row" style="border-bottom: 1px solid {{accentColor}}08;">
+                <text class="skill-td-name skill-td-zh">{{item.displayName}}</text>
+                <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.growth || 0}}" data-col="right" data-idx="{{index}}" bindinput="onSkillGrowthInput" />
+                <text wx:else class="skill-td-num" style="color: {{item.growth > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.growth || 0}}</text>
+                <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.occ || 0}}" data-col="right" data-idx="{{index}}" bindinput="onSkillOccInput" />
+                <text wx:else class="skill-td-num" style="color: {{item.occ > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.occ || 0}}</text>
+                <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.int || 0}}" data-col="right" data-idx="{{index}}" bindinput="onSkillIntInput" />
+                <text wx:else class="skill-td-num" style="color: {{item.int > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.int || 0}}</text>
+                <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.current}}" data-col="right" data-idx="{{index}}" bindinput="onSkillCurrentInput" />
+                <text wx:else class="skill-td-pct" style="color: {{item.color}};">{{item.current}}%</text>
+              </view>
+            </block>
+          </view>
         </view>
       </view>
 
@@ -322,4 +473,33 @@
   <text class="not-found-text">页面状态异常</text>
   <text class="not-found-desc">cardNotFound={{cardNotFound}}</text>
   <view class="not-found-btn" bindtap="goBack">返回列表</view>
+</view>
+
+<!-- st 指令对话框 -->
+<view wx:if="{{stDialogVisible}}" class="dialog-mask" bindtap="closeStDialog">
+  <view class="dialog-box" catchtap="stopPropagation">
+    <view class="dialog-header">
+      <text class="dialog-title">粘贴 .st 指令</text>
+      <text class="dialog-close" bindtap="closeStDialog">✕</text>
+    </view>
+    <view class="dialog-body">
+      <view class="dialog-tip">
+        <text>粘贴 .st 指令，确认后将更新角色卡数据</text>
+      </view>
+      <view class="form-item">
+        <textarea
+          class="form-textarea st-textarea"
+          placeholder="粘贴 .st 指令..."
+          placeholder-class="input-placeholder"
+          maxlength="-1"
+          value="{{stCommandText}}"
+          bindinput="onStCommandInput"
+        />
+      </view>
+      <view class="dialog-actions">
+        <view class="btn-cancel" bindtap="closeStDialog">取消</view>
+        <view class="btn-primary" bindtap="applyStCommand">确认更新</view>
+      </view>
+    </view>
+  </view>
 </view>

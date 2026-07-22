@@ -6,6 +6,7 @@ import RuleTab from '@/components/RuleTab.vue'
 import CardItem from '@/components/CardItem.vue'
 import type { RuleSystem, CharacterCard, SystemInfo } from '@/types/card'
 import { loggerPage } from '@/utils/logger'
+import { parseStCommand } from '@/utils/st-parser'
 const logger = loggerPage('MiniAppHome')
 
 const router = useRouter()
@@ -14,7 +15,7 @@ const store = useCardStore()
 const searchInput = ref('')
 const addDialogVisible = ref(false)
 const newCardName = ref('')
-const newCardDesc = ref('')
+const newCardSt = ref('')
 const deleteDialogVisible = ref(false)
 const cardToDelete = ref<CharacterCard | null>(null)
 const systemActionDialogVisible = ref(false)
@@ -50,14 +51,15 @@ function goImport() {
 
 function openAddDialog() {
   newCardName.value = ''
-  newCardDesc.value = ''
+  newCardSt.value = ''
   addDialogVisible.value = true
 }
 
 function doAddCard() {
   logger.info('doAddCard', { system: store.currentSystem, name: newCardName.value })
   if (!newCardName.value.trim()) return
-  const card = store.addCard(store.currentSystem, newCardName.value.trim(), newCardDesc.value.trim())
+  const stFormData = newCardSt.value.trim() ? parseStCommand(newCardSt.value.trim()) : {}
+  const card = store.addCard(store.currentSystem, newCardName.value.trim(), stFormData)
   addDialogVisible.value = false
   router.push({ name: 'miniapp-card', params: { id: card.id } })
 }
@@ -298,12 +300,13 @@ const sysInfo = computed(() => store.currentSystemInfo)
               />
             </div>
             <div>
-              <label class="mb-1 block text-xs text-parchment-200/60">简介</label>
+              <label class="mb-1 block text-xs text-parchment-200/60">粘贴st指令</label>
               <textarea
-                v-model="newCardDesc"
-                rows="3"
-                class="w-full rounded-md bg-ink-900 px-3 py-2 text-sm text-parchment-200 ring-1 ring-ink-600 focus:outline-none focus:ring-dnd"
-                placeholder="角色的简短描述..."
+                v-model="newCardSt"
+                rows="4"
+                maxlength="-1"
+                class="w-full rounded-md bg-ink-900 px-3 py-2 text-sm text-parchment-200 ring-1 ring-ink-600 focus:outline-none focus:ring-dnd font-mono"
+                placeholder="粘贴 .st 指令，自动识别填入角色数据..."
               />
             </div>
             <div class="flex justify-end gap-2 pt-2">

@@ -264,15 +264,15 @@ export const useCardStore = defineStore('cards', () => {
     return true
   }
 
-  function addCard(system: RuleSystem, name: string, description = ''): CharacterCard {
+  function addCard(system: RuleSystem, name: string, formData: Record<string, unknown> = {}): CharacterCard {
     const newCard: CharacterCard = {
       id: `card-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       system,
       name,
       player: '我',
       avatar: '',
-      description,
-      formData: {},
+      description: '',
+      formData: { ...formData },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       favorite: false,
@@ -311,6 +311,16 @@ export const useCardStore = defineStore('cards', () => {
     }
   }
 
+  function updateCardAvatar(cardId: string, avatarPath: string) {
+    const card = cards.value.find((c) => c.id === cardId)
+    if (card) {
+      loggerCards.debug('updateCardAvatar', { cardId, name: card.name })
+      card.avatar = avatarPath
+      card.updatedAt = new Date().toISOString()
+      persistCustomCards()
+    }
+  }
+
   function persistCustomCards() {
     loggerCards.debug('persistCustomCards', { count: customCards.value.length })
     saveCustomCards(customCards.value)
@@ -344,5 +354,6 @@ export const useCardStore = defineStore('cards', () => {
     addCard,
     deleteCard,
     updateCardFormData,
+    updateCardAvatar,
   }
 })

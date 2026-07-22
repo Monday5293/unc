@@ -9,6 +9,21 @@
   padding: 48rpx 40rpx;
 }
 
+/* 右上角 st 按钮 */
+.st-btn {
+  position: absolute;
+  right: 40rpx;
+  top: 48rpx;
+  z-index: 10;
+  padding: 8rpx 16rpx;
+  border-radius: 10rpx;
+  border: 1px solid;
+  font-size: 20rpx;
+  font-weight: 700;
+  font-family: monospace;
+  letter-spacing: 1rpx;
+}
+
 .header-decoration {
   position: absolute;
   right: -16rpx;
@@ -171,6 +186,10 @@
   margin-bottom: 24rpx;
 }
 
+.sheet-card-header .sheet-card-title {
+  margin-bottom: 0;
+}
+
 .sheet-card-title {
   display: block;
   font-size: 24rpx;
@@ -230,7 +249,227 @@
   text-align: right;
 }
 
-/* ===== COC 4列属性 ===== */
+/* ===== COC 3列属性 ===== */
+.attr-grid-3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.attr-cell-3 {
+  width: 32%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 4rpx;
+  border-radius: 12rpx;
+  background-color: rgba(255, 255, 255, 0.03);
+  text-align: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* ===== COC 4列状态 ===== */
+.stat-row-4 {
+  display: flex;
+  gap: 16rpx;
+}
+
+.stat-row-4 .stat-card {
+  flex: 1;
+  padding: 20rpx 12rpx;
+  border-radius: 16rpx;
+  text-align: center;
+}
+
+.stat-row-4 .stat-card-val {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.stat-row-4 .stat-card-max {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.2);
+}
+
+.stat-row-4 .stat-card-abbr {
+  display: block;
+  font-size: 16rpx;
+  color: rgba(232, 220, 196, 0.3);
+  margin-top: 2rpx;
+}
+
+.stat-card-btns {
+  display: flex;
+  justify-content: center;
+  gap: 16rpx;
+  margin-top: 8rpx;
+}
+
+/* 快速调整栏 */
+.stat-adjust-bar {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.stat-adjust-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  padding: 14rpx 8rpx;
+  border-radius: 12rpx;
+  border: 1px solid;
+}
+
+.stat-adjust-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(232, 220, 196, 0.7);
+  background: rgba(232, 220, 196, 0.06);
+  border: 1px solid rgba(232, 220, 196, 0.12);
+}
+
+.stat-adjust-btn:active {
+  background: rgba(232, 220, 196, 0.18);
+  color: rgba(232, 220, 196, 0.95);
+}
+
+.hp-color { color: #ef4444; }
+.mp-color { color: #818cf8; }
+.san-color { color: #a78bfa; }
+.ac-color { color: #22c55e; }
+
+/* ===== 技能表 2列布局 ===== */
+.skill-two-col {
+  display: flex;
+  gap: 16rpx;
+}
+
+.skill-col {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ===== 技能表头 ===== */
+.skill-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.skill-edit-btn {
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 18rpx;
+}
+
+.skill-edit-btn.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.skill-toggle-btn {
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 18rpx;
+}
+
+.skill-toggle-btn.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.skill-table-header {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 0;
+  font-size: 18rpx;
+  letter-spacing: 2rpx;
+  color: rgba(232, 220, 196, 0.2);
+}
+
+.skill-th-name {
+  width: 66rpx;
+  flex-shrink: 0;
+}
+
+.skill-th-num {
+  flex: 1;
+  text-align: center;
+}
+
+.skill-th-pct {
+  flex: 1;
+  text-align: center;
+}
+
+.skill-table-row {
+  display: flex;
+  align-items: center;
+  padding: 6rpx 0;
+  font-size: 20rpx;
+}
+
+.skill-td-name {
+  width: 66rpx;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.skill-td-zh {
+  color: rgba(232, 220, 196, 0.7);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  line-height: 1.15;
+  display: inline-block;
+  width: 66rpx;
+  white-space: pre-line;
+}
+
+.skill-td-header {
+  color: rgba(232, 220, 196, 0.5);
+  font-weight: bold;
+  font-size: 18rpx;
+  width: auto;
+}
+
+.skill-td-en {
+  margin-left: 6rpx;
+  font-size: 16rpx;
+  color: rgba(232, 220, 196, 0.18);
+}
+
+.skill-td-num {
+  flex: 1;
+  text-align: center;
+  color: rgba(232, 220, 196, 0.3);
+}
+
+.skill-td-pct {
+  flex: 1;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* st 指令输入框 */
+.st-textarea {
+  height: 200rpx !important;
+  font-size: 22rpx;
+  font-family: monospace;
+  line-height: 1.5;
+}
+
 .attr-grid-4 {
   display: flex;
   flex-wrap: wrap;
@@ -696,4 +935,106 @@
   border: 1rpx solid #C8A046;
   font-size: 24rpx;
   color: #C8A046;
+}
+
+/* ===== 编辑相关样式 ===== */
+
+/* 技能编辑输入框 */
+.skill-td-input {
+  flex: 1;
+  text-align: center;
+  height: 40rpx;
+  font-size: 20rpx;
+  color: #E8DCC4;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4rpx;
+  padding: 0 4rpx;
+  min-width: 0;
+}
+
+/* 区域编辑按钮 */
+.section-edit-btns {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.section-edit-btn {
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  font-size: 18rpx;
+  border: 1rpx solid;
+  opacity: 0.7;
+}
+
+.section-edit-btn.primary {
+  font-weight: 600;
+  opacity: 1;
+}
+
+/* 基本信息编辑输入 */
+.info-input {
+  flex: 1;
+  text-align: right;
+  font-size: 22rpx;
+  color: #E8DCC4;
+  height: 44rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4rpx;
+  padding: 0 8rpx;
+  min-width: 0;
+}
+
+/* 属性编辑 */
+.attr-edit-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.attr-edit-cell {
+  width: 32%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12rpx 4rpx;
+  border-radius: 12rpx;
+  background-color: rgba(255, 255, 255, 0.03);
+  box-sizing: border-box;
+}
+
+.attr-edit-label {
+  font-size: 18rpx;
+  color: rgba(232, 220, 196, 0.4);
+  margin-bottom: 4rpx;
+}
+
+.attr-edit-input {
+  width: 80%;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #E8DCC4;
+  height: 56rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6rpx;
+  padding: 0 4rpx;
+}
+
+/* 状态编辑输入 */
+.stat-edit-input {
+  width: 70%;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 700;
+  height: 48rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6rpx;
+  padding: 0 4rpx;
+}
+
+.stat-edit-sep {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.2);
+  margin: 0 2rpx;
 }

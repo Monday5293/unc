@@ -461,7 +461,8 @@ function deleteSystem(code) {
   return true
 }
 
-function addCard(system, name, description = '') {
+function addCard(system, name, formData = {}) {
+  console.log('[store] addCard START:', system, name, JSON.stringify(formData).slice(0, 200))
   const sysInfo = getSystemInfo(system)
   const newCard = {
     id: `card-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -469,16 +470,19 @@ function addCard(system, name, description = '') {
     name,
     player: '我',
     avatar: '',
-    description,
+    description: '',
     rule: sysInfo ? (sysInfo.rule || []) : [],
-    formData: {},
+    formData: { name: name, player: '我', ...formData },
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     favorite: false
   }
+  console.log('[store] addCard newCard.id:', newCard.id)
   state.cards.push(newCard)
   state.customCards.push(newCard)
+  console.log('[store] addCard state.cards.length:', state.cards.length)
   persistCustomCards()
+  console.log('[store] addCard DONE, returning card')
   return newCard
 }
 
@@ -498,6 +502,15 @@ function updateCardFormData(cardId, formData) {
   const card = state.cards.find(c => c.id === cardId)
   if (card) {
     card.formData = { ...formData }
+    card.updatedAt = new Date().toISOString()
+    persistCustomCards()
+  }
+}
+
+function updateCardAvatar(cardId, avatarPath) {
+  const card = state.cards.find(c => c.id === cardId)
+  if (card) {
+    card.avatar = avatarPath
     card.updatedAt = new Date().toISOString()
     persistCustomCards()
   }
@@ -530,5 +543,6 @@ module.exports = {
   addCard,
   deleteCard,
   updateCardFormData,
+  updateCardAvatar,
   getState
 }

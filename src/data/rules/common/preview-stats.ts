@@ -17,15 +17,15 @@ export interface PreviewStat {
 
 /**
  * 计算 COC 调查员的预览统计
- * 显示：职业、年龄、SAN、HP
+ * 显示：职业、年龄、住地、年份
  */
 function getCocPreviewStats(fd: Record<string, unknown>): PreviewStat[] {
-  loggerPreviewStats.debug('getCocPreviewStats', { occupation: fd.occupation, san: fd.san, hp: `${fd.hp}/${fd.hpMax}` })
+  loggerPreviewStats.debug('getCocPreviewStats', { occupation: fd.occupation, age: fd.age, residence: fd.residence, year: fd.year })
   return [
     { label: '职业', value: fd.occupation ?? '—' },
     { label: '年龄', value: fd.age ?? '—' },
-    { label: 'SAN', value: fd.san ?? '—' },
-    { label: 'HP', value: `${fd.hp ?? 0}/${fd.hpMax ?? 0}` },
+    { label: '住地', value: fd.residence ?? '—' },
+    { label: '年份', value: fd.year ?? '1920s' },
   ]
 }
 
@@ -108,8 +108,8 @@ export function getDefaultPreviewStats(system: RuleSystem): PreviewStat[] {
       return [
         { label: '职业', value: '—' },
         { label: '年龄', value: '—' },
-        { label: 'SAN', value: '—' },
-        { label: 'HP', value: '0/0' },
+        { label: '住地', value: '—' },
+        { label: '年份', value: '1920s' },
       ]
     case 'DND':
       return [

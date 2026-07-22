@@ -1,4 +1,5 @@
 const store = require('../../utils/store.js')
+const { parseStCommand } = require('../../utils/st-parser.js')
 
 Page({
   data: {
@@ -9,7 +10,7 @@ Page({
     currentSystemInfo: {},
     addDialogVisible: false,
     newCardName: '',
-    newCardDesc: '',
+    newCardSt: '',
     deleteDialogVisible: false,
     cardToDelete: null,
     systemActionDialogVisible: false,
@@ -104,7 +105,7 @@ Page({
   openAddDialog() {
     this.setData({
       newCardName: '',
-      newCardDesc: '',
+      newCardSt: '',
       addDialogVisible: true
     })
   },
@@ -113,24 +114,27 @@ Page({
     this.setData({ newCardName: e.detail.value })
   },
 
-  onNewCardDescInput(e) {
-    this.setData({ newCardDesc: e.detail.value })
+  onNewCardStInput(e) {
+    this.setData({ newCardSt: e.detail.value })
   },
 
   doAddCard() {
     if (!this.data.newCardName.trim()) return
+    console.log('[home] doAddCard name:', this.data.newCardName.trim(), 'st:', this.data.newCardSt.trim().slice(0, 100))
+    const stFormData = this.data.newCardSt.trim() ? parseStCommand(this.data.newCardSt.trim()) : {}
+    console.log('[home] doAddCard stFormData keys:', Object.keys(stFormData).length)
     const card = store.addCard(
       this.data.currentSystem,
       this.data.newCardName.trim(),
-      this.data.newCardDesc.trim()
+      stFormData
     )
-    console.log('[home] doAddCard created card:', card.id, 'system:', card.system)
+    console.log('[home] doAddCard created card:', card.id, 'system:', card.system, 'name:', card.name)
     this.setData({ addDialogVisible: false })
     this.refreshData()
     wx.navigateTo({
       url: `/pages/card-detail/card-detail?id=${card.id}`,
       success: () => {
-        console.log('[home] navigateTo success')
+        console.log('[home] navigateTo success to card:', card.id)
       },
       fail: (err) => {
         console.error('[home] navigateTo after addCard failed:', JSON.stringify(err))

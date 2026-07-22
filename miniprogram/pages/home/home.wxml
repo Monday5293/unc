@@ -84,13 +84,14 @@
           />
         </view>
         <view class="form-item">
-          <text class="form-label">简介</text>
+          <text class="form-label">粘贴st指令</text>
           <textarea
             class="form-textarea"
-            placeholder="角色的简短描述..."
+            placeholder="粘贴 .st 指令，自动识别填入角色数据..."
             placeholder-class="input-placeholder"
-            value="{{newCardDesc}}"
-            bindinput="onNewCardDescInput"
+            maxlength="-1"
+            value="{{newCardSt}}"
+            bindinput="onNewCardStInput"
           />
         </view>
         <view class="dialog-actions">
