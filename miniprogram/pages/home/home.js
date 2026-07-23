@@ -10,6 +10,7 @@ Page({
     currentSystemInfo: {},
     addDialogVisible: false,
     newCardName: '',
+    newCardModule: '',
     newCardSt: '',
     deleteDialogVisible: false,
     cardToDelete: null,
@@ -105,6 +106,7 @@ Page({
   openAddDialog() {
     this.setData({
       newCardName: '',
+      newCardModule: '',
       newCardSt: '',
       addDialogVisible: true
     })
@@ -114,14 +116,26 @@ Page({
     this.setData({ newCardName: e.detail.value })
   },
 
+  onNewCardModuleInput(e) {
+    this.setData({ newCardModule: e.detail.value })
+  },
+
   onNewCardStInput(e) {
     this.setData({ newCardSt: e.detail.value })
   },
 
   doAddCard() {
     if (!this.data.newCardName.trim()) return
-    console.log('[home] doAddCard name:', this.data.newCardName.trim(), 'st:', this.data.newCardSt.trim().slice(0, 100))
+    console.log('[home] doAddCard name:', this.data.newCardName.trim(), 'module:', this.data.newCardModule.trim(), 'st:', this.data.newCardSt.trim().slice(0, 100))
     const stFormData = this.data.newCardSt.trim() ? parseStCommand(this.data.newCardSt.trim()) : {}
+    // 如果填写了参与模组，写入经历模块的第一个条目
+    const moduleName = this.data.newCardModule.trim()
+    if (moduleName) {
+      stFormData.experiences = [
+        { key: 'exp_0', label: moduleName, value: '' },
+        { key: 'exp_1', label: '', value: '' },
+      ]
+    }
     console.log('[home] doAddCard stFormData keys:', Object.keys(stFormData).length)
     const card = store.addCard(
       this.data.currentSystem,

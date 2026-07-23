@@ -42,12 +42,54 @@ Page({
       { key: 'int', label: '智力' },
       { key: 'luck', label: '幸运' },
     ],
+    // 背景故事
+    backstoryItems: [
+      { key: 'backstory_desc', label: '个人描述', formDataKey: 'backstory_desc' },
+      { key: 'backstory_belief', label: '思想/信念', formDataKey: 'backstory_belief' },
+      { key: 'backstory_important', label: '重要之人', formDataKey: 'backstory_important' },
+      { key: 'backstory_place', label: '非凡之地', formDataKey: 'backstory_place' },
+      { key: 'backstory_treasure', label: '宝贵植物', formDataKey: 'backstory_treasure' },
+      { key: 'backstory_trait', label: '特点', formDataKey: 'backstory_trait' },
+      { key: 'backstory_wound', label: '伤口/伤痕', formDataKey: 'backstory_wound' },
+      { key: 'backstory_phobia', label: '恐惧/狂躁症', formDataKey: 'backstory_phobia' },
+    ],
+    backstoryDialogVisible: false,
+    backstoryDialogTitle: '',
+    backstoryDialogContent: '',
+    backstoryDialogKey: '',
+    backstoryDialogEditing: false,
+    backstoryIsDetail: false,
+    // 背包
+    backpackDialogVisible: false,
+    backpackDialogContent: '',
+    backpackDialogEditing: false,
+    // 经历
+    experienceItems: [],
+    experienceDialogVisible: false,
+    experienceDialogType: 'label', // 'label' | 'value'
+    experienceDialogTitle: '',
+    experienceDialogLabel: '',
+    experienceDialogContent: '',
+    experienceDialogKey: '',
+    experienceDialogEditing: false,
+    experienceManaging: false,
     // DND
     dndAbilities: [],
     dndSavingThrows: [],
-    dndSkillProfs: [],
+    dndAbilities: [],
     dndHpPercent: 0,
     dndHpColor: '#22c55e',
+    // DND 当前状态
+    editingDndStatus: false,
+    editDndStatus: {},
+    dndSpellSlots: [],
+    dndAc: 0,
+    dndDc: 0,
+    dndClassLabel: '',
+    editingDndBasicInfo: false,
+    editDndBasicInfo: {},
+    editingDndAttrs: false,
+    editDndAttrs: {},
     // Daggerheart
     dhAttributes: [],
     dhStaminaPct: 0,
@@ -112,6 +154,7 @@ Page({
         updatedAtText: this.formatDate(card.updatedAt),
         cardNotFound: false,
         ...sheetData,
+        experienceItems: this.buildExperienceItems(card),
       })
 
       wx.setNavigationBarTitle({
@@ -253,11 +296,19 @@ Page({
         { key: 'int', label: '智力', abbr: 'INT', value: fd.int ?? 10 },
         { key: 'wis', label: '感知', abbr: 'WIS', value: fd.wis ?? 10 },
         { key: 'cha', label: '魅力', abbr: 'CHA', value: fd.cha ?? 10 },
-      ].map(ab => ({
-        ...ab,
-        mod: this.dndMod(ab.value),
-        modColor: this.dndModColor(ab.value),
-      }))
+      ].map(ab => {
+        const modRaw = fd[ab.key + '_mod'] !== undefined ? fd[ab.key + '_mod'] : this.dndMod(ab.value)
+        const mod = typeof modRaw === 'string' ? modRaw.replace(/^\+/, '') : String(modRaw)
+        const saveRaw = fd[ab.key + '_save'] !== undefined ? fd[ab.key + '_save'] : mod
+        const save = typeof saveRaw === 'string' ? saveRaw.replace(/^\+/, '') : String(saveRaw)
+        return {
+          ...ab,
+          mod,
+          modColor: this.dndModColor(ab.value),
+          save,
+          saveColor: this.dndModColor(ab.value),
+        }
+      })
 
       const saves = (fd.savingThrows || []).map(sv => ({
         key: sv,
@@ -275,12 +326,26 @@ Page({
       if (hpPct <= 25) hpColor = '#ef4444'
       else if (hpPct <= 50) hpColor = '#f59e0b'
 
+      const ac = fd.ac || 0
+      const dc = fd.dc !== undefined ? fd.dc : ac
+
+      const spellSlots = fd.spellSlots && Array.isArray(fd.spellSlots) && fd.spellSlots.length > 0
+        ? fd.spellSlots.map((s, i) => {
+            if (typeof s === 'object') return { used: s.used ?? 0, total: s.total ?? 0 }
+            return { used: 0, total: s ?? 0 }
+          })
+        : Array.from({ length: 9 }, () => ({ used: 0, total: 0 }))
+
       return {
         dndAbilities: abilities,
         dndSavingThrows: saves,
         dndSkillProfs: skills,
         dndHpPercent: hpPct,
         dndHpColor: hpColor,
+        dndAc: ac,
+        dndDc: dc,
+        dndSpellSlots: spellSlots,
+        dndClassLabel: this.classLabel(fd.class),
       }
     }
 
@@ -322,10 +387,167 @@ Page({
     return '#ef4444'
   },
 
+  // === DND 编辑处理 ===
+  /** 开启/关闭 DND 基本信息编辑 */
+  onToggleDndBasicInfoEdit() {
+    if (this.data.editingDndBasicInfo) {
+      this.setData({ editingDndBasicInfo: false })
+      return
+    }
+    const fd = this.data.card.formData || {}
+    this.setData({
+      editingDndBasicInfo: true,
+      editDndBasicInfo: {
+        name: fd.name || '',
+        player: fd.player || '',
+        occupation: fd.occupation || '',
+        age: fd.age || '',
+        gender: fd.gender || '',
+        class: fd.class || '',
+        level: fd.level || '',
+        race: fd.race || '',
+        alignment: fd.alignment || '',
+        background: fd.background || '',
+      }
+    })
+  },
+
+  onDndBasicInfoInput(e) {
+    const { key } = e.currentTarget.dataset
+    const edit = { ...this.data.editDndBasicInfo }
+    edit[key] = e.detail.value
+    this.setData({ editDndBasicInfo: edit })
+  },
+
+  saveDndBasicInfo() {
+    const fd = { ...this.data.card.formData }
+    const edit = this.data.editDndBasicInfo
+    Object.keys(edit).forEach(k => {
+      if (edit[k] !== undefined && edit[k] !== '') fd[k] = edit[k]
+    })
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDndBasicInfo: false })
+    this.loadCard()
+  },
+
+  cancelDndBasicInfoEdit() {
+    this.setData({ editingDndBasicInfo: false })
+  },
+
+  /** 开启/关闭 DND 属性编辑 */
+  onToggleDndAttrEdit() {
+    if (this.data.editingDndAttrs) {
+      this.setData({ editingDndAttrs: false })
+      return
+    }
+    const fd = this.data.card.formData || {}
+    this.setData({
+      editingDndAttrs: true,
+      editDndAttrs: {
+        str: fd.str ?? 10,
+        str_mod: fd.str_mod !== undefined ? fd.str_mod : this.dndMod(fd.str ?? 10),
+        str_save: fd.str_save !== undefined ? fd.str_save : this.dndMod(fd.str ?? 10),
+        dex: fd.dex ?? 10,
+        dex_mod: fd.dex_mod !== undefined ? fd.dex_mod : this.dndMod(fd.dex ?? 10),
+        dex_save: fd.dex_save !== undefined ? fd.dex_save : this.dndMod(fd.dex ?? 10),
+        con: fd.con ?? 10,
+        con_mod: fd.con_mod !== undefined ? fd.con_mod : this.dndMod(fd.con ?? 10),
+        con_save: fd.con_save !== undefined ? fd.con_save : this.dndMod(fd.con ?? 10),
+        int: fd.int ?? 10,
+        int_mod: fd.int_mod !== undefined ? fd.int_mod : this.dndMod(fd.int ?? 10),
+        int_save: fd.int_save !== undefined ? fd.int_save : this.dndMod(fd.int ?? 10),
+        wis: fd.wis ?? 10,
+        wis_mod: fd.wis_mod !== undefined ? fd.wis_mod : this.dndMod(fd.wis ?? 10),
+        wis_save: fd.wis_save !== undefined ? fd.wis_save : this.dndMod(fd.wis ?? 10),
+        cha: fd.cha ?? 10,
+        cha_mod: fd.cha_mod !== undefined ? fd.cha_mod : this.dndMod(fd.cha ?? 10),
+        cha_save: fd.cha_save !== undefined ? fd.cha_save : this.dndMod(fd.cha ?? 10),
+      }
+    })
+  },
+
+  onDndAttrInput(e) {
+    const { key } = e.currentTarget.dataset
+    const edit = { ...this.data.editDndAttrs }
+    edit[key] = e.detail.value
+    this.setData({ editDndAttrs: edit })
+  },
+
+  saveDndAttrs() {
+    const fd = { ...this.data.card.formData }
+    const edit = this.data.editDndAttrs
+    Object.keys(edit).forEach(k => {
+      fd[k] = edit[k]
+    })
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDndAttrs: false })
+    this.loadCard()
+  },
+
+  cancelDndAttrEdit() {
+    this.setData({ editingDndAttrs: false })
+  },
+
+  // === DND 当前状态编辑 ===
+  onToggleDndStatusEdit() {
+    const fd = this.data.card.formData || {}
+    this.setData({
+      editingDndStatus: !this.data.editingDndStatus,
+      editDndStatus: {
+        hp: fd.hp ?? 0,
+        hpMax: fd.hpMax ?? 0,
+        initiative: fd.initiative ?? 0,
+        hitDiceUsed: fd.hitDiceUsed ?? 0,
+        hitDiceCount: fd.hitDiceCount ?? 0,
+        hitDice: fd.hitDice ?? '',
+      },
+      dndSpellSlots: fd.spellSlots && Array.isArray(fd.spellSlots) && fd.spellSlots.length > 0
+        ? fd.spellSlots.map(s => {
+            if (typeof s === 'object') return { used: s.used ?? 0, total: s.total ?? 0 }
+            return { used: 0, total: s ?? 0 }
+          })
+        : Array.from({ length: 9 }, () => ({ used: 0, total: 0 })),
+    })
+  },
+
+  onDndStatusInput(e) {
+    const field = e.currentTarget.dataset.field
+    const edit = { ...this.data.editDndStatus }
+    edit[field] = e.detail.value
+    this.setData({ editDndStatus: edit })
+  },
+
+  onDndSpellSlotInput(e) {
+    const index = parseInt(e.currentTarget.dataset.index)
+    const field = e.currentTarget.dataset.field
+    const slots = [...this.data.dndSpellSlots]
+    slots[index] = { ...slots[index], [field]: parseInt(e.detail.value) || 0 }
+    this.setData({ dndSpellSlots: slots })
+  },
+
+  cancelDndStatusEdit() {
+    this.setData({ editingDndStatus: false })
+  },
+
+  saveDndStatus() {
+    const edit = this.data.editDndStatus
+    const fd = { ...this.data.card.formData }
+    fd.hp = parseInt(edit.hp) || 0
+    fd.hpMax = parseInt(edit.hpMax) || 0
+    fd.initiative = parseInt(edit.initiative) || 0
+    fd.hitDiceUsed = parseInt(edit.hitDiceUsed) || 0
+    fd.hitDiceCount = parseInt(edit.hitDiceCount) || 0
+    fd.hitDice = edit.hitDice
+    fd.spellSlots = this.data.dndSpellSlots.map(s => ({ used: parseInt(s.used) || 0, total: parseInt(s.total) || 0 }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDndStatus: false })
+    this.loadCard()
+  },
+
   // === DND 工具函数 ===
   dndMod(score) {
     const m = Math.floor((score - 10) / 2)
-    return m >= 0 ? '+' + m : String(m)
+    return m > 0 ? String(m) : m === 0 ? '0' : String(m)
   },
   dndModColor(score) {
     const m = Math.floor((score - 10) / 2)
@@ -371,11 +593,13 @@ Page({
     }
 
     if (sys === 'DND') {
+      const ac = fd.ac || 0
+      const dc = fd.dc !== undefined ? fd.dc : ac
       return [
         { label: '职业', value: this.classLabel(fd.class) },
         { label: '种族', value: fd.race || '—' },
         { label: '等级', value: fd.level || '—' },
-        { label: 'AC/HP', value: `${fd.ac || 0}/${fd.hp || 0}` }
+        { label: 'AC/DC/HP', value: `${ac}/${dc}/${fd.hp || 0}` }
       ]
     }
 
@@ -500,18 +724,47 @@ Page({
   // ===== 头像上传 =====
   onChooseAvatar() {
     const that = this
-    wx.chooseMedia({
+    wx.chooseImage({
       count: 1,
-      mediaType: ['image'],
+      sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
       success(res) {
-        const tempFilePath = res.tempFiles[0].tempFilePath
-        const card = that.data.card
-        if (card) {
-          card.avatar = tempFilePath
-          that.setData({ card })
-          store.updateCardAvatar(card.id, tempFilePath)
+        const tempFilePath = res.tempFilePaths[0]
+        console.log('[card-detail] chooseImage 成功, path:', tempFilePath)
+        // 检查 wx.cropImage 是否可用
+        if (!wx.cropImage) {
+          console.log('[card-detail] wx.cropImage 不可用，直接使用原图')
+          const card = that.data.card
+          if (card) {
+            card.avatar = tempFilePath
+            that.setData({ card })
+            store.updateCardAvatar(card.id, tempFilePath)
+          }
+          return
         }
+        // 打开裁剪界面，让玩家手动框选区域
+        wx.cropImage({
+          src: tempFilePath,
+          cropScale: '1:1',
+          success(cropRes) {
+            console.log('[card-detail] cropImage 成功, path:', cropRes.tempFilePath)
+            const card = that.data.card
+            if (card) {
+              card.avatar = cropRes.tempFilePath
+              that.setData({ card })
+              store.updateCardAvatar(card.id, cropRes.tempFilePath)
+            }
+          },
+          fail(err) {
+            console.error('[card-detail] cropImage 失败:', JSON.stringify(err))
+            const card = that.data.card
+            if (card) {
+              card.avatar = tempFilePath
+              that.setData({ card })
+              store.updateCardAvatar(card.id, tempFilePath)
+            }
+          }
+        })
       }
     })
   },
@@ -763,6 +1016,293 @@ Page({
     store.updateCardFormData(this.cardId, fd)
     this.setData({ editingStatus: false })
     wx.showToast({ title: '状态已更新', icon: 'success' })
+    this.loadCard()
+  },
+
+  // ===== 背景故事 =====
+
+  /** 点击条目行 → 直接弹出弹窗 */
+  onBackstoryEntryTap(e) {
+    if (this._copyLocked) return
+    const { key, label } = e.currentTarget.dataset
+    const fd = this.data.card.formData || {}
+    this.setData({
+      backstoryDialogVisible: true,
+      backstoryDialogTitle: label,
+      backstoryDialogContent: fd[key] || '',
+      backstoryDialogKey: key,
+      backstoryDialogEditing: false,
+      backstoryIsDetail: false,
+    })
+  },
+
+  /** 点击详细故事预览 → 弹出放大弹窗 */
+  onBackstoryDetailPreview() {
+    if (this._copyLocked) return
+    const fd = this.data.card.formData || {}
+    this.setData({
+      backstoryDialogVisible: true,
+      backstoryDialogTitle: '详细故事',
+      backstoryDialogContent: fd.backstory_detail || '',
+      backstoryDialogKey: 'backstory_detail',
+      backstoryDialogEditing: false,
+      backstoryIsDetail: true,
+    })
+  },
+
+  /** 关闭弹窗 */
+  closeBackstoryDialog() {
+    this.setData({ backstoryDialogVisible: false })
+  },
+
+  /** 弹窗内进入编辑模式 */
+  startBackstoryEdit() {
+    this.setData({ backstoryDialogEditing: true })
+  },
+
+  /** 弹窗内取消编辑 */
+  cancelBackstoryEdit() {
+    const fd = this.data.card.formData || {}
+    this.setData({
+      backstoryDialogEditing: false,
+      backstoryDialogContent: fd[this.data.backstoryDialogKey] || '',
+    })
+  },
+
+  /** 弹窗内文本输入 */
+  onBackstoryDialogInput(e) {
+    this.setData({ backstoryDialogContent: e.detail.value })
+  },
+
+  /** 弹窗内保存编辑 */
+  applyBackstoryEdit() {
+    const fd = { ...this.data.card.formData }
+    fd[this.data.backstoryDialogKey] = this.data.backstoryDialogContent
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ backstoryDialogVisible: false, backstoryDialogEditing: false })
+    wx.showToast({ title: '已保存', icon: 'success' })
+    this.loadCard()
+  },
+
+  /** 长按背景故事条目 → 复制内容 */
+  onCopyBackstoryEntry(e) {
+    const { key } = e.currentTarget.dataset
+    const fd = this.data.card.formData || {}
+    const text = fd[key] || ''
+    if (!text) return
+    wx.setClipboardData({ data: text })
+    this._copyLocked = true
+    setTimeout(() => { this._copyLocked = false }, 300)
+  },
+
+  /** 长按详细故事 → 复制内容 */
+  onCopyBackstoryDetail() {
+    const fd = this.data.card.formData || {}
+    const text = fd.backstory_detail || ''
+    if (!text) return
+    wx.setClipboardData({ data: text })
+    this._copyLocked = true
+    setTimeout(() => { this._copyLocked = false }, 300)
+  },
+
+  // ===== 背包 =====
+
+  /** 点击背包预览 → 弹出弹窗 */
+  onBackpackPreview() {
+    if (this._copyLocked) return
+    const fd = this.data.card.formData || {}
+    this.setData({
+      backpackDialogVisible: true,
+      backpackDialogContent: fd.backpack || '',
+      backpackDialogEditing: false,
+    })
+  },
+
+  /** 关闭背包弹窗 */
+  closeBackpackDialog() {
+    this.setData({ backpackDialogVisible: false })
+  },
+
+  /** 背包弹窗内进入编辑模式 */
+  startBackpackEdit() {
+    this.setData({ backpackDialogEditing: true })
+  },
+
+  /** 背包弹窗内取消编辑 */
+  cancelBackpackEdit() {
+    const fd = this.data.card.formData || {}
+    this.setData({
+      backpackDialogEditing: false,
+      backpackDialogContent: fd.backpack || '',
+    })
+  },
+
+  /** 背包弹窗内文本输入 */
+  onBackpackDialogInput(e) {
+    this.setData({ backpackDialogContent: e.detail.value })
+  },
+
+  /** 背包弹窗内保存编辑 */
+  applyBackpackEdit() {
+    const fd = { ...this.data.card.formData }
+    fd.backpack = this.data.backpackDialogContent
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ backpackDialogVisible: false, backpackDialogEditing: false })
+    wx.showToast({ title: '已保存', icon: 'success' })
+    this.loadCard()
+  },
+
+  /** 长按背包 → 复制内容 */
+  onCopyBackpack() {
+    const fd = this.data.card.formData || {}
+    const text = fd.backpack || ''
+    if (!text) return
+    wx.setClipboardData({ data: text })
+    this._copyLocked = true
+    setTimeout(() => { this._copyLocked = false }, 300)
+  },
+
+  // ===== 经历 =====
+
+  /** 构建经历条目列表 */
+  buildExperienceItems(card) {
+    const fd = card.formData || {}
+    const exps = fd.experiences
+    if (exps && Array.isArray(exps) && exps.length > 0) {
+      return exps.map((exp, i) => ({
+        key: exp.key || 'exp_' + i,
+        label: exp.label || '',
+        value: exp.value || '',
+      }))
+    }
+    // 默认2栏，标签留空让玩家自己填
+    return [
+      { key: 'exp_0', label: '', value: '' },
+      { key: 'exp_1', label: '', value: '' },
+    ]
+  },
+
+  /** 点击经历左列（经历模组）→ 弹出弹窗 */
+  onExperienceLabelTap(e) {
+    if (this._copyLocked) return
+    const { key, label } = e.currentTarget.dataset
+    const item = this.data.experienceItems.find(it => it.key === key)
+    this.setData({
+      experienceDialogVisible: true,
+      experienceDialogType: 'label',
+      experienceDialogTitle: '经历模组',
+      experienceDialogLabel: item ? item.label : '',
+      experienceDialogContent: '',
+      experienceDialogKey: key,
+      experienceDialogEditing: false,
+    })
+  },
+
+  /** 点击经历右列（人物变化描述）→ 弹出弹窗 */
+  onExperienceValueTap(e) {
+    if (this._copyLocked) return
+    const { key, label } = e.currentTarget.dataset
+    const item = this.data.experienceItems.find(it => it.key === key)
+    this.setData({
+      experienceDialogVisible: true,
+      experienceDialogType: 'value',
+      experienceDialogTitle: '人物变化描述',
+      experienceDialogLabel: '',
+      experienceDialogContent: item ? item.value : '',
+      experienceDialogKey: key,
+      experienceDialogEditing: false,
+    })
+  },
+
+  /** 长按经历条目 → 复制 */
+  onCopyExperienceEntry(e) {
+    const { key } = e.currentTarget.dataset
+    const item = this.data.experienceItems.find(it => it.key === key)
+    const text = item ? item.value : ''
+    if (!text) return
+    wx.setClipboardData({ data: text })
+    this._copyLocked = true
+    setTimeout(() => { this._copyLocked = false }, 300)
+  },
+
+  /** 新增经历条目 */
+  onAddExperienceEntry() {
+    const items = [...this.data.experienceItems]
+    const nextIdx = items.length
+    items.push({
+      key: 'exp_' + nextIdx,
+      label: '',
+      value: '',
+    })
+    // 同步到 formData
+    const fd = { ...this.data.card.formData }
+    fd.experiences = items.map(it => ({ key: it.key, label: it.label, value: it.value }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ experienceItems: items })
+  },
+
+  /** 切换经历管理模式 */
+  toggleExperienceManage() {
+    this.setData({ experienceManaging: !this.data.experienceManaging })
+  },
+
+  /** 删除经历条目 */
+  onDeleteExperienceEntry(e) {
+    const { key } = e.currentTarget.dataset
+    const items = this.data.experienceItems.filter(it => it.key !== key)
+    const fd = { ...this.data.card.formData }
+    fd.experiences = items.map(it => ({ key: it.key, label: it.label, value: it.value }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ experienceItems: items })
+  },
+
+  /** 关闭经历弹窗 */
+  closeExperienceDialog() {
+    this.setData({ experienceDialogVisible: false })
+  },
+
+  /** 经历弹窗内进入编辑 */
+  startExperienceEdit() {
+    this.setData({ experienceDialogEditing: true })
+  },
+
+  /** 经历弹窗内取消编辑 */
+  cancelExperienceEdit() {
+    const item = this.data.experienceItems.find(it => it.key === this.data.experienceDialogKey)
+    if (this.data.experienceDialogType === 'label') {
+      this.setData({ experienceDialogEditing: false, experienceDialogLabel: item ? item.label : '' })
+    } else {
+      this.setData({ experienceDialogEditing: false, experienceDialogContent: item ? item.value : '' })
+    }
+  },
+
+  /** 经历弹窗内模组名称输入 */
+  onExperienceLabelInput(e) {
+    this.setData({ experienceDialogLabel: e.detail.value })
+  },
+
+  /** 经历弹窗内文本输入 */
+  onExperienceDialogInput(e) {
+    this.setData({ experienceDialogContent: e.detail.value })
+  },
+
+  /** 经历弹窗内保存 */
+  applyExperienceEdit() {
+    const items = this.data.experienceItems.map(it => {
+      if (it.key === this.data.experienceDialogKey) {
+        if (this.data.experienceDialogType === 'label') {
+          return { ...it, label: this.data.experienceDialogLabel }
+        } else {
+          return { ...it, value: this.data.experienceDialogContent }
+        }
+      }
+      return it
+    })
+    const fd = { ...this.data.card.formData }
+    fd.experiences = items.map(it => ({ key: it.key, label: it.label, value: it.value }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ experienceDialogVisible: false, experienceDialogEditing: false, experienceItems: items })
+    wx.showToast({ title: '已保存', icon: 'success' })
     this.loadCard()
   },
 

@@ -13,6 +13,7 @@
  */
 import type { CharacterCard } from '@/types/card'
 import { ref, computed } from 'vue'
+import { useCardStore } from '@/stores/cards'
 
 const props = defineProps<{
   card: CharacterCard
@@ -21,6 +22,215 @@ const props = defineProps<{
 }>()
 
 const fd = props.card.formData
+
+const cardStore = useCardStore()
+
+// ==================== 背景故事 ====================
+const backstoryItems = [
+  { key: 'backstory_desc', label: '个人描述' },
+  { key: 'backstory_belief', label: '思想/信念' },
+  { key: 'backstory_important', label: '重要之人' },
+  { key: 'backstory_place', label: '非凡之地' },
+  { key: 'backstory_treasure', label: '宝贵植物' },
+  { key: 'backstory_trait', label: '特点' },
+  { key: 'backstory_wound', label: '伤口/伤痕' },
+  { key: 'backstory_phobia', label: '恐惧/狂躁症' },
+]
+const backstoryDialogVisible = ref(false)
+const backstoryDialogTitle = ref('')
+const backstoryDialogContent = ref('')
+const backstoryDialogKey = ref('')
+const backstoryDialogEditing = ref(false)
+const backstoryIsDetail = ref(false)
+
+function onBackstoryEntryTap(item: { key: string; label: string }) {
+  backstoryDialogTitle.value = item.label
+  backstoryDialogContent.value = (props.card.formData as any)[item.key] || ''
+  backstoryDialogKey.value = item.key
+  backstoryDialogEditing.value = false
+  backstoryIsDetail.value = false
+  backstoryDialogVisible.value = true
+}
+
+function onBackstoryDetailPreview() {
+  backstoryDialogTitle.value = '详细故事'
+  backstoryDialogContent.value = (props.card.formData as any).backstory_detail || ''
+  backstoryDialogKey.value = 'backstory_detail'
+  backstoryDialogEditing.value = false
+  backstoryIsDetail.value = true
+  backstoryDialogVisible.value = true
+}
+
+function closeBackstoryDialog() {
+  backstoryDialogVisible.value = false
+}
+
+function startBackstoryEdit() {
+  backstoryDialogEditing.value = true
+}
+
+function cancelBackstoryEdit() {
+  backstoryDialogContent.value = (props.card.formData as any)[backstoryDialogKey.value] || ''
+  backstoryDialogEditing.value = false
+}
+
+function applyBackstoryEdit() {
+  const fd = { ...props.card.formData } as Record<string, unknown>
+  fd[backstoryDialogKey.value] = backstoryDialogContent.value
+  cardStore.updateCardFormData(props.card.id, fd)
+  backstoryDialogVisible.value = false
+  backstoryDialogEditing.value = false
+}
+
+/** 复制背景故事条目 */
+function copyBackstoryEntry(item: { key: string; label: string }) {
+  const text = (props.card.formData as any)[item.key] || ''
+  if (!text) return
+  navigator.clipboard.writeText(text).then(() => {
+    // copied silently
+  }).catch(() => {})
+}
+
+/** 复制详细故事 */
+function copyBackstoryDetail() {
+  const text = (props.card.formData as any).backstory_detail || ''
+  if (!text) return
+  navigator.clipboard.writeText(text).then(() => {}).catch(() => {})
+}
+
+// ==================== 背包 ====================
+const backpackDialogVisible = ref(false)
+const backpackDialogContent = ref('')
+const backpackDialogEditing = ref(false)
+
+function onBackpackPreview() {
+  backpackDialogContent.value = (props.card.formData as any).backpack || ''
+  backpackDialogEditing.value = false
+  backpackDialogVisible.value = true
+}
+
+function closeBackpackDialog() {
+  backpackDialogVisible.value = false
+}
+
+function startBackpackEdit() {
+  backpackDialogEditing.value = true
+}
+
+function cancelBackpackEdit() {
+  backpackDialogContent.value = (props.card.formData as any).backpack || ''
+  backpackDialogEditing.value = false
+}
+
+function applyBackpackEdit() {
+  const fd = { ...props.card.formData } as Record<string, unknown>
+  fd.backpack = backpackDialogContent.value
+  cardStore.updateCardFormData(props.card.id, fd)
+  backpackDialogVisible.value = false
+  backpackDialogEditing.value = false
+}
+
+/** 复制背包内容 */
+function copyBackpack() {
+  const text = (props.card.formData as any).backpack || ''
+  if (!text) return
+  navigator.clipboard.writeText(text).then(() => {}).catch(() => {})
+}
+
+// ==================== 经历 ====================
+const experienceDialogVisible = ref(false)
+const experienceDialogType = ref<'label' | 'value'>('label')
+const experienceDialogTitle = ref('')
+const experienceDialogLabel = ref('')
+const experienceDialogContent = ref('')
+const experienceDialogKey = ref('')
+const experienceDialogEditing = ref(false)
+
+const experienceItems = computed(() => {
+  const fd = props.card.formData as any
+  const exps = fd.experiences
+  if (exps && Array.isArray(exps) && exps.length > 0) {
+    return exps.map((exp: any, i: number) => ({
+      key: exp.key || 'exp_' + i,
+      label: exp.label || '',
+      value: exp.value || '',
+    }))
+  }
+  return [
+    { key: 'exp_0', label: '', value: '' },
+    { key: 'exp_1', label: '', value: '' },
+  ]
+})
+
+function onExperienceLabelTap(item: { key: string; label: string; value: string }) {
+  experienceDialogType.value = 'label'
+  experienceDialogTitle.value = '经历模组'
+  experienceDialogLabel.value = item.label
+  experienceDialogContent.value = ''
+  experienceDialogKey.value = item.key
+  experienceDialogEditing.value = false
+  experienceDialogVisible.value = true
+}
+
+function onExperienceValueTap(item: { key: string; label: string; value: string }) {
+  experienceDialogType.value = 'value'
+  experienceDialogTitle.value = '人物变化描述'
+  experienceDialogLabel.value = ''
+  experienceDialogContent.value = item.value
+  experienceDialogKey.value = item.key
+  experienceDialogEditing.value = false
+  experienceDialogVisible.value = true
+}
+
+function onAddExperienceEntry() {
+  const items = experienceItems.value.map(it => ({ ...it }))
+  const nextIdx = items.length
+  items.push({ key: 'exp_' + nextIdx, label: '', value: '' })
+  const fd = { ...props.card.formData } as Record<string, unknown>
+  fd.experiences = items
+  cardStore.updateCardFormData(props.card.id, fd)
+}
+
+function closeExperienceDialog() {
+  experienceDialogVisible.value = false
+}
+
+function startExperienceEdit() {
+  experienceDialogEditing.value = true
+}
+
+function cancelExperienceEdit() {
+  const item = experienceItems.value.find(it => it.key === experienceDialogKey.value)
+  if (experienceDialogType.value === 'label') {
+    experienceDialogLabel.value = item ? item.label : ''
+  } else {
+    experienceDialogContent.value = item ? item.value : ''
+  }
+  experienceDialogEditing.value = false
+}
+
+function applyExperienceEdit() {
+  const items = experienceItems.value.map(it => {
+    if (it.key === experienceDialogKey.value) {
+      if (experienceDialogType.value === 'label') {
+        return { ...it, label: experienceDialogLabel.value }
+      } else {
+        return { ...it, value: experienceDialogContent.value }
+      }
+    }
+    return it
+  })
+  const fd = { ...props.card.formData } as Record<string, unknown>
+  fd.experiences = items
+  cardStore.updateCardFormData(props.card.id, fd)
+  experienceDialogVisible.value = false
+  experienceDialogEditing.value = false
+}
+
+function copyExperienceEntry(item: { key: string; label: string; value: string }) {
+  if (!item.value) return
+  navigator.clipboard.writeText(item.value).then(() => {}).catch(() => {})
+}
 
 // ==================== 技能表模式 ====================
 const skillMode = ref<'simple' | 'detailed'>('detailed')
@@ -256,25 +466,33 @@ const filteredColumns = computed(() => {
     <!-- 3. 4个突出摘要词条 -->
     <!-- ================================================================ -->
     <div class="grid grid-cols-4 gap-2">
-      <div class="rounded-lg px-2 py-2 text-center"
-        :style="{ background: `${accentColor}0F`, boxShadow: `0 0 0 1px ${accentColor}28` }">
-        <div class="font-cinzel text-base font-bold" :style="{ color: accentColor }">{{ fd.occupation || '-' }}</div>
+      <div class="flex flex-col items-center gap-1">
         <div class="text-[9px] text-parchment-200/35">职业</div>
+        <div class="w-full rounded-lg px-2 py-3 text-center flex items-center justify-center"
+          :style="{ background: `${accentColor}0F`, boxShadow: `0 0 0 1px ${accentColor}28` }">
+          <div class="font-cinzel text-base font-bold" :style="{ color: accentColor }">{{ fd.occupation || '-' }}</div>
+        </div>
       </div>
-      <div class="rounded-lg px-2 py-2 text-center"
-        :style="{ background: `${accentColor}0F`, boxShadow: `0 0 0 1px ${accentColor}28` }">
-        <div class="font-cinzel text-base font-bold" :style="{ color: accentColor }">{{ fd.age ?? '-' }}</div>
+      <div class="flex flex-col items-center gap-1">
         <div class="text-[9px] text-parchment-200/35">年龄</div>
+        <div class="w-full rounded-lg px-2 py-3 text-center flex items-center justify-center"
+          :style="{ background: `${accentColor}0F`, boxShadow: `0 0 0 1px ${accentColor}28` }">
+          <div class="font-cinzel text-base font-bold" :style="{ color: accentColor }">{{ fd.age ?? '-' }}</div>
+        </div>
       </div>
-      <div class="rounded-lg px-2 py-2 text-center"
-        :style="{ background: `${accentColor}0F`, boxShadow: `0 0 0 1px ${accentColor}28` }">
-        <div class="font-cinzel text-base font-bold" :style="{ color: accentColor }">{{ fd.residence || '-' }}</div>
+      <div class="flex flex-col items-center gap-1">
         <div class="text-[9px] text-parchment-200/35">住地</div>
+        <div class="w-full rounded-lg px-2 py-3 text-center flex items-center justify-center"
+          :style="{ background: `${accentColor}0F`, boxShadow: `0 0 0 1px ${accentColor}28` }">
+          <div class="font-cinzel text-base font-bold" :style="{ color: accentColor }">{{ fd.residence || '-' }}</div>
+        </div>
       </div>
-      <div class="rounded-lg px-2 py-2 text-center"
-        :style="{ background: `${accentColor}0F`, boxShadow: `0 0 0 1px ${accentColor}28` }">
-        <div class="font-cinzel text-base font-bold" :style="{ color: accentColor }">{{ fd.year || '1920s' }}</div>
+      <div class="flex flex-col items-center gap-1">
         <div class="text-[9px] text-parchment-200/35">年份</div>
+        <div class="w-full rounded-lg px-2 py-3 text-center flex items-center justify-center"
+          :style="{ background: `${accentColor}0F`, boxShadow: `0 0 0 1px ${accentColor}28` }">
+          <div class="font-cinzel text-base font-bold" :style="{ color: accentColor }">{{ fd.year || '1920s' }}</div>
+        </div>
       </div>
     </div>
 
@@ -432,14 +650,193 @@ const filteredColumns = computed(() => {
     <!-- ================================================================ -->
     <!-- 背景故事 -->
     <!-- ================================================================ -->
-    <div v-if="fd.backstory"
-      class="rounded-lg p-3"
-      :style="{ background: `${accentColor}06`, borderLeft: `3px solid ${accentColor}55` }">
-      <h3 class="mb-2 font-cinzel text-[11px] font-semibold tracking-wider" :style="{ color: accentColor }">
-        背景故事
-      </h3>
-      <p class="text-[11px] leading-relaxed text-parchment-200/55">{{ fd.backstory }}</p>
+    <div class="rounded-lg p-3" :style="{ background: `${accentColor}08`, border: `1px solid ${accentColor}15` }">
+      <h3 class="mb-3 font-cinzel text-[11px] font-semibold tracking-wider" :style="{ color: accentColor }">背景故事</h3>
+
+      <!-- 8栏条目列表 -->
+      <div class="flex flex-col gap-0.5">
+        <div
+          v-for="item in backstoryItems"
+          :key="item.key"
+          class="flex items-center px-3 py-2.5 rounded-lg border cursor-pointer transition-colors hover:bg-parchment-200/5"
+          :style="{ borderColor: `${accentColor}15` }"
+          @click="onBackstoryEntryTap(item)"
+          @contextmenu.prevent="copyBackstoryEntry(item)"
+        >
+          <span class="w-[88px] flex-shrink-0 text-[11px] font-medium" style="color: rgba(232,220,196,0.7)">{{ item.label }}</span>
+          <span class="flex-1 text-[11px] truncate" style="color: rgba(232,220,196,0.35)">{{ (card.formData as any)[item.key] || '暂无' }}</span>
+        </div>
+      </div>
+
+      <!-- 详细故事 -->
+      <div class="mt-3">
+        <span class="text-[10px] block mb-1.5" style="color: rgba(232,220,196,0.6)">详细故事</span>
+        <div
+          class="min-h-[240px] p-2.5 rounded-lg border cursor-pointer overflow-y-auto"
+          :style="{ borderColor: `${accentColor}22`, background: `${accentColor}06` }"
+          @click="onBackstoryDetailPreview"
+          @contextmenu.prevent="copyBackstoryDetail"
+        >
+          <p v-if="(card.formData as any).backstory_detail" class="text-[11px] leading-relaxed whitespace-pre-wrap break-all" style="color: rgba(232,220,196,0.7)">{{ (card.formData as any).backstory_detail }}</p>
+          <p v-else class="text-[11px] flex items-center justify-center h-full" style="color: rgba(232,220,196,0.2)">点击查看详细故事</p>
+        </div>
+      </div>
     </div>
+
+    <!-- ================================================================ -->
+    <!-- 背包 -->
+    <!-- ================================================================ -->
+    <div class="rounded-lg p-3" :style="{ background: `${accentColor}08`, border: `1px solid ${accentColor}15` }">
+      <h3 class="mb-3 font-cinzel text-[11px] font-semibold tracking-wider" :style="{ color: accentColor }">背包</h3>
+      <div class="mt-1">
+        <span class="text-[10px] block mb-1.5" style="color: rgba(232,220,196,0.6)">物品清单</span>
+        <div
+          class="h-[240px] p-2.5 rounded-lg border cursor-pointer overflow-y-auto"
+          :style="{ borderColor: `${accentColor}22`, background: `${accentColor}06` }"
+          @click="onBackpackPreview"
+          @contextmenu.prevent="copyBackpack"
+        >
+          <p v-if="(card.formData as any).backpack" class="text-[11px] leading-relaxed whitespace-pre-wrap break-all" style="color: rgba(232,220,196,0.7)">{{ (card.formData as any).backpack }}</p>
+          <p v-else class="text-[11px] flex items-center justify-center h-full" style="color: rgba(232,220,196,0.2)">点击编辑背包</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- 经历 -->
+    <!-- ================================================================ -->
+    <div class="rounded-lg p-3" :style="{ background: `${accentColor}08`, border: `1px solid ${accentColor}15` }">
+      <h3 class="mb-3 font-cinzel text-[11px] font-semibold tracking-wider" :style="{ color: accentColor }">调查员经历</h3>
+      <!-- 列标题 -->
+      <div class="flex items-center px-3 pb-2 mb-1 border-b" :style="{ borderColor: `${accentColor}08` }">
+        <span class="w-[140rpx] flex-shrink-0 text-[10px]" style="color: rgba(232,220,196,0.25)">经历模组</span>
+        <span class="flex-1 ml-[25rpx] text-[10px]" style="color: rgba(232,220,196,0.25)">人物变化描述</span>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <div
+          v-for="item in experienceItems"
+          :key="item.key"
+          class="flex items-center px-3 py-2.5 rounded-lg border"
+          :style="{ borderColor: `${accentColor}15` }"
+        >
+          <span
+            class="w-[140rpx] flex-shrink-0 text-[11px] truncate cursor-pointer"
+            :style="{ color: item.label ? 'rgba(232,220,196,0.7)' : 'rgba(232,220,196,0.25)' }"
+            @click="onExperienceLabelTap(item)"
+            @contextmenu.prevent="copyExperienceEntry(item)"
+          >{{ item.label || '暂无' }}</span>
+          <div class="w-px h-4 mx-2 flex-shrink-0" :style="{ background: `${accentColor}12` }" />
+          <span
+            class="flex-1 text-[11px] truncate cursor-pointer"
+            style="color: rgba(232,220,196,0.35)"
+            @click="onExperienceValueTap(item)"
+            @contextmenu.prevent="copyExperienceEntry(item)"
+          >{{ item.value || '暂无' }}</span>
+        </div>
+      </div>
+      <div
+        class="mt-2 py-2.5 rounded-lg border border-dashed text-center cursor-pointer transition-colors hover:bg-parchment-200/5 text-[11px]"
+        :style="{ borderColor: `${accentColor}33`, color: accentColor }"
+        @click="onAddExperienceEntry"
+      >
+        + 新增项目
+      </div>
+    </div>
+
+    <!-- 背景故事弹窗 -->
+    <Teleport to="body">
+      <div v-if="backstoryDialogVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60" @click.self="closeBackstoryDialog">
+        <div class="w-[85vw] max-h-[80vh] rounded-xl flex flex-col" :style="{ background: '#1A1714', border: `1px solid ${accentColor}33` }">
+          <div class="flex items-center justify-between px-4 py-3 border-b" :style="{ borderColor: `${accentColor}15` }">
+            <span class="text-[14px] font-semibold" :style="{ color: accentColor }">{{ backstoryDialogTitle }}</span>
+            <template v-if="backstoryDialogEditing">
+              <div class="flex items-center gap-3">
+                <button class="text-[12px] px-2 py-0.5 rounded border" style="color: rgba(232,220,196,0.5); border-color: rgba(232,220,196,0.15); background: rgba(232,220,196,0.06)" @click="cancelBackstoryEdit">取消</button>
+                <button class="text-[12px] px-2 py-0.5 rounded border font-semibold" :style="{ color: accentColor, borderColor: `${accentColor}44`, background: `${accentColor}15` }" @click="applyBackstoryEdit">保存</button>
+              </div>
+            </template>
+            <button v-else class="text-[16px] px-1 text-green-400 hover:text-green-300" @click="startBackstoryEdit">✎</button>
+          </div>
+          <div class="flex-1 overflow-y-auto p-4">
+            <textarea
+              v-if="backstoryDialogEditing"
+              v-model="backstoryDialogContent"
+              class="w-full min-h-[300px] text-[13px] leading-relaxed rounded-lg p-3 resize-none"
+              :style="{ background: `${accentColor}08`, color: 'rgba(232,220,196,0.8)', border: `1px solid ${accentColor}22` }"
+              placeholder="输入内容..."
+            ></textarea>
+            <p v-else class="text-[13px] leading-relaxed whitespace-pre-wrap break-all" style="color: rgba(232,220,196,0.7)">{{ backstoryDialogContent || '暂无内容' }}</p>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- 背包弹窗 -->
+    <Teleport to="body">
+      <div v-if="backpackDialogVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60" @click.self="closeBackpackDialog">
+        <div class="w-[85vw] max-h-[80vh] rounded-xl flex flex-col" :style="{ background: '#1A1714', border: `1px solid ${accentColor}33` }">
+          <div class="flex items-center justify-between px-4 py-3 border-b" :style="{ borderColor: `${accentColor}15` }">
+            <span class="text-[14px] font-semibold" :style="{ color: accentColor }">背包</span>
+            <template v-if="backpackDialogEditing">
+              <div class="flex items-center gap-3">
+                <button class="text-[12px] px-2 py-0.5 rounded border" style="color: rgba(232,220,196,0.5); border-color: rgba(232,220,196,0.15); background: rgba(232,220,196,0.06)" @click="cancelBackpackEdit">取消</button>
+                <button class="text-[12px] px-2 py-0.5 rounded border font-semibold" :style="{ color: accentColor, borderColor: `${accentColor}44`, background: `${accentColor}15` }" @click="applyBackpackEdit">保存</button>
+              </div>
+            </template>
+            <button v-else class="text-[16px] px-1 text-green-400 hover:text-green-300" @click="startBackpackEdit">✎</button>
+          </div>
+          <div class="flex-1 overflow-y-auto p-4">
+            <textarea
+              v-if="backpackDialogEditing"
+              v-model="backpackDialogContent"
+              class="w-full min-h-[300px] text-[13px] leading-relaxed rounded-lg p-3 resize-none"
+              :style="{ background: `${accentColor}08`, color: 'rgba(232,220,196,0.8)', border: `1px solid ${accentColor}22` }"
+              placeholder="输入背包物品..."
+            ></textarea>
+            <p v-else class="text-[13px] leading-relaxed whitespace-pre-wrap break-all" style="color: rgba(232,220,196,0.7)">{{ backpackDialogContent || '暂无内容' }}</p>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- 经历弹窗 -->
+    <Teleport to="body">
+      <div v-if="experienceDialogVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60" @click.self="closeExperienceDialog">
+        <div class="w-[85vw] max-h-[80vh] rounded-xl flex flex-col" :style="{ background: '#1A1714', border: `1px solid ${accentColor}33` }">
+          <div class="flex items-center justify-between px-4 py-3 border-b" :style="{ borderColor: `${accentColor}15` }">
+            <span class="text-[14px] font-semibold" :style="{ color: accentColor }">{{ experienceDialogType === 'value' ? '人物变化描述' : '经历模组' }}</span>
+            <template v-if="experienceDialogEditing">
+              <div class="flex items-center gap-3">
+                <button class="text-[12px] px-2 py-0.5 rounded border" style="color: rgba(232,220,196,0.5); border-color: rgba(232,220,196,0.15); background: rgba(232,220,196,0.06)" @click="cancelExperienceEdit">取消</button>
+                <button class="text-[12px] px-2 py-0.5 rounded border font-semibold" :style="{ color: accentColor, borderColor: `${accentColor}44`, background: `${accentColor}15` }" @click="applyExperienceEdit">保存</button>
+              </div>
+            </template>
+            <button v-else class="text-[16px] px-1 text-green-400 hover:text-green-300" @click="startExperienceEdit">✎</button>
+          </div>
+          <div class="flex-1 overflow-y-auto p-4">
+            <template v-if="experienceDialogEditing">
+              <input
+                v-if="experienceDialogType === 'label'"
+                v-model="experienceDialogLabel"
+                class="w-full h-9 px-3 rounded-lg text-[13px] outline-none"
+                :style="{ background: `${accentColor}08`, color: 'rgba(232,220,196,0.8)', border: `1px solid ${accentColor}22` }"
+                placeholder="经历模组"
+              />
+              <textarea
+                v-if="experienceDialogType === 'value'"
+                v-model="experienceDialogContent"
+                class="w-full min-h-[200px] text-[13px] leading-relaxed rounded-lg p-3 resize-none"
+                :style="{ background: `${accentColor}08`, color: 'rgba(232,220,196,0.8)', border: `1px solid ${accentColor}22` }"
+                placeholder="人物变化描述"
+              ></textarea>
+            </template>
+            <template v-else>
+              <p class="text-[13px] leading-relaxed whitespace-pre-wrap break-all" style="color: rgba(232,220,196,0.7)">{{ experienceDialogType === 'value' ? (experienceDialogContent || '暂无内容') : (experienceDialogLabel || '暂无内容') }}</p>
+            </template>
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <!-- 时间戳 -->
     <div class="flex justify-between text-[9px] text-parchment-200/18">

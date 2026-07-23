@@ -77,10 +77,18 @@
           <text class="form-label">角色名称 *</text>
           <input
             class="form-input"
-            placeholder="输入角色名称"
             placeholder-class="input-placeholder"
             value="{{newCardName}}"
             bindinput="onNewCardNameInput"
+          />
+        </view>
+        <view class="form-item">
+          <text class="form-label">参与模组</text>
+          <input
+            class="form-input"
+            placeholder-class="input-placeholder"
+            value="{{newCardModule}}"
+            bindinput="onNewCardModuleInput"
           />
         </view>
         <view class="form-item">

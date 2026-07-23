@@ -468,11 +468,11 @@ function addCard(system, name, formData = {}) {
     id: `card-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     system,
     name,
-    player: '我',
+    player: state.userName,
     avatar: '',
     description: '',
     rule: sysInfo ? (sysInfo.rule || []) : [],
-    formData: { name: name, player: '我', ...formData },
+    formData: { name: name, player: state.userName, ...formData },
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     favorite: false

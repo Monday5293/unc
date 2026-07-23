@@ -55,24 +55,27 @@ function onToggleFav() {
   emit('toggleFav', props.card)
 }
 
-// 计算展示的前三个非空表单字段，用于卡片预览
-const firstFields = (() => {
-  const fd = props.card.formData
-  const entries = Object.entries(fd).filter(
-    ([, v]) => v !== '' && v !== null && v !== undefined && typeof v !== 'object',
-  )
-  return entries.slice(0, 3).map(([k, v]) => ({
-    label: k,
-    value: String(v),
-  }))
-})()
+// 计算展示的四个固定字段，用于卡片预览
+const profileFields = [
+  { label: '职业', value: (props.card.formData as any).occupation || '-' },
+  { label: '年龄', value: (props.card.formData as any).age ?? '-' },
+  { label: '住地', value: (props.card.formData as any).residence || '-' },
+  { label: '年份', value: (props.card.formData as any).year || '-' },
+]
+
+// 计算边框颜色（浅色版本）
+const accentHex = props.system.accentColor.replace('#', '')
+const r = parseInt(accentHex.slice(0, 2), 16)
+const g = parseInt(accentHex.slice(2, 4), 16)
+const b = parseInt(accentHex.slice(4, 6), 16)
+const borderColor = `rgba(${r},${g},${b},0.3)`
 </script>
 
 <template>
   <div
     class="parchment-card ink-border group relative flex cursor-pointer flex-col overflow-hidden rounded-xl p-4 text-ink-900 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
     :class="{ 'scale-[0.98]': pressing }"
-    :style="{ '--accent': system.accentColor }"
+    :style="{ '--accent': system.accentColor, border: `2px solid ${borderColor}` }"
     @click="onClickCard"
     @mousedown="onTouchStart"
     @mouseup="onTouchEnd"
@@ -132,21 +135,21 @@ const firstFields = (() => {
       </div>
       <div class="min-w-0 flex-1">
         <h3 class="font-cinzel truncate text-lg font-semibold leading-tight" :style="{ color: '#1A1714' }">
-          {{ card.name }}
+          {{ card.formData?.name || card.name }}
         </h3>
         <p class="mt-0.5 truncate text-xs text-ink-700">
-          {{ card.player }}
+          {{ card.formData?.player || card.player }}
         </p>
       </div>
     </div>
 
     <p class="mb-3 line-clamp-2 text-xs leading-relaxed text-ink-700">
-      {{ card.description }}
+      {{ card.description || card.formData?.description }}
     </p>
 
-    <div v-if="firstFields.length" class="mt-auto flex flex-wrap gap-1.5">
+    <div class="mt-auto flex flex-wrap gap-1.5">
       <span
-        v-for="stat in firstFields"
+        v-for="stat in profileFields"
         :key="stat.label"
         class="inline-flex items-center gap-1 rounded-md bg-ink-900/8 px-2 py-1 text-[10px] font-medium"
       >

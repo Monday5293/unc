@@ -1,19 +1,36 @@
-现在来详细写一下coc规则中角色卡的内容
-
-1.顶部左侧的logo改为可上传图片的框架，默认图片为规则的logo
-
-2.基本信息中的词条改为姓名、职业、玩家、年龄、性别、年份、居住地，4行2列
-
-3.在顶部简介下的4个突出词条，改为职业，年龄，住地，年份
-
-4.基础属性改为3行3列，按顺序为力量、敏捷、意志、体质、外貌、教育、体型、智力、幸运
-
-5.基础属性下为当前状态，1行写完，分为别体力（HP）、理智（SAN）、魔法、护甲
-
-6.在当前状态下写技能表，技能表的右上角有切换按钮，可以切换到详细模式和简单模式
-
-在简单模式下，仅显示更改过的技能。在详细模式下，显示所有技能。
-
-技能表为一个表格，按照以下图片进行设计，去掉成功标、本质标记、成功率后面的两列
-
-![image-20260723023608417](C:\Users\12954\AppData\Roaming\Typora\typora-user-images\image-20260723023608417.png)
+[card-item] updateDisplay 被调用
+card-item.js:37 [card-item] card 对象: {"id":"coc-001","name":"艾琳·哈丁","player":"玩家A","hasFormData":true,"formDataKeys":["name","occupation","age","gender","residence","str","con","siz","dex","app","int","pow","edu","hp","hpMax","mp","san","skill_libraryUse","skill_spotHidden","skill_listen","skill_dodge","backstory"]}
+card-item.js:38 [card-item] system 对象: {"code":"COC","accentColor":"#3B6B4A"}
+card-item.js:52 [card-item] formData (fd): {"name":"艾琳·哈丁","occupation":"私家侦探","age":32,"gender":"女","residence":"波士顿","str":60,"con":70,"siz":55,"dex":65,"app":50,"int":75,"pow":60,"edu":80,"hp":12,"hpMax":12,"mp":12,"san":60,"skill_libraryUse":70,"skill_spotHidden":65,"skill_listen":55,"skill_dodge":50,"backstory":"前警探转行私家侦探，三年前接手一桩艺术商失踪案，从此开始接触禁忌古籍与不可名状之物。"}
+card-item.js:53 [card-item] occupation: 私家侦探 | age: 32 | residence: 波士顿 | year: undefined
+card-item.js:58 [card-item] displayName: 艾琳·哈丁 | displayPlayer: 玩家A | displayDescription: 1920年代波士顿的私家侦探，因一桩离奇...
+card-item.js:66 [card-item] profileFields: [{"label":"职业","value":"私家侦探"},{"label":"年龄","value":"32"},{"label":"住地","value":"波士顿"},{"label":"年份","value":"-"}]
+card-item.js:69 [card-item] borderColor: rgba(59,107,74,0.3)
+card-item.js:78 [card-item] setData 完成，当前 data: {"displayName":"艾琳·哈丁","displayPlayer":"玩家A","displayDescription":"1920年代波士顿的私家侦探，因一桩离奇...","profileFieldsCount":4}
+card-item.js:36 [card-item] updateDisplay 被调用
+card-item.js:37 [card-item] card 对象: {"id":"coc-002","name":"维克多·克莱因","player":"玩家B","hasFormData":true,"formDataKeys":["name","occupation","age","gender","residence","str","con","siz","dex","app","int","pow","edu","hp","hpMax","mp","san","skill_libraryUse","skill_spotHidden","skill_listen","skill_dodge","backstory"]}
+card-item.js:38 [card-item] system 对象: {"code":"COC","accentColor":"#3B6B4A"}
+card-item.js:52 [card-item] formData (fd): {"name":"维克多·克莱因","occupation":"大学教授","age":48,"gender":"男","residence":"阿卡姆","str":45,"con":50,"siz":60,"dex":50,"app":55,"int":85,"pow":55,"edu":90,"hp":11,"hpMax":11,"mp":11,"san":55,"skill_libraryUse":85,"skill_spotHidden":50,"skill_listen":40,"skill_dodge":35,"backstory":"专攻美索不达米亚文明的考古学教授，曾在乌尔遗址发掘出无法解读的泥板，从此被禁忌知识所吸引。"}
+card-item.js:53 [card-item] occupation: 大学教授 | age: 48 | residence: 阿卡姆 | year: undefined
+card-item.js:58 [card-item] displayName: 维克多·克莱因 | displayPlayer: 玩家B | displayDescription: 米斯卡托尼克大学考古学教授，对古老文明有...
+card-item.js:66 [card-item] profileFields: [{"label":"职业","value":"大学教授"},{"label":"年龄","value":"48"},{"label":"住地","value":"阿卡姆"},{"label":"年份","value":"-"}]
+card-item.js:69 [card-item] borderColor: rgba(59,107,74,0.3)
+card-item.js:78 [card-item] setData 完成，当前 data: {"displayName":"维克多·克莱因","displayPlayer":"玩家B","displayDescription":"米斯卡托尼克大学考古学教授，对古老文明有...","profileFieldsCount":4}
+card-item.js:36 [card-item] updateDisplay 被调用
+card-item.js:37 [card-item] card 对象: {"id":"card-1784757153171-3zvsf","name":"阿斯顿","player":"我","hasFormData":true,"formDataKeys":["name","player","str","dex","pow","con","app","edu","siz","int","san","sanMax","luck","mp","mpMax","hp","hpMax","skill_accounting","skill_anthropology","skill_appraise","skill_archaeology","skill_charm","skill_climb","skill_computer","skill_creditRating","skill_cthulhuMythos","skill_disguise","skill_dodge","skill_driveAuto","skill_elecRepair","skill_electronics","skill_fastTalk","skill_fightingBrawl","skill_firearmsHandgun","skill_firstAid","skill_history","skill_intimidate","skill_jump","skill_languageOther","skill_languageOwn","skill_law","skill_libraryUse","skill_listen","skill_locksmith","skill_mechRepair","skill_medicine","skill_naturalWorld","skill_navigate","skill_occult","skill_opHeavyMachine","skill_persuade","skill_psychoanalysis","skill_psychology","skill_ride","skill_sleightOfHand","skill_spotHidden","skill_stealth","skill_survival","skill_swim","skill_throw","skill_track","skill_animal","skill_diving","skill_demolitions","skill_lipReading","skill_hypnosis","skill_artillery"]}
+card-item.js:38 [card-item] system 对象: {"code":"COC","accentColor":"#3B6B4A"}
+card-item.js:52 [card-item] formData (fd): {"name":"阿斯顿","player":"我","str":40,"dex":70,"pow":65,"con":55,"app":80,"edu":50,"siz":50,"int":70,"san":65,"sanMax":65,"luck":55,"mp":13,"mpMax":13,"hp":10,"hpMax":10,"skill_accounting":6,"skill_anthropology":1,"skill_appraise":5,"skill_archaeology":1,"skill_charm":16,"skill_climb":20,"skill_computer":5,"skill_creditRating":18,"skill_cthulhuMythos":0,"skill_disguise":5,"skill_dodge":35,"skill_driveAuto":20,"skill_elecRepair":10,"skill_electronics":1,"skill_fastTalk":5,"skill_fightingBrawl":26,"skill_firearmsHandgun":20,"skill_firstAid":60,"skill_history":5,"skill_intimidate":15,"skill_jump":20,"skill_languageOther":60,"skill_languageOwn":50,"skill_law":5,"skill_libraryUse":50,"skill_listen":54,"skill_locksmith":1,"skill_mechRepair":10,"skill_medicine":1,"skill_naturalWorld":10,"skill_navigate":10,"skill_occult":5,"skill_opHeavyMachine":1,"skill_persuade":70,"skill_psychoanalysis":52,"skill_psychology":70,"skill_ride":5,"skill_sleightOfHand":10,"skill_spotHidden":80,"skill_stealth":20,"skill_survival":10,"skill_swim":20,"skill_throw":20,"skill_track":10,"skill_animal":5,"skill_diving":1,"skill_demolitions":1,"skill_lipReading":1,"skill_hypnosis":1,"skill_artillery":1}
+card-item.js:53 [card-item] occupation: undefined | age: undefined | residence: undefined | year: undefined
+card-item.js:58 [card-item] displayName: 阿斯顿 | displayPlayer: 我 | displayDescription: (空)
+card-item.js:66 [card-item] profileFields: [{"label":"职业","value":"-"},{"label":"年龄","value":"-"},{"label":"住地","value":"-"},{"label":"年份","value":"-"}]
+card-item.js:69 [card-item] borderColor: rgba(59,107,74,0.3)
+card-item.js:78 [card-item] setData 完成，当前 data: {"displayName":"阿斯顿","displayPlayer":"我","displayDescription":"(空)","profileFieldsCount":4}
+card-item.js:36 [card-item] updateDisplay 被调用
+card-item.js:37 [card-item] card 对象: {"id":"card-1784757454161-vd704","name":"阿斯顿","player":"我","hasFormData":true,"formDataKeys":["name","player","str","dex","pow","con","app","edu","siz","int","san","sanMax","luck","mp","mpMax","hp","hpMax","skill_accounting","skill_anthropology","skill_appraise","skill_archaeology","skill_charm","skill_climb","skill_computer","skill_creditRating","skill_cthulhuMythos","skill_disguise","skill_dodge","skill_driveAuto","skill_elecRepair","skill_electronics","skill_fastTalk","skill_fightingBrawl","skill_firearmsHandgun","skill_firstAid","skill_history","skill_intimidate","skill_jump","skill_languageOther","skill_languageOther_name","skill_languageOther2","skill_languageOther2_name","skill_languageOwn","skill_law","skill_libraryUse","skill_listen","skill_locksmith","skill_mechRepair","skill_medicine","skill_naturalWorld","skill_navigate","skill_occult","skill_opHeavyMachine","skill_persuade","skill_psychoanalysis","skill_psychology","skill_ride","skill_sleightOfHand","skill_spotHidden","skill_stealth","skill_survival","skill_swim","skill_throw","skill_track","skill_animal","skill_diving","skill_demolitions","skill_lipReading","skill_hypnosis","skill_artillery","backstory_belief","backstory_detail","backstory_trait","backstory_phobia","experiences","occupation","age","gender","year","residence"]}
+card-item.js:38 [card-item] system 对象: {"code":"COC","accentColor":"#3B6B4A"}
+card-item.js:52 [card-item] formData (fd): {"name":"阿斯顿","player":"我","str":40,"dex":70,"pow":65,"con":55,"app":80,"edu":50,"siz":50,"int":70,"san":65,"sanMax":65,"luck":55,"mp":13,"mpMax":13,"hp":10,"hpMax":10,"skill_accounting":6,"skill_anthropology":1,"skill_appraise":5,"skill_archaeology":1,"skill_charm":16,"skill_climb":20,"skill_computer":5,"skill_creditRating":18,"skill_cthulhuMythos":0,"skill_disguise":5,"skill_dodge":35,"skill_driveAuto":20,"skill_elecRepair":10,"skill_electronics":1,"skill_fastTalk":5,"skill_fightingBrawl":26,"skill_firearmsHandgun":20,"skill_firstAid":60,"skill_history":5,"skill_intimidate":15,"skill_jump":20,"skill_languageOther":60,"skill_languageOther_name":"法语","skill_languageOther2":24,"skill_languageOther2_name":"徳语","skill_languageOwn":50,"skill_law":5,"skill_libraryUse":50,"skill_listen":54,"skill_locksmith":1,"skill_mechRepair":10,"skill_medicine":1,"skill_naturalWorld":10,"skill_navigate":10,"skill_occult":5,"skill_opHeavyMachine":1,"skill_persuade":70,"skill_psychoanalysis":52,"skill_psychology":70,"skill_ride":5,"skill_sleightOfHand":10,"skill_spotHidden":80,"skill_stealth":20,"skill_survival":10,"skill_swim":20,"skill_throw":20,"skill_track":10,"skill_animal":5,"skill_diving":1,"skill_demolitions":1,"skill_lipReading":1,"skill_hypnosis":1,"skill_artillery":1,"backstory_belief":"","backstory_detail":"阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德阿德","backstory_trait":"","backstory_phobia":"阿斯顿","experiences":[{"key":"exp_0","label":"","value":""},{"key":"exp_1","label":"","value":""}],"occupation":"啊","age":"啊","gender":"啊","year":"1920s","residence":"啊啊"}
+card-item.js:53 [card-item] occupation: 啊 | age: 啊 | residence: 啊啊 | year: 1920s
+card-item.js:58 [card-item] displayName: 阿斯顿 | displayPlayer: 我 | displayDescription: (空)
+card-item.js:66 [card-item] profileFields: [{"label":"职业","value":"啊"},{"label":"年龄","value":"啊"},{"label":"住地","value":"啊啊"},{"label":"年份","value":"1920s"}]
+card-item.js:69 [card-item] borderColor: rgba(59,107,74,0.3)
+card-item.js:78 [card-item] setData 完成，当前 data: {"displayName":"阿斯顿","displayPlayer":"我","displayDescription":"(空)","profileFieldsCount":4}

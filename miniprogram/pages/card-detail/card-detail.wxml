@@ -34,11 +34,12 @@
         <view
           wx:for="{{previewStats}}"
           wx:key="label"
-          class="stat-item"
-          style="box-shadow: 0 0 0 1px {{accentColor}}33;"
+          class="stat-wrapper"
         >
-          <text class="stat-value" style="color: {{accentColor}}">{{item.value}}</text>
           <text class="stat-label">{{item.label}}</text>
+          <view class="stat-item" style="box-shadow: 0 0 0 1px {{accentColor}}33;">
+            <text class="stat-value" style="color: {{accentColor}}">{{item.value}}</text>
+          </view>
         </view>
       </view>
     </view>
@@ -262,12 +263,91 @@
       </view>
 
       <!-- 背景故事 -->
-      <view wx:if="{{card.formData.backstory}}" class="sheet-card" style="background: {{accentColor}}06; border-left: 3px solid {{accentColor}}55;">
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
         <view class="sheet-card-header">
-          <text class="section-icon">📜</text>
           <text class="sheet-card-title" style="color: {{accentColor}};">背景故事</text>
         </view>
-        <text class="story-text">{{card.formData.backstory}}</text>
+        <!-- 8栏条目列表 -->
+        <view class="backstory-list">
+          <view
+            wx:for="{{backstoryItems}}"
+            wx:key="key"
+            class="backstory-entry"
+            style="border-color: {{accentColor}}15;"
+            bindtap="onBackstoryEntryTap"
+            bindlongpress="onCopyBackstoryEntry"
+            data-key="{{item.key}}"
+            data-label="{{item.label}}"
+          >
+            <text class="backstory-entry-label">{{item.label}}</text>
+            <text class="backstory-entry-preview">{{card.formData[item.key] || '暂无'}}</text>
+          </view>
+        </view>
+        <!-- 详细故事 -->
+        <view class="backstory-detail-section">
+          <text class="backstory-detail-label">详细故事</text>
+          <view class="backstory-detail-preview" bindtap="onBackstoryDetailPreview" bindlongpress="onCopyBackstoryDetail" style="border-color: {{accentColor}}22; background: {{accentColor}}06;">
+            <text wx:if="{{card.formData.backstory_detail}}" class="backstory-preview-text">{{card.formData.backstory_detail}}</text>
+            <text wx:else class="backstory-preview-placeholder">点击查看详细故事</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 背包 -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <view class="sheet-card-header">
+          <text class="sheet-card-title" style="color: {{accentColor}};">背包</text>
+        </view>
+        <view class="backstory-detail-section">
+          <text class="backstory-detail-label">物品清单</text>
+          <view class="backstory-detail-preview" bindtap="onBackpackPreview" bindlongpress="onCopyBackpack" style="border-color: {{accentColor}}22; background: {{accentColor}}06;">
+            <text wx:if="{{card.formData.backpack}}" class="backstory-preview-text">{{card.formData.backpack}}</text>
+            <text wx:else class="backstory-preview-placeholder">点击编辑背包</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 调查员经历 -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <view class="sheet-card-header">
+          <text class="sheet-card-title" style="color: {{accentColor}};">调查员经历</text>
+          <text class="section-edit-btn" style="color: {{accentColor}};" bindtap="toggleExperienceManage">{{experienceManaging ? '✓ 完成' : '✎'}}</text>
+        </view>
+        <!-- 列标题 -->
+        <view class="experience-header">
+          <text class="experience-header-label">经历模组</text>
+          <text class="experience-header-label">人物变化描述</text>
+        </view>
+        <view class="backstory-list">
+          <view
+            wx:for="{{experienceItems}}"
+            wx:key="key"
+            class="backstory-entry"
+            style="border-color: {{accentColor}}15;"
+          >
+            <text
+              class="experience-entry-label {{item.label ? '' : 'empty'}}"
+              bindtap="{{experienceManaging ? '' : 'onExperienceLabelTap'}}"
+              bindlongpress="onCopyExperienceEntry"
+              data-key="{{item.key}}"
+              data-label="{{item.label}}"
+            >{{item.label || '暂无'}}</text>
+            <view class="experience-entry-divider"></view>
+            <text
+              class="experience-entry-value"
+              bindtap="{{experienceManaging ? '' : 'onExperienceValueTap'}}"
+              bindlongpress="onCopyExperienceEntry"
+              data-key="{{item.key}}"
+              data-label="{{item.label}}"
+            >{{item.value || '暂无'}}</text>
+            <view wx:if="{{experienceManaging}}" class="exp-delete-btn" bindtap="onDeleteExperienceEntry" data-key="{{item.key}}" style="background: #ef4444;">
+              <text>−</text>
+            </view>
+          </view>
+        </view>
+        <view class="add-entry-btn" bindtap="onAddExperienceEntry" style="border-color: {{accentColor}}33; color: {{accentColor}};">
+          <text>+ 新增项目</text>
+        </view>
       </view>
     </view>
 
@@ -277,59 +357,206 @@
     <view wx:if="{{system === 'DND'}}" class="sheet-block">
       <!-- 基本信息 -->
       <view class="sheet-card" style="background: linear-gradient(135deg, {{accentColor}}18 0%, {{accentColor}}06 100%); border: 1px solid {{accentColor}}28;">
-        <view class="dnd-id-row">
-          <view class="dnd-id-icon" style="background: linear-gradient(135deg, {{accentColor}}20, {{accentColor}}0A); box-shadow: 0 0 0 2px {{accentColor}}33;">🐉</view>
-          <view class="dnd-id-info">
-            <text class="dnd-id-name">{{card.formData.name || '无名冒险者'}}</text>
-            <view class="dnd-id-sub">
-              <view class="dnd-level-tag" style="background: {{accentColor}}18; color: {{accentColor}};">Lv.{{card.formData.level || '?'}}</view>
-              <text class="dnd-id-race">{{card.formData.race || '?'}}</text>
+        <view class="sheet-card-header">
+          <text class="sheet-card-title" style="color: {{accentColor}};">基本信息</text>
+          <view class="section-edit-btns">
+            <block wx:if="{{editingDndBasicInfo}}">
+              <text class="section-edit-btn" bindtap="cancelDndBasicInfoEdit" style="color: {{accentColor}};">取消</text>
+              <text class="section-edit-btn primary" bindtap="saveDndBasicInfo" style="color: {{accentColor}};">保存</text>
+            </block>
+            <text wx:else class="section-edit-btn" bindtap="onToggleDndBasicInfoEdit" style="color: {{accentColor}};">✎</text>
+          </view>
+        </view>
+        <view wx:if="{{!editingDndBasicInfo}}" class="info-grid-2">
+          <view class="info-row"><text class="info-label">姓名</text><text class="info-value">{{card.formData.name || '—'}}</text></view>
+          <view class="info-row"><text class="info-label">玩家</text><text class="info-value">{{card.formData.player || '—'}}</text></view>
+          <view class="info-row"><text class="info-label">职业</text><text class="info-value">{{card.formData.occupation || '—'}}</text></view>
+          <view class="info-row"><text class="info-label">年龄</text><text class="info-value">{{card.formData.age || '—'}}</text></view>
+          <view class="info-row"><text class="info-label">性别</text><text class="info-value">{{card.formData.gender || '—'}}</text></view>
+          <view class="info-row"><text class="info-label">主职业</text><text class="info-value">{{dndClassLabel || '—'}}</text></view>
+          <view class="info-row"><text class="info-label">等级</text><text class="info-value">{{card.formData.level || '—'}}</text></view>
+          <view class="info-row"><text class="info-label">种族</text><text class="info-value">{{card.formData.race || '—'}}</text></view>
+          <view class="info-row"><text class="info-label">阵营</text><text class="info-value">{{card.formData.alignment || '—'}}</text></view>
+          <view class="info-row"><text class="info-label">背景</text><text class="info-value">{{card.formData.background || '—'}}</text></view>
+        </view>
+        <view wx:else class="dnd-edit-form">
+          <view class="dnd-edit-row">
+            <text class="dnd-edit-label">姓名</text>
+            <input class="dnd-edit-input" value="{{editDndBasicInfo.name}}" data-key="name" bindinput="onDndBasicInfoInput" />
+          </view>
+          <view class="dnd-edit-row">
+            <text class="dnd-edit-label">玩家</text>
+            <input class="dnd-edit-input" value="{{editDndBasicInfo.player}}" data-key="player" bindinput="onDndBasicInfoInput" />
+          </view>
+          <view class="dnd-edit-row">
+            <text class="dnd-edit-label">职业</text>
+            <input class="dnd-edit-input" value="{{editDndBasicInfo.occupation}}" data-key="occupation" bindinput="onDndBasicInfoInput" />
+          </view>
+          <view class="dnd-edit-row">
+            <text class="dnd-edit-label">年龄</text>
+            <input class="dnd-edit-input" value="{{editDndBasicInfo.age}}" data-key="age" bindinput="onDndBasicInfoInput" />
+          </view>
+          <view class="dnd-edit-row">
+            <text class="dnd-edit-label">性别</text>
+            <input class="dnd-edit-input" value="{{editDndBasicInfo.gender}}" data-key="gender" bindinput="onDndBasicInfoInput" />
+          </view>
+          <view class="dnd-edit-row">
+            <text class="dnd-edit-label">主职业</text>
+            <input class="dnd-edit-input" value="{{editDndBasicInfo.class}}" data-key="class" bindinput="onDndBasicInfoInput" />
+          </view>
+          <view class="dnd-edit-row">
+            <text class="dnd-edit-label">等级</text>
+            <input class="dnd-edit-input" value="{{editDndBasicInfo.level}}" data-key="level" bindinput="onDndBasicInfoInput" />
+          </view>
+          <view class="dnd-edit-row">
+            <text class="dnd-edit-label">种族</text>
+            <input class="dnd-edit-input" value="{{editDndBasicInfo.race}}" data-key="race" bindinput="onDndBasicInfoInput" />
+          </view>
+          <view class="dnd-edit-row">
+            <text class="dnd-edit-label">阵营</text>
+            <input class="dnd-edit-input" value="{{editDndBasicInfo.alignment}}" data-key="alignment" bindinput="onDndBasicInfoInput" />
+          </view>
+          <view class="dnd-edit-row">
+            <text class="dnd-edit-label">背景</text>
+            <input class="dnd-edit-input" value="{{editDndBasicInfo.background}}" data-key="background" bindinput="onDndBasicInfoInput" />
+          </view>
+        </view>
+      </view>
+
+      <!-- 六项基础属性 -->
+      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
+        <view class="sheet-card-header">
+          <text class="sheet-card-title" style="color: {{accentColor}};">基础属性</text>
+          <view class="section-edit-btns">
+            <block wx:if="{{editingDndAttrs}}">
+              <text class="section-edit-btn" bindtap="cancelDndAttrEdit" style="color: {{accentColor}};">取消</text>
+              <text class="section-edit-btn primary" bindtap="saveDndAttrs" style="color: {{accentColor}};">保存</text>
+            </block>
+            <text wx:else class="section-edit-btn" bindtap="onToggleDndAttrEdit" style="color: {{accentColor}};">✎</text>
+          </view>
+        </view>
+        <view wx:if="{{!editingDndAttrs}}" class="dnd-attr-grid-v2">
+          <view wx:for="{{dndAbilities}}" wx:key="key" class="dnd-attr-cell-v2" wx:for-item="attr">
+            <text class="dnd-attr-label-v2">{{attr.label}}</text>
+            <view class="dnd-attr-values-h">
+              <view class="dnd-attr-col">
+                <text class="dnd-attr-sub-label">调整</text>
+                <text class="dnd-attr-mod-v2" style="color: {{attr.modColor}};">{{attr.mod}}</text>
+              </view>
+              <view class="dnd-attr-col dnd-attr-col-center">
+                <text class="dnd-attr-score">{{attr.value}}</text>
+              </view>
+              <view class="dnd-attr-col">
+                <text class="dnd-attr-sub-label">豁免</text>
+                <text class="dnd-attr-save" style="color: {{attr.saveColor}};">{{attr.save}}</text>
+              </view>
             </view>
-            <view class="dnd-id-extra">
-              <text>{{card.formData.background || '?'}}</text>
-              <text class="dot-sep">·</text>
-              <text>{{card.formData.alignment || '?'}}</text>
-              <text class="dot-sep">·</text>
-              <text>熟练 +{{card.formData.profBonus || '?'}}</text>
+            <text class="dnd-attr-abbr-v2">{{attr.abbr}}</text>
+          </view>
+        </view>
+        <view wx:else class="dnd-edit-form">
+          <view class="dnd-edit-header-row">
+            <text class="dnd-edit-attr-label"></text>
+            <view class="dnd-edit-attr-inputs">
+              <text class="dnd-edit-input-label">属性值</text>
+              <text class="dnd-edit-input-label">调整</text>
+              <text class="dnd-edit-input-label">豁免</text>
+            </view>
+          </view>
+          <view wx:for="{{dndAbilities}}" wx:key="key" class="dnd-edit-attr-row" wx:for-item="attr">
+            <text class="dnd-edit-attr-label">{{attr.label}}</text>
+            <view class="dnd-edit-attr-inputs">
+              <input class="dnd-edit-attr-input" type="number" value="{{editDndAttrs[attr.key]}}" data-key="{{attr.key}}" bindinput="onDndAttrInput" />
+              <input class="dnd-edit-attr-input" type="number" value="{{editDndAttrs[attr.key + '_mod']}}" data-key="{{attr.key}}_mod" bindinput="onDndAttrInput" />
+              <input class="dnd-edit-attr-input" type="number" value="{{editDndAttrs[attr.key + '_save']}}" data-key="{{attr.key}}_save" bindinput="onDndAttrInput" />
             </view>
           </view>
         </view>
       </view>
 
-      <!-- 六项属性 -->
+      <!-- 当前状态 -->
       <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
-        <text class="sheet-card-title" style="color: {{accentColor}};">六项属性 · ABILITY SCORES</text>
-        <view class="dnd-attr-grid">
-          <view wx:for="{{dndAbilities}}" wx:key="key" class="dnd-attr-cell">
-            <text class="dnd-attr-mod" style="color: {{item.modColor}};">{{item.mod}}</text>
-            <text class="dnd-attr-val">{{item.value}}</text>
-            <text class="dnd-attr-abbr">{{item.abbr}}</text>
+        <view class="sheet-card-header">
+          <text class="sheet-card-title" style="color: {{accentColor}};">当前状态</text>
+          <view class="section-edit-btns">
+            <block wx:if="{{editingDndStatus}}">
+              <text class="section-edit-btn" bindtap="cancelDndStatusEdit" style="color: {{accentColor}};">取消</text>
+              <text class="section-edit-btn primary" bindtap="saveDndStatus" style="color: {{accentColor}};">保存</text>
+            </block>
+            <text wx:else class="section-edit-btn" bindtap="onToggleDndStatusEdit" style="color: {{accentColor}};">✎</text>
           </view>
         </view>
-      </view>
-
-      <!-- 战斗数据 -->
-      <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
-        <text class="sheet-card-title" style="color: {{accentColor}};">战斗数据 · COMBAT</text>
-        <!-- HP 条 -->
-        <view class="hp-bar-section">
-          <view class="hp-bar-header">
-            <text class="hp-bar-label">生命值 HP</text>
-            <text class="hp-bar-val" style="color: {{dndHpColor}};">{{card.formData.hp || '-'}} / {{card.formData.hpMax || '-'}}</text>
+        <!-- 编辑模式 -->
+        <view wx:if="{{editingDndStatus}}" class="stat-row-4">
+          <view class="stat-card" style="background: linear-gradient(180deg, #ef444414 0%, #ef444406 100%); box-shadow: 0 0 0 1px #ef444433;">
+            <view class="stat-edit-hp-row">
+              <input class="stat-edit-hp-input hp-color" type="number" value="{{editDndStatus.hp}}" data-field="hp" bindinput="onDndStatusInput" />
+              <text class="stat-edit-sep">/</text>
+              <input class="stat-edit-hp-input" type="number" value="{{editDndStatus.hpMax}}" data-field="hpMax" bindinput="onDndStatusInput" />
+            </view>
+            <text class="stat-card-abbr">生命值 HP</text>
           </view>
-          <view class="hp-bar-bg"><view class="hp-bar-fill" style="width: {{dndHpPercent}}%; background: {{dndHpColor}};"></view></view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #f59e0b14 0%, #f59e0b06 100%); box-shadow: 0 0 0 1px #f59e0b33;">
+            <input class="stat-edit-input" type="number" value="{{editDndStatus.initiative}}" data-field="initiative" bindinput="onDndStatusInput" />
+            <text class="stat-card-abbr">先攻</text>
+          </view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #8b5cf614 0%, #8b5cf606 100%); box-shadow: 0 0 0 1px #8b5cf633;">
+            <view class="stat-edit-hp-row">
+              <input class="stat-edit-hp-input" type="number" value="{{editDndStatus.hitDiceUsed}}" data-field="hitDiceUsed" bindinput="onDndStatusInput" />
+              <text class="stat-edit-sep">/</text>
+              <input class="stat-edit-hp-input" type="number" value="{{editDndStatus.hitDiceCount}}" data-field="hitDiceCount" bindinput="onDndStatusInput" />
+            </view>
+            <text class="stat-card-abbr">生命骰数量</text>
+          </view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #22c55e14 0%, #22c55e06 100%); box-shadow: 0 0 0 1px #22c55e33;">
+            <input class="stat-edit-input" value="{{editDndStatus.hitDice}}" data-field="hitDice" bindinput="onDndStatusInput" />
+            <text class="stat-card-abbr">生命骰</text>
+          </view>
         </view>
-        <!-- 数据卡片 -->
-        <view class="combat-row">
-          <view class="combat-card"><text class="combat-val" style="color: {{accentColor}};">{{card.formData.ac || '-'}}</text><text class="combat-abbr">AC</text></view>
-          <view class="combat-card"><text class="combat-val" style="color: {{accentColor}};">{{card.formData.hitDice || '-'}}</text><text class="combat-abbr">HD</text></view>
-          <view class="combat-card"><text class="combat-val" style="color: {{accentColor}};">+{{card.formData.profBonus || '?'}}</text><text class="combat-abbr">PROF</text></view>
+        <!-- 显示模式 -->
+        <view wx:else class="stat-row-4">
+          <view class="stat-card" style="background: linear-gradient(180deg, #ef444414 0%, #ef444406 100%); box-shadow: 0 0 0 1px #ef444433;">
+            <text class="stat-card-val hp-color">{{card.formData.hp || '-'}}<text class="stat-card-max">/{{card.formData.hpMax || '-'}}</text></text>
+            <text class="stat-card-abbr">生命值 HP</text>
+          </view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #f59e0b14 0%, #f59e0b06 100%); box-shadow: 0 0 0 1px #f59e0b33;">
+            <text class="stat-card-val">{{card.formData.initiative || '-'}}</text>
+            <text class="stat-card-abbr">先攻</text>
+          </view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #8b5cf614 0%, #8b5cf606 100%); box-shadow: 0 0 0 1px #8b5cf633;">
+            <text class="stat-card-val">{{card.formData.hitDiceUsed || '-'}}<text class="stat-card-max">/{{card.formData.hitDiceCount || '-'}}</text></text>
+            <text class="stat-card-abbr">生命骰数量</text>
+          </view>
+          <view class="stat-card" style="background: linear-gradient(180deg, #22c55e14 0%, #22c55e06 100%); box-shadow: 0 0 0 1px #22c55e33;">
+            <text class="stat-card-val">{{card.formData.hitDice || '-'}}</text>
+            <text class="stat-card-abbr">生命骰</text>
+          </view>
+        </view>
+        <!-- 环位 -->
+        <view class="spell-slots-section">
+          <text class="spell-slots-title">环位</text>
+          <view wx:if="{{editingDndStatus}}" class="spell-slots-grid">
+            <view wx:for="{{dndSpellSlots}}" wx:key="index" class="spell-slot-edit">
+              <text class="spell-slot-label">{{index + 1}}环</text>
+              <view class="spell-slot-inputs">
+                <input class="spell-slot-input" type="number" value="{{item.used}}" data-index="{{index}}" data-field="used" bindinput="onDndSpellSlotInput" />
+                <text class="spell-slot-sep">/</text>
+                <input class="spell-slot-input" type="number" value="{{item.total}}" data-index="{{index}}" data-field="total" bindinput="onDndSpellSlotInput" />
+              </view>
+            </view>
+          </view>
+          <view wx:else class="spell-slots-grid">
+            <view wx:for="{{dndSpellSlots}}" wx:key="index" class="spell-slot-item">
+              <text class="spell-slot-label">{{index + 1}}环</text>
+              <text class="spell-slot-val">{{item.used || 0}}/{{item.total || 0}}</text>
+            </view>
+          </view>
         </view>
       </view>
 
       <!-- 豁免与技能 -->
       <view class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
-        <text class="sheet-card-title" style="color: {{accentColor}};">豁免 · 技能 · SAVES &amp; SKILLS</text>
+        <text class="sheet-card-title" style="color: {{accentColor}};">豁免 · 技能</text>
         <view wx:if="{{dndSavingThrows.length > 0}}" class="tag-section">
           <text class="tag-section-label">SAVING THROWS</text>
           <view class="tag-row">
@@ -346,7 +573,7 @@
 
       <!-- 特性与专长 -->
       <view wx:if="{{card.formData.features}}" class="sheet-card" style="background: {{accentColor}}08; border: 1px solid {{accentColor}}15;">
-        <text class="sheet-card-title" style="color: {{accentColor}};">特性与专长 · FEATURES</text>
+        <text class="sheet-card-title" style="color: {{accentColor}};">特性与专长</text>
         <text class="story-text">{{card.formData.features}}</text>
       </view>
 
@@ -454,7 +681,7 @@
       </view>
     </view>
 
-    <view class="action-buttons">
+    <view class="action-buttons" hidden>
       <view class="action-btn secondary" bindtap="exportCard">
         <text>📤 导出 JSON</text>
       </view>
@@ -500,6 +727,85 @@
         <view class="btn-cancel" bindtap="closeStDialog">取消</view>
         <view class="btn-primary" bindtap="applyStCommand">确认更新</view>
       </view>
+    </view>
+  </view>
+</view>
+
+<!-- 背景故事弹窗（独立弹窗，不嵌入角色卡内） -->
+<view wx:if="{{backstoryDialogVisible}}" class="dialog-mask" bindtap="closeBackstoryDialog">
+  <view class="dialog-box backstory-dialog" catchtap="stopPropagation">
+    <view class="dialog-header">
+      <text class="dialog-title">{{backstoryDialogTitle}}</text>
+      <block wx:if="{{backstoryDialogEditing}}">
+        <view class="dialog-header-actions">
+          <text class="dialog-action-btn" bindtap="cancelBackstoryEdit">取消</text>
+          <text class="dialog-action-btn primary" bindtap="applyBackstoryEdit">保存</text>
+        </view>
+      </block>
+      <text wx:else class="backstory-edit-icon" bindtap="startBackstoryEdit">✎</text>
+    </view>
+    <view class="dialog-body">
+      <textarea
+        wx:if="{{backstoryDialogEditing}}"
+        class="form-textarea backstory-textarea"
+        placeholder="输入内容..."
+        placeholder-class="input-placeholder"
+        maxlength="-1"
+        value="{{backstoryDialogContent}}"
+        bindinput="onBackstoryDialogInput"
+      />
+      <text wx:else class="backstory-dialog-text">{{backstoryDialogContent || '暂无内容'}}</text>
+    </view>
+  </view>
+</view>
+
+<!-- 背包弹窗 -->
+<view wx:if="{{backpackDialogVisible}}" class="dialog-mask" bindtap="closeBackpackDialog">
+  <view class="dialog-box backstory-dialog" catchtap="stopPropagation">
+    <view class="dialog-header">
+      <text class="dialog-title">背包</text>
+      <block wx:if="{{backpackDialogEditing}}">
+        <view class="dialog-header-actions">
+          <text class="dialog-action-btn" bindtap="cancelBackpackEdit">取消</text>
+          <text class="dialog-action-btn primary" bindtap="applyBackpackEdit">保存</text>
+        </view>
+      </block>
+      <text wx:else class="backstory-edit-icon" bindtap="startBackpackEdit">✎</text>
+    </view>
+    <view class="dialog-body">
+      <textarea
+        wx:if="{{backpackDialogEditing}}"
+        class="form-textarea backstory-textarea"
+        placeholder="输入背包物品..."
+        placeholder-class="input-placeholder"
+        maxlength="-1"
+        value="{{backpackDialogContent}}"
+        bindinput="onBackpackDialogInput"
+      />
+      <text wx:else class="backstory-dialog-text">{{backpackDialogContent || '暂无内容'}}</text>
+    </view>
+  </view>
+</view>
+
+<!-- 经历弹窗 -->
+<view wx:if="{{experienceDialogVisible}}" class="dialog-mask" bindtap="closeExperienceDialog">
+  <view class="dialog-box backstory-dialog" catchtap="stopPropagation">
+    <view class="dialog-header">
+      <text class="dialog-title">{{experienceDialogType === 'value' ? '人物变化描述' : '经历模组'}}</text>
+      <block wx:if="{{experienceDialogEditing}}">
+        <view class="dialog-header-actions">
+          <text class="dialog-action-btn" bindtap="cancelExperienceEdit">取消</text>
+          <text class="dialog-action-btn primary" bindtap="applyExperienceEdit">保存</text>
+        </view>
+      </block>
+      <text wx:else class="backstory-edit-icon" bindtap="startExperienceEdit">✎</text>
+    </view>
+    <view class="dialog-body">
+      <view wx:if="{{experienceDialogEditing}}">
+        <input wx:if="{{experienceDialogType === 'label'}}" class="exp-edit-input" placeholder="经历模组" placeholder-class="input-placeholder" value="{{experienceDialogLabel}}" bindinput="onExperienceLabelInput" />
+        <textarea wx:if="{{experienceDialogType === 'value'}}" class="form-textarea backstory-textarea" placeholder="人物变化描述" placeholder-class="input-placeholder" maxlength="-1" value="{{experienceDialogContent}}" bindinput="onExperienceDialogInput" />
+      </view>
+      <text wx:else class="backstory-dialog-text">{{experienceDialogType === 'value' ? (experienceDialogContent || '暂无内容') : (experienceDialogLabel || '暂无内容')}}</text>
     </view>
   </view>
 </view>

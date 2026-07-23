@@ -11,7 +11,7 @@
   z-index: 20;
   flex-shrink: 0;
   border-bottom: 1rpx solid rgba(232, 220, 196, 0.1);
-  background-color: rgba(26, 23, 20, 0.95);
+  background-color: #1A1714;
   }
 
 .header-top {
