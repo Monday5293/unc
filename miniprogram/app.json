@@ -12,13 +12,16 @@
     "navigationBarBackgroundColor": "#1A1714",
     "navigationBarTitleText": "跑团角色卡",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#1A1714"
+    "backgroundColor": "#1A1714",
+    "backgroundColorTop": "#1A1714",
+    "backgroundColorBottom": "#1A1714"
   },
   "tabBar": {
+    "custom": true,
     "color": "#8B857E",
     "selectedColor": "#C8A046",
     "backgroundColor": "#1A1714",
-    "borderStyle": "white",
+    "borderStyle": "black",
     "list": [
       {
         "pagePath": "pages/home/home",
@@ -31,6 +34,6 @@
     ]
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
 }

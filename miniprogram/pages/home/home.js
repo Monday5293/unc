@@ -25,6 +25,9 @@ Page({
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 })
+    }
     this.refreshData()
   },
 
@@ -71,12 +74,8 @@ Page({
 
   onCardClick(e) {
     const { card } = e.detail
-    console.log('[home] onCardClick card:', card ? card.id : 'NO CARD')
     wx.navigateTo({
       url: `/pages/card-detail/card-detail?id=${card.id}`,
-      success: () => {
-        console.log('[home] onCardClick navigateTo success')
-      },
       fail: (err) => {
         console.error('[home] onCardClick navigateTo failed:', JSON.stringify(err))
       }

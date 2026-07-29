@@ -1,6 +1,7 @@
 <view
   class="card-item parchment-card ink-border {{pressing ? 'pressing' : ''}}"
   style="--accent: {{system.accentColor}}; --border-color: {{borderColor}}"
+  hover-class="none"
   bindtap="onClickCard"
   bindtouchstart="onTouchStart"
   bindtouchend="onTouchEnd"

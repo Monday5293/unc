@@ -1,6 +1,116 @@
 const store = require('../../utils/store.js')
 const { parseStCommand } = require('../../utils/st-parser.js')
 
+// Daggerheart Build 工具函数（模块级，避免 WeChat 编译器 "not a function" 错误）
+function buildDhExperiences(card) {
+  const fd = card.formData || {}
+  const exps = fd.dh_experiences
+  if (exps && Array.isArray(exps) && exps.length > 0) {
+    return exps.map((e, i) => ({ key: e.key || 'dhexp_' + i, label: e.label || '', value: e.value ?? 0 }))
+  }
+  return [
+    { key: 'dhexp_0', label: '', value: 0 },
+    { key: 'dhexp_1', label: '', value: 0 },
+    { key: 'dhexp_2', label: '', value: 0 },
+    { key: 'dhexp_3', label: '', value: 0 },
+    { key: 'dhexp_4', label: '', value: 0 },
+  ]
+}
+
+function buildDhWeapons(card) {
+  const fd = card.formData || {}
+  const weapons = fd.dh_weapons
+  if (weapons && Array.isArray(weapons) && weapons.length > 0) {
+    return weapons.map((w, i) => ({
+      key: w.key || 'dhwpn_' + i, name: w.name || '', info: w.info || '',
+      dice: w.dice || '', hand: w.hand || '主手', properties: w.properties || '',
+    }))
+  }
+  return [
+    { key: 'dhwpn_0', name: '', info: '', dice: '', hand: '主手', properties: '' },
+    { key: 'dhwpn_1', name: '', info: '', dice: '', hand: '副手', properties: '' },
+  ]
+}
+
+function buildDhArmors(card) {
+  const fd = card.formData || {}
+  const armors = fd.dh_armors
+  if (armors && Array.isArray(armors) && armors.length > 0) {
+    return armors.map((a, i) => ({
+      key: a.key || 'dharm_' + i, name: a.name || '', value: a.value ?? 0,
+      threshold: a.threshold ?? 0, thresholdMax: a.thresholdMax ?? 0, properties: a.properties || '',
+    }))
+  }
+  return [
+    { key: 'dharm_0', name: '', value: 0, threshold: 0, thresholdMax: 0, properties: '' },
+    { key: 'dharm_1', name: '', value: 0, threshold: 0, thresholdMax: 0, properties: '' },
+  ]
+}
+
+function buildDhAdventureNote(card) {
+  const fd = card.formData || {}
+  return fd.dh_adventure_note || ''
+}
+
+function buildDhClassFeatures(card) {
+  const fd = card.formData || {}
+  const features = fd.dh_class_features
+  if (features && Array.isArray(features) && features.length > 0) {
+    return features.map((f, i) => ({ key: f.key || 'dhcf_' + i, name: f.name || '', description: f.description || '' }))
+  }
+  return [
+    { key: 'dhcf_0', name: '', description: '' },
+    { key: 'dhcf_1', name: '', description: '' },
+  ]
+}
+
+function buildDhRaceFeatures(card) {
+  const fd = card.formData || {}
+  const features = fd.dh_race_features
+  if (features && Array.isArray(features) && features.length > 0) {
+    return features.map((f, i) => ({ key: f.key || 'dhrf_' + i, name: f.name || '', description: f.description || '' }))
+  }
+  return [
+    { key: 'dhrf_0', name: '', description: '' },
+    { key: 'dhrf_1', name: '', description: '' },
+  ]
+}
+
+function buildDhDomainCards(card) {
+  const fd = card.formData || {}
+  const cards = fd.dh_domain_cards
+  if (cards && Array.isArray(cards) && cards.length > 0) {
+    return cards.map((c, i) => ({
+      key: c.key || 'dhdc_' + i, name: c.name || c.domain || '', domain: c.domain || '',
+      ability: c.ability || '', rc: c.rc ?? 0, description: c.description || '',
+    }))
+  }
+  return [
+    { key: 'dhdc_0', name: '', domain: '', ability: '', rc: 0, description: '' },
+    { key: 'dhdc_1', name: '', domain: '', ability: '', rc: 0, description: '' },
+  ]
+}
+
+function buildDhTreasuryCards(card) {
+  const fd = card.formData || {}
+  const cards = fd.dh_treasury_cards
+  if (cards && Array.isArray(cards) && cards.length > 0) {
+    return cards.map((c, i) => ({
+      key: c.key || 'dhtc_' + i, name: c.name || '', domain: c.domain || '',
+      ability: c.ability || '', rc: c.rc ?? 0, description: c.description || '',
+    }))
+  }
+  return [
+    { key: 'dhtc_0', name: '', domain: '', ability: '', rc: 0, description: '' },
+    { key: 'dhtc_1', name: '', domain: '', ability: '', rc: 0, description: '' },
+  ]
+}
+
+var _dhKeySeq = 0
+function _dhNextKey(prefix) {
+  return prefix + (Date.now()) + '_' + (_dhKeySeq++)
+}
+
 Page({
   data: {
     card: null,
@@ -53,6 +163,14 @@ Page({
       { key: 'backstory_wound', label: '伤口/伤痕', formDataKey: 'backstory_wound' },
       { key: 'backstory_phobia', label: '恐惧/狂躁症', formDataKey: 'backstory_phobia' },
     ],
+    dndBackstoryItems: [
+      { key: 'backstory_skill', label: '背景技能熟练' },
+      { key: 'backstory_tool', label: '背景工具熟练' },
+      { key: 'backstory_language', label: '背景语言' },
+      { key: 'backstory_equipment', label: '背景装备' },
+      { key: 'backstory_special', label: '背景特殊选项' },
+      { key: 'backstory_feature', label: '背景特性' },
+    ],
     backstoryDialogVisible: false,
     backstoryDialogTitle: '',
     backstoryDialogContent: '',
@@ -63,6 +181,22 @@ Page({
     backpackDialogVisible: false,
     backpackDialogContent: '',
     backpackDialogEditing: false,
+    // 背包（DND财富）
+    editingWealth: false,
+    editWealth: { pp: 0, ep: 0, gp: 0, sp: 0, cp: 0 },
+    wealthTotalGP: 0,
+    wealthCoins: [
+      { key: 'pp', label: '铂金币 PP' },
+      { key: 'ep', label: '银金币 EP' },
+      { key: 'gp', label: '金币 GP' },
+      { key: 'sp', label: '银币 SP' },
+      { key: 'cp', label: '铜币 CP' },
+    ],
+    // 背包（DND物品）
+    dndBackpackContent: '',
+    dndBackpackDialogVisible: false,
+    dndBackpackDialogContent: '',
+    dndBackpackDialogEditing: false,
     // 经历
     experienceItems: [],
     experienceDialogVisible: false,
@@ -73,6 +207,7 @@ Page({
     experienceDialogKey: '',
     experienceDialogEditing: false,
     experienceManaging: false,
+    experienceItemsSnapshot: [],
     // DND
     dndAbilities: [],
     dndSavingThrows: [],
@@ -89,41 +224,217 @@ Page({
     editingDndBasicInfo: false,
     editDndBasicInfo: {},
     editingDndAttrs: false,
+    editingDndSkills: false,
+    editDndSkills: {},
     editDndAttrs: {},
+    // 武器
+    weaponItems: [],
+    editingWeapons: false,
+    weaponItemsSnapshot: [],
+    weaponDialogVisible: false,
+    weaponDialogEditing: false,
+    weaponDialogKey: '',
+    weaponDialogName: '',
+    weaponDialogAttuned: false,
+    weaponDialogProperties: '',
+    weaponDialogAbility: '',
+    weaponDialogHitBonus: '',
+    weaponDialogDamage: '',
+    weaponDialogDamageType: '',
+    // 装备
+    equipmentItems: [],
+    editingEquipment: false,
+    equipmentItemsSnapshot: [],
+    equipmentDialogVisible: false,
+    equipmentDialogEditing: false,
+    equipmentDialogKey: '',
+    equipmentDialogName: '',
+    equipmentDialogAttuned: false,
+    equipmentDialogProperties: '',
+    equipmentDialogWeight: '',
+    equipmentDialogSlot: '',
+    // 特性
+    classFeatures: [],
+    raceFeatures: [],
+    feats: [],
+    editingClassFeatures: false,
+    classFeaturesSnapshot: [],
+    editingRaceFeatures: false,
+    raceFeaturesSnapshot: [],
+    editingFeats: false,
+    featsSnapshot: [],
+    featureDialogVisible: false,
+    featureDialogEditing: false,
+    featureDialogKey: '',
+    featureDialogType: '', // 'classFeature' | 'raceFeature' | 'feat'
+    featureDialogLevel: '',
+    featureDialogName: '',
+    featureDialogDescription: '',
+    // 法术
+    spellItems: [],
+    editingSpells: false,
+    spellItemsSnapshot: [],
+    spellCollapsed: {},
+    spellDialogVisible: false,
+    spellDialogEditing: false,
+    spellDialogKey: '',
+    spellDialogName: '',
+    spellDialogAttackBonus: '',
+    spellDialogDamage: '',
+    spellDialogDamageType: '',
+    spellDialogAbility: '',
+    spellDialogRitual: false,
+    spellDialogVerbal: false,
+    spellDialogSomatic: false,
+    spellDialogMaterial: false,
+    spellDialogLevel: '',
+    spellDialogSchool: '',
+    spellDialogCastingTime: '',
+    spellDialogRange: '',
+    spellDialogDuration: '',
+    spellDialogEffect: '',
+    spellDialogMaterials: '',
     // Daggerheart
     dhAttributes: [],
-    dhStaminaPct: 0,
-    dhStressPct: 0,
+    dhAttrFilled: {},
+    editingDhAttrs: false,
+    editDhAttrs: {},
+    // Daggerheart 当前情况
+    dhMark1HP: 0,
+    dhMark2HP: 0,
+    dhMark3HP: 0,
+    dhEvasion: 0,
+    dhProficiency: 0,
+    dhArmor: 0,
+    dhArmorMax: 0,
+    dhHP: 0,
+    dhHPMax: 0,
+    dhStress: 0,
+    dhStressMax: 0,
+    dhHope: 0,
+    dhHopeMax: 6,
+    editingDhStatus: false,
+    editDhStatus: {},
+    // Daggerheart 经历
+    dhExperiences: [],
+    editingDhExperiences: false,
+    dhExperiencesSnapshot: [],
+    // Daggerheart 武器
+    dhWeapons: [],
+    editingDhWeapons: false,
+    dhWeaponsSnapshot: [],
+    dhWeaponDialogVisible: false,
+    dhWeaponDialogEditing: false,
+    dhWeaponDialogKey: '',
+    dhWeaponDialogName: '',
+    dhWeaponDialogInfo: '',
+    dhWeaponDialogDice: '',
+    dhWeaponDialogHand: '主手',
+    dhWeaponDialogProperties: '',
+    // Daggerheart 护甲
+    dhArmors: [],
+    editingDhArmors: false,
+    dhArmorsSnapshot: [],
+    dhArmorDialogVisible: false,
+    dhArmorDialogEditing: false,
+    dhArmorDialogKey: '',
+    dhArmorDialogName: '',
+    dhArmorDialogValue: 0,
+    dhArmorDialogThreshold: 0,
+    dhArmorDialogThresholdMax: 0,
+    dhArmorDialogProperties: '',
+    // Daggerheart 库存
+    dhInventory: '',
+    editingDhInventory: false,
+    editDhInventory: '',
+    // Daggerheart 背景故事
+    dhBackstoryIntro: '',
+    dhBackstoryTraits: '',
+    dhAdventureNote: '',
+    editingDhBackstory: false,
+    editDhBackstoryIntro: '',
+    editDhBackstoryTraits: '',
+    editDhAdventureNote: '',
+    dhBackstoryDialogVisible: false,
+    dhBackstoryDialogType: '',
+    dhBackstoryDialogContent: '',
+    dhBackstoryDialogEditing: false,
+    // Daggerheart 特性
+    dhClassFeatures: [],
+    dhRaceFeatures: [],
+    editingDhClassFeatures: false,
+    dhClassFeaturesSnapshot: [],
+    editingDhRaceFeatures: false,
+    dhRaceFeaturesSnapshot: [],
+    dhFeatureDialogVisible: false,
+    dhFeatureDialogEditing: false,
+    dhFeatureDialogKey: '',
+    dhFeatureDialogType: '',
+    dhFeatureDialogName: '',
+    dhFeatureDialogDesc: '',
+    // Daggerheart 领域卡
+    dhDomainCards: [],
+    editingDhDomainCards: false,
+    dhDomainCardsSnapshot: [],
+    dhDomainDialogVisible: false,
+    dhDomainDialogEditing: false,
+    dhDomainDialogKey: '',
+    dhDomainDialogName: '',
+    dhDomainDialogDomain: '',
+    dhDomainDialogAbility: '',
+    dhDomainDialogRC: 0,
+    dhDomainDialogDesc: '',
+    // Daggerheart 宝库
+    dhTreasuryCards: [],
+    editingDhTreasuryCards: false,
+    dhTreasuryCardsSnapshot: [],
+    // Daggerheart 编辑
+    editingDhBasicInfo: false,
+    editDhBasicInfo: {},
+    // 模块折叠
+    collapsedSections: {},
+    // 头像裁剪弹窗
+    cropDialogVisible: false,
+    cropImageSrc: '',
+    cropImageW: 0,
+    cropImageH: 0,
+    cropX: 0,
+    cropY: 0,
+    cropBoxSize: 200,
   },
 
   onLoad(options) {
-    console.log('[card-detail] onLoad options:', JSON.stringify(options))
     this.cardId = options.id
+    this._ready = false
     this.loadCard()
   },
 
+  onReady() {
+    this._ready = true
+  },
+
   onShow() {
-    console.log('[card-detail] onShow cardId:', this.cardId)
-    if (this.cardId) {
+    if (this.cardId && this._ready) {
       this.loadCard()
     }
   },
 
+  toggleSection(e) {
+    const key = e.currentTarget.dataset.section
+    const collapsed = { ...this.data.collapsedSections }
+    collapsed[key] = !collapsed[key]
+    this.setData({ collapsedSections: collapsed })
+  },
+
   loadCard() {
     try {
-      console.log('[card-detail] loadCard cardId:', this.cardId)
-      // 调试：列出所有卡片ID
-      const allCards = store.getState().cards
-      console.log('[card-detail] allCards count:', allCards.length, 'ids:', allCards.map(c => c.id).join(', '))
       const card = store.getCardById(this.cardId)
-      console.log('[card-detail] getCardById result:', card ? card.id : 'NOT FOUND')
       if (!card) {
         this.setData({ cardNotFound: true, card: null, systemInfo: null })
         return
       }
 
       let systemInfo = store.getSystemInfo(card.system)
-      console.log('[card-detail] getSystemInfo result:', systemInfo ? systemInfo.code : 'NOT FOUND')
       if (!systemInfo) {
         systemInfo = {
           code: card.system || 'CUSTOM',
@@ -155,6 +466,54 @@ Page({
         cardNotFound: false,
         ...sheetData,
         experienceItems: this.buildExperienceItems(card),
+        weaponItems: this.buildWeaponItems(card),
+        equipmentItems: (() => {
+          const fd = card.formData || {}
+          const equipment = fd.equipment
+          if (equipment && Array.isArray(equipment) && equipment.length > 0) {
+            return equipment.map((eq, i) => ({
+              key: eq.key || 'equip_' + i,
+              name: eq.name || '',
+              attuned: !!eq.attuned,
+              properties: eq.properties || '',
+              weight: eq.weight || '',
+              slot: eq.slot || '',
+            }))
+          }
+          return [
+            { key: 'equip_0', name: '', attuned: false, properties: '', weight: '', slot: '' },
+            { key: 'equip_1', name: '', attuned: false, properties: '', weight: '', slot: '' },
+          ]
+        })(),
+        classFeatures: this.buildClassFeatures(card),
+        raceFeatures: this.buildRaceFeatures(card),
+        feats: this.buildFeats(card),
+        spellItems: this.buildSpellItems(card),
+        editWealth: (() => {
+          const fd = card.formData || {}
+          const w = {}
+          ;['pp','ep','gp','sp','cp'].forEach(k => { w[k] = parseInt(fd['wealth_' + k]) || 0 })
+          return w
+        })(),
+        wealthTotalGP: (() => {
+          const fd2 = card.formData || {}
+          const w2 = { pp: parseInt(fd2.wealth_pp) || 0, ep: parseInt(fd2.wealth_ep) || 0, gp: parseInt(fd2.wealth_gp) || 0, sp: parseInt(fd2.wealth_sp) || 0, cp: parseInt(fd2.wealth_cp) || 0 }
+          const raw = w2.pp * 100 + w2.ep * 10 + w2.gp * 1 + w2.sp * 0.1 + w2.cp * 0.01
+          return Math.round(raw * 100) / 100
+        })(),
+        dndBackpackContent: (card.formData && card.formData.dndBackpack) || '',
+        // Daggerheart 数据
+        dhExperiences: buildDhExperiences(card),
+        dhWeapons: buildDhWeapons(card),
+        dhArmors: buildDhArmors(card),
+        dhInventory: (card.formData && card.formData.dh_inventory) || '',
+        dhBackstoryIntro: (card.formData && card.formData.dh_backstory_intro) || '',
+        dhBackstoryTraits: (card.formData && card.formData.dh_backstory_traits) || '',
+        dhAdventureNote: buildDhAdventureNote(card),
+        dhClassFeatures: buildDhClassFeatures(card),
+        dhRaceFeatures: buildDhRaceFeatures(card),
+        dhDomainCards: buildDhDomainCards(card),
+        dhTreasuryCards: buildDhTreasuryCards(card),
       })
 
       wx.setNavigationBarTitle({
@@ -319,6 +678,81 @@ Page({
         label: this.skillLabel(sk),
       }))
 
+      // 18 项技能定义（按顺序）
+      const profBonus = parseInt(fd.profBonus) || 2
+      const skillDefs = [
+        { key: 'skill_athletics',     name: '运动', ability: 'str', group: 'con' },
+        { key: 'skill_acrobatics',    name: '特技', ability: 'dex', group: 'dex' },
+        { key: 'skill_sleightOfHand', name: '巧手', ability: 'dex', group: 'dex' },
+        { key: 'skill_stealth',       name: '隐匿', ability: 'dex', group: 'dex' },
+        { key: 'skill_investigation', name: '调查', ability: 'int', group: 'int' },
+        { key: 'skill_arcana',        name: '奥秘', ability: 'int', group: 'int' },
+        { key: 'skill_history',       name: '历史', ability: 'int', group: 'int' },
+        { key: 'skill_nature',        name: '自然', ability: 'int', group: 'int' },
+        { key: 'skill_religion',      name: '宗教', ability: 'int', group: 'int' },
+        { key: 'skill_perception',    name: '察觉', ability: 'wis', group: 'wis' },
+        { key: 'skill_insight',       name: '洞悉', ability: 'wis', group: 'wis' },
+        { key: 'skill_animal',        name: '驯兽', ability: 'wis', group: 'wis' },
+        { key: 'skill_medicine',      name: '医药', ability: 'wis', group: 'wis' },
+        { key: 'skill_survival',      name: '生存', ability: 'wis', group: 'wis' },
+        { key: 'skill_persuasion',    name: '游说', ability: 'cha', group: 'cha' },
+        { key: 'skill_deception',     name: '欺瞒', ability: 'cha', group: 'cha' },
+        { key: 'skill_intimidation',  name: '威吓', ability: 'cha', group: 'cha' },
+        { key: 'skill_performance',   name: '表演', ability: 'cha', group: 'cha' },
+      ]
+
+      const GROUP_COLORS = {
+        con: 'rgba(239,68,68,0.25)',
+        dex: 'rgba(34,197,94,0.25)',
+        int: 'rgba(59,130,246,0.25)',
+        wis: 'rgba(168,85,247,0.25)',
+        cha: 'rgba(234,179,8,0.25)',
+      }
+
+      const getGroupIndex = (defs, i, group) => {
+        let idx = 0
+        for (let j = 0; j <= i; j++) {
+          if (defs[j].group === group) idx++
+        }
+        return idx - 1
+      }
+      const getGroupSize = (defs, group) => defs.filter(d => d.group === group).length
+
+      const skillRows = skillDefs.map((sd, i) => {
+        const abilityVal = fd[sd.ability] ?? 10
+        const baseMod = this.dndModValue(abilityVal)
+        // 调整值：支持手动覆盖
+        const modOverride = fd[sd.key + '_mod']
+        const mod = modOverride !== undefined ? parseInt(modOverride) : baseMod
+        // 总值：独立存储，无覆盖时默认计算 baseMod + profBonus（兼容旧数据）
+        const totalOverride = fd[sd.key + '_total']
+        const prof = (fd.skillProf || []).includes(sd.key)
+        const total = totalOverride !== undefined ? parseInt(totalOverride) : (mod + (prof ? profBonus : 0))
+        const modFmt = mod >= 0 ? '+' + mod : String(mod)
+        const groupIdx = getGroupIndex(skillDefs, i, sd.group)
+        const groupSize = getGroupSize(skillDefs, sd.group)
+        return {
+          key: sd.key,
+          name: sd.name,
+          ability: sd.ability,
+          group: sd.group,
+          modFmt,
+          modRaw: mod,
+          modColor: this.dndModColor(abilityVal),
+          total,
+          groupColor: GROUP_COLORS[sd.group],
+          firstInGroup: groupIdx === 0,
+          lastInGroup: groupIdx === groupSize - 1,
+        }
+      })
+
+      // 拆分为 3 列，每列 6 个
+      const dndSkillColumns = [
+        skillRows.slice(0, 6),
+        skillRows.slice(6, 12),
+        skillRows.slice(12, 18),
+      ]
+
       const hp = fd.hp || 0
       const hpMax = fd.hpMax || 0
       const hpPct = hpMax ? Math.min((hp / hpMax) * 100, 100) : 0
@@ -340,6 +774,7 @@ Page({
         dndAbilities: abilities,
         dndSavingThrows: saves,
         dndSkillProfs: skills,
+        dndSkillColumns,
         dndHpPercent: hpPct,
         dndHpColor: hpColor,
         dndAc: ac,
@@ -350,29 +785,40 @@ Page({
     }
 
     if (system === 'DAGGERHEART') {
-      const attrs = [
-        { key: 'agility',   label: '敏捷', abbr: 'AGI', value: fd.agility ?? 0 },
-        { key: 'strength',  label: '力量', abbr: 'STR', value: fd.strength ?? 0 },
-        { key: 'finesse',   label: '精巧', abbr: 'FIN', value: fd.finesse ?? 0 },
-        { key: 'instinct',  label: '本能', abbr: 'INS', value: fd.instinct ?? 0 },
-        { key: 'presence',  label: '存在', abbr: 'PRE', value: fd.presence ?? 0 },
-        { key: 'knowledge', label: '知识', abbr: 'KNO', value: fd.knowledge ?? 0 },
-      ].map(a => ({
+      const attrDefs = [
+        { key: 'agility', label: '敏捷', abbr: 'AGI', subs: ['冲刺', '跳跃', '机动'] },
+        { key: 'strength', label: '力量', abbr: 'STR', subs: ['举起', '猛击', '擒抱'] },
+        { key: 'finesse', label: '灵巧', abbr: 'FIN', subs: ['控制', '隐藏', '巧手'] },
+        { key: 'instinct', label: '本能', abbr: 'INS', subs: ['感知', '察觉', '导航'] },
+        { key: 'presence', label: '风度', abbr: 'PRE', subs: ['魅力', '表演', '欺骗'] },
+        { key: 'knowledge', label: '知识', abbr: 'KNO', subs: ['回忆', '分析', '理解'] },
+      ]
+      const attrs = attrDefs.map(a => ({
         ...a,
-        fmt: a.value >= 0 ? '+' + a.value : String(a.value),
-        color: this.dhAttrColor(a.value),
-        barPct: Math.min(((a.value + 2) / 6) * 100, 100),
+        value: fd['dh_' + a.key] ?? 0,
+        fmt: String(fd['dh_' + a.key] ?? 0),
+        color: this.dhAttrColor(fd['dh_' + a.key] ?? 0),
       }))
-
-      const stamina = fd.stamina || 0
-      const staminaMax = fd.staminaMax || 0
-      const stress = fd.stress || 0
-      const stressMax = fd.stressMax || 0
+      const attrFilled = fd.dh_attr_filled || {}
+      const dhAttrFilled = {}
+      attrDefs.forEach(a => { dhAttrFilled[a.key] = !!attrFilled[a.key] })
 
       return {
         dhAttributes: attrs,
-        dhStaminaPct: staminaMax ? Math.min((stamina / staminaMax) * 100, 100) : 0,
-        dhStressPct: stressMax ? Math.min((stress / stressMax) * 100, 100) : 0,
+        dhAttrFilled,
+        dhMark1HP: fd.dh_mark1_hp ?? 0,
+        dhMark2HP: fd.dh_mark2_hp ?? 0,
+        dhMark3HP: fd.dh_mark3_hp ?? 0,
+        dhEvasion: fd.dh_evasion ?? 0,
+        dhProficiency: fd.dh_proficiency ?? 0,
+        dhArmor: fd.dh_armor ?? 0,
+        dhArmorMax: fd.dh_armor_max ?? 0,
+        dhHP: fd.dh_hp ?? 0,
+        dhHPMax: fd.dh_hp_max ?? 0,
+        dhStress: fd.dh_stress ?? 0,
+        dhStressMax: fd.dh_stress_max ?? 0,
+        dhHope: fd.dh_hope ?? 0,
+        dhHopeMax: fd.dh_hope_max ?? 6,
       }
     }
 
@@ -400,10 +846,10 @@ Page({
       editDndBasicInfo: {
         name: fd.name || '',
         player: fd.player || '',
-        occupation: fd.occupation || '',
         age: fd.age || '',
         gender: fd.gender || '',
         class: fd.class || '',
+        multiclass: fd.multiclass || '',
         level: fd.level || '',
         race: fd.race || '',
         alignment: fd.alignment || '',
@@ -488,6 +934,55 @@ Page({
     this.setData({ editingDndAttrs: false })
   },
 
+  // === DND 技能编辑 ===
+  onToggleDndSkillEdit() {
+    if (this.data.editingDndSkills) {
+      this.setData({ editingDndSkills: false })
+      return
+    }
+    const fd = this.data.card.formData || {}
+    const columns = this.data.dndSkillColumns || []
+    const edit = {}
+    const profBonus = parseInt(fd.profBonus) || 2
+    columns.forEach(col => {
+      col.forEach(s => {
+        edit[s.key + '_mod'] = fd[s.key + '_mod'] !== undefined ? fd[s.key + '_mod'] : s.modRaw
+        const prof = (fd.skillProf || []).includes(s.key)
+        edit[s.key + '_total'] = fd[s.key + '_total'] !== undefined ? fd[s.key + '_total'] : (s.modRaw + (prof ? profBonus : 0))
+      })
+    })
+    this.setData({ editingDndSkills: true, editDndSkills: edit })
+  },
+
+  onDndSkillModInput(e) {
+    const key = e.currentTarget.dataset.key
+    const edit = { ...this.data.editDndSkills }
+    edit[key] = parseInt(e.detail.value) || 0
+    this.setData({ editDndSkills: edit })
+  },
+
+  cancelDndSkillEdit() {
+    this.setData({ editingDndSkills: false })
+  },
+
+  saveDndSkills() {
+    const edit = this.data.editDndSkills
+    const fd = { ...this.data.card.formData }
+    const skillDefs = [
+      'skill_athletics','skill_acrobatics','skill_sleightOfHand','skill_stealth',
+      'skill_investigation','skill_arcana','skill_history','skill_nature','skill_religion',
+      'skill_perception','skill_insight','skill_animal','skill_medicine','skill_survival',
+      'skill_persuasion','skill_deception','skill_intimidation','skill_performance',
+    ]
+    skillDefs.forEach(k => {
+      fd[k + '_mod'] = edit[k + '_mod']
+      fd[k + '_total'] = edit[k + '_total']
+    })
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDndSkills: false })
+    this.loadCard()
+  },
+
   // === DND 当前状态编辑 ===
   onToggleDndStatusEdit() {
     const fd = this.data.card.formData || {}
@@ -500,6 +995,10 @@ Page({
         hitDiceUsed: fd.hitDiceUsed ?? 0,
         hitDiceCount: fd.hitDiceCount ?? 0,
         hitDice: fd.hitDice ?? '',
+        ac: fd.ac ?? 0,
+        dc: fd.dc ?? 0,
+        passivePerception: fd.passivePerception ?? 0,
+        speed: fd.speed ?? 30,
       },
       dndSpellSlots: fd.spellSlots && Array.isArray(fd.spellSlots) && fd.spellSlots.length > 0
         ? fd.spellSlots.map(s => {
@@ -525,6 +1024,23 @@ Page({
     this.setData({ dndSpellSlots: slots })
   },
 
+  onSpellSlotDelta(e) {
+    const index = parseInt(e.currentTarget.dataset.index)
+    const delta = parseInt(e.currentTarget.dataset.delta)
+    const slots = [...this.data.dndSpellSlots]
+    const newVal = Math.max(0, (slots[index].used || 0) + delta)
+    if (newVal > (slots[index].total || 0)) return
+    slots[index] = { ...slots[index], used: newVal }
+    this.setData({ dndSpellSlots: slots })
+    // 非编辑模式下直接保存
+    if (!this.data.editingDndStatus) {
+      const fd = { ...this.data.card.formData }
+      fd.spellSlots = slots.map(s => ({ used: s.used || 0, total: s.total || 0 }))
+      store.updateCardFormData(this.cardId, fd)
+      this.loadCard()
+    }
+  },
+
   cancelDndStatusEdit() {
     this.setData({ editingDndStatus: false })
   },
@@ -538,6 +1054,10 @@ Page({
     fd.hitDiceUsed = parseInt(edit.hitDiceUsed) || 0
     fd.hitDiceCount = parseInt(edit.hitDiceCount) || 0
     fd.hitDice = edit.hitDice
+    fd.ac = parseInt(edit.ac) || 0
+    fd.dc = parseInt(edit.dc) || 0
+    fd.passivePerception = parseInt(edit.passivePerception) || 0
+    fd.speed = parseInt(edit.speed) || 30
     fd.spellSlots = this.data.dndSpellSlots.map(s => ({ used: parseInt(s.used) || 0, total: parseInt(s.total) || 0 }))
     store.updateCardFormData(this.cardId, fd)
     this.setData({ editingDndStatus: false })
@@ -548,6 +1068,10 @@ Page({
   dndMod(score) {
     const m = Math.floor((score - 10) / 2)
     return m > 0 ? String(m) : m === 0 ? '0' : String(m)
+  },
+
+  dndModValue(score) {
+    return Math.floor((score - 10) / 2)
   },
   dndModColor(score) {
     const m = Math.floor((score - 10) / 2)
@@ -599,16 +1123,32 @@ Page({
         { label: '职业', value: this.classLabel(fd.class) },
         { label: '种族', value: fd.race || '—' },
         { label: '等级', value: fd.level || '—' },
-        { label: 'AC/DC/HP', value: `${ac}/${dc}/${fd.hp || 0}` }
+        { label: 'AC/DC/HP', value: `${ac}/${dc}/${fd.hpMax || 0}` }
       ]
     }
 
     if (sys === 'DAGGERHEART') {
+      const hasA1 = fd.ancestry && String(fd.ancestry).trim()
+      const hasA2 = fd.ancestry2 && String(fd.ancestry2).trim()
+      let ancestryVal, ancestrySubVal
+      if (hasA1 && hasA2) {
+        ancestryVal = this.dhAncestryLabel(fd.ancestry)
+        ancestrySubVal = this.dhAncestryLabel(fd.ancestry2)
+      } else if (hasA1) {
+        ancestryVal = this.dhAncestryLabel(fd.ancestry)
+        ancestrySubVal = null
+      } else if (hasA2) {
+        ancestryVal = this.dhAncestryLabel(fd.ancestry2)
+        ancestrySubVal = null
+      } else {
+        ancestryVal = '—'
+        ancestrySubVal = null
+      }
       return [
         { label: '职业', value: this.dhClassLabel(fd.class) },
-        { label: '血脉', value: this.dhAncestryLabel(fd.ancestry) },
-        { label: '阶层', value: fd.tier || '—' },
-        { label: '耐力', value: `${fd.stamina || 0}/${fd.staminaMax || 0}` }
+        { label: '等级', value: fd.level || '—' },
+        { label: '种族', value: ancestryVal, subValue: ancestrySubVal },
+        { label: '社群', value: fd.community || '—' }
       ]
     }
 
@@ -643,6 +1183,53 @@ Page({
       dwarf: '矮人', halfling: '半身人'
     }
     return (v && map[v]) || v || '—'
+  },
+
+  // === Daggerheart 编辑处理 ===
+  onToggleDhBasicInfoEdit() {
+    if (this.data.editingDhBasicInfo) {
+      this.setData({ editingDhBasicInfo: false })
+      return
+    }
+    const fd = this.data.card.formData || {}
+    this.setData({
+      editingDhBasicInfo: true,
+      editDhBasicInfo: {
+        name: fd.name || '',
+        player: fd.player || '',
+        age: fd.age || '',
+        gender: fd.gender || '',
+        class: fd.class || '',
+        subclass: fd.subclass || '',
+        community: fd.community || '',
+        birthplace: fd.birthplace || '',
+        ancestry: fd.ancestry || '',
+        ancestry2: fd.ancestry2 || '',
+        level: fd.level || '',
+      }
+    })
+  },
+
+  onDhBasicInfoInput(e) {
+    const { field } = e.currentTarget.dataset
+    const edit = { ...this.data.editDhBasicInfo }
+    edit[field] = e.detail.value
+    this.setData({ editDhBasicInfo: edit })
+  },
+
+  saveDhBasicInfo() {
+    const fd = { ...this.data.card.formData }
+    const edit = this.data.editDhBasicInfo
+    Object.keys(edit).forEach(k => {
+      fd[k] = edit[k]
+    })
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDhBasicInfo: false })
+    this.loadCard()
+  },
+
+  cancelDhBasicInfoEdit() {
+    this.setData({ editingDhBasicInfo: false })
   },
 
   formatDate(dateStr) {
@@ -730,41 +1317,136 @@ Page({
       sourceType: ['album', 'camera'],
       success(res) {
         const tempFilePath = res.tempFilePaths[0]
-        console.log('[card-detail] chooseImage 成功, path:', tempFilePath)
-        // 检查 wx.cropImage 是否可用
-        if (!wx.cropImage) {
-          console.log('[card-detail] wx.cropImage 不可用，直接使用原图')
-          const card = that.data.card
-          if (card) {
-            card.avatar = tempFilePath
-            that.setData({ card })
-            store.updateCardAvatar(card.id, tempFilePath)
-          }
-          return
-        }
-        // 打开裁剪界面，让玩家手动框选区域
-        wx.cropImage({
+        // 获取图片尺寸信息
+        wx.getImageInfo({
           src: tempFilePath,
-          cropScale: '1:1',
-          success(cropRes) {
-            console.log('[card-detail] cropImage 成功, path:', cropRes.tempFilePath)
-            const card = that.data.card
-            if (card) {
-              card.avatar = cropRes.tempFilePath
-              that.setData({ card })
-              store.updateCardAvatar(card.id, cropRes.tempFilePath)
-            }
+          success(info) {
+            // 计算图片在弹窗中的显示尺寸（宽度撑满弹窗内容区）
+            const screenWidth = wx.getSystemInfoSync().windowWidth
+            const dialogWidth = screenWidth * 0.85  // 85vw
+            const contentWidth = dialogWidth - 28 * 2 * (screenWidth / 750)  // 减去 padding
+            const imageW = contentWidth
+            const imageH = (info.height / info.width) * contentWidth
+            that.setData({
+              cropImageSrc: tempFilePath,
+              cropImageW: imageW,
+              cropImageH: imageH,
+              cropX: 0,
+              cropY: 0,
+              cropBoxSize: Math.min(imageW, imageH) * 0.6,
+              cropDialogVisible: true
+            })
           },
-          fail(err) {
-            console.error('[card-detail] cropImage 失败:', JSON.stringify(err))
-            const card = that.data.card
-            if (card) {
-              card.avatar = tempFilePath
-              that.setData({ card })
-              store.updateCardAvatar(card.id, tempFilePath)
-            }
+          fail() {
+            // 获取尺寸失败，使用默认值
+            that.setData({
+              cropImageSrc: tempFilePath,
+              cropImageW: 300,
+              cropImageH: 300,
+              cropX: 0,
+              cropY: 0,
+              cropBoxSize: 180,
+              cropDialogVisible: true
+            })
           }
         })
+      }
+    })
+  },
+
+  onCropBoxChange(e) {
+    if (!this.data.cropDialogVisible) return
+    this.setData({
+      cropX: e.detail.x,
+      cropY: e.detail.y
+    })
+  },
+
+  cancelCrop() {
+    this.setData({ cropDialogVisible: false })
+  },
+
+  onResizeStart(e) {
+    this._resizeStartX = e.touches[0].pageX
+    this._resizeStartY = e.touches[0].pageY
+    this._resizeStartSize = this.data.cropBoxSize
+  },
+
+  onResizeMove(e) {
+    if (this._resizeStartSize == null) return
+    const dx = e.touches[0].pageX - this._resizeStartX
+    const dy = e.touches[0].pageY - this._resizeStartY
+    // 取对角线方向的最大偏移作为新尺寸增量
+    const delta = Math.max(dx, dy)
+    const { cropImageW, cropImageH } = this.data
+    const maxSize = Math.min(cropImageW, cropImageH)
+    const newSize = Math.max(60, Math.min(this._resizeStartSize + delta, maxSize))
+    this.setData({ cropBoxSize: newSize })
+  },
+
+  onResizeEnd() {
+    this._resizeStartSize = null
+  },
+
+  confirmCrop() {
+    const that = this
+    const cropX = this.data.cropX || 0
+    const cropY = this.data.cropY || 0
+    const { cropImageSrc, cropBoxSize } = this.data
+    const card = this.data.card
+    if (!card) {
+      this.setData({ cropDialogVisible: false })
+      return
+    }
+
+    const screenWidth = wx.getSystemInfoSync().windowWidth
+
+    // 使用 canvas 裁剪
+    wx.getImageInfo({
+      src: cropImageSrc,
+      success(info) {
+        const imgW = info.width
+        // 图片在弹窗中的显示尺寸
+        const dialogWidth = screenWidth * 0.85
+        const contentWidth = dialogWidth - 28 * 2 * (screenWidth / 750)
+        const displayW = contentWidth
+        // 裁剪框在原始图片上的坐标
+        const ratio = imgW / displayW
+        const sx = cropX * ratio
+        const sy = cropY * ratio
+        const sw = cropBoxSize * ratio
+        const sh = cropBoxSize * ratio
+
+        const ctx = wx.createCanvasContext('cropCanvas', that)
+        const canvasSize = 300  // 输出头像尺寸
+        ctx.drawImage(cropImageSrc, sx, sy, sw, sh, 0, 0, canvasSize, canvasSize)
+        ctx.draw(false, () => {
+          wx.canvasToTempFilePath({
+            canvasId: 'cropCanvas',
+            x: 0,
+            y: 0,
+            width: canvasSize,
+            height: canvasSize,
+            destWidth: canvasSize,
+            destHeight: canvasSize,
+            success(res2) {
+              card.avatar = res2.tempFilePath
+              that.setData({ card, cropDialogVisible: false })
+              store.updateCardAvatar(card.id, res2.tempFilePath)
+            },
+            fail(err) {
+              console.error('[card-detail] canvasToTempFilePath 失败:', err)
+              card.avatar = cropImageSrc
+              that.setData({ card, cropDialogVisible: false })
+              store.updateCardAvatar(card.id, cropImageSrc)
+            }
+          }, that)
+        })
+      },
+      fail() {
+        card.avatar = cropImageSrc
+        that.setData({ card, cropDialogVisible: false })
+        store.updateCardAvatar(card.id, cropImageSrc)
       }
     })
   },
@@ -851,11 +1533,10 @@ Page({
     }
     store.updateCardFormData(this.cardId, fd)
     this.setData({ cocSkillEditing: false })
-    wx.showToast({ title: '技能已更新', icon: 'success' })
     this.loadCard()
   },
 
-  // ===== 基本信息编辑 =====
+  // ===== 基础属性编辑 =====
   startEditBasicInfo() {
     const fd = this.data.card.formData || {}
     this.setData({
@@ -898,7 +1579,6 @@ Page({
     this.data.card.name = edit.name
     this.data.card.player = edit.player
     this.setData({ editingBasicInfo: false })
-    wx.showToast({ title: '基本信息已更新', icon: 'success' })
     this.loadCard()
   },
 
@@ -953,7 +1633,6 @@ Page({
     fd.sanMax = edit.pow
     store.updateCardFormData(this.cardId, fd)
     this.setData({ editingAttrs: false })
-    wx.showToast({ title: '属性已更新', icon: 'success' })
     this.loadCard()
   },
 
@@ -1015,7 +1694,6 @@ Page({
     fd.ac = edit.ac
     store.updateCardFormData(this.cardId, fd)
     this.setData({ editingStatus: false })
-    wx.showToast({ title: '状态已更新', icon: 'success' })
     this.loadCard()
   },
 
@@ -1162,6 +1840,92 @@ Page({
     setTimeout(() => { this._copyLocked = false }, 300)
   },
 
+  // ===== 背包（DND财富） =====
+
+  /** 开始编辑财富 */
+  startEditWealth() {
+    this.setData({ editingWealth: true })
+  },
+
+  /** 取消编辑财富 */
+  cancelEditWealth() {
+    const card = this.data.card
+    const fd = card.formData || {}
+    const editWealth = {}
+    ;['pp','ep','gp','sp','cp'].forEach(k => { editWealth[k] = parseInt(fd['wealth_' + k]) || 0 })
+    const raw = editWealth.pp * 100 + editWealth.ep * 10 + editWealth.gp * 1 + editWealth.sp * 0.1 + editWealth.cp * 0.01
+    const wealthTotalGP = Math.round(raw * 100) / 100
+    this.setData({ editingWealth: false, editWealth, wealthTotalGP })
+  },
+
+  /** 财富输入 */
+  onWealthInput(e) {
+    const field = e.currentTarget.dataset.field
+    const val = parseInt(e.detail.value) || 0
+    const editWealth = { ...this.data.editWealth, [field]: val }
+    const raw = editWealth.pp * 100 + editWealth.ep * 10 + editWealth.gp * 1 + editWealth.sp * 0.1 + editWealth.cp * 0.01
+    const wealthTotalGP = Math.round(raw * 100) / 100
+    this.setData({ editWealth, wealthTotalGP })
+  },
+
+  /** 保存财富编辑 */
+  saveEditWealth() {
+    const fd = { ...this.data.card.formData }
+    const w = this.data.editWealth
+    fd.wealth_pp = w.pp; fd.wealth_ep = w.ep; fd.wealth_gp = w.gp
+    fd.wealth_sp = w.sp; fd.wealth_cp = w.cp
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingWealth: false })
+    wx.showToast({ title: '已保存', icon: 'success' })
+    this.loadCard()
+  },
+
+  // ===== 背包（DND物品） =====
+
+  /** 点击背包物品 → 弹窗 */
+  onDndBackpackTap() {
+    if (this._copyLocked) return
+    const content = this.data.dndBackpackContent || ''
+    this.setData({
+      dndBackpackDialogVisible: true,
+      dndBackpackDialogContent: content,
+      dndBackpackDialogEditing: false,
+    })
+  },
+
+  /** 关闭 DND 背包弹窗 */
+  closeDndBackpackDialog() {
+    this.setData({ dndBackpackDialogVisible: false })
+  },
+
+  /** DND 背包弹窗进入编辑 */
+  startDndBackpackEdit() {
+    this.setData({ dndBackpackDialogEditing: true })
+  },
+
+  /** DND 背包弹窗取消编辑 */
+  cancelDndBackpackEdit() {
+    this.setData({
+      dndBackpackDialogEditing: false,
+      dndBackpackDialogContent: this.data.dndBackpackContent || '',
+    })
+  },
+
+  /** DND 背包弹窗文本输入 */
+  onDndBackpackDialogInput(e) {
+    this.setData({ dndBackpackDialogContent: e.detail.value })
+  },
+
+  /** DND 背包弹窗保存 */
+  applyDndBackpackEdit() {
+    const fd = { ...this.data.card.formData }
+    fd.dndBackpack = this.data.dndBackpackDialogContent
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ dndBackpackDialogVisible: false, dndBackpackDialogEditing: false })
+    wx.showToast({ title: '已保存', icon: 'success' })
+    this.loadCard()
+  },
+
   // ===== 经历 =====
 
   /** 构建经历条目列表 */
@@ -1234,25 +1998,53 @@ Page({
       label: '',
       value: '',
     })
-    // 同步到 formData
-    const fd = { ...this.data.card.formData }
-    fd.experiences = items.map(it => ({ key: it.key, label: it.label, value: it.value }))
-    store.updateCardFormData(this.cardId, fd)
     this.setData({ experienceItems: items })
   },
 
   /** 切换经历管理模式 */
   toggleExperienceManage() {
-    this.setData({ experienceManaging: !this.data.experienceManaging })
+    if (this.data.experienceManaging) {
+      this.cancelExperienceManage()
+      return
+    }
+    // 进入管理模式：保存快照
+    const items = this.data.experienceItems
+    const snapshot = []
+    for (let i = 0; i < items.length; i++) {
+      snapshot.push({ key: items[i].key, label: items[i].label, value: items[i].value })
+    }
+    this.setData({
+      experienceManaging: true,
+      experienceItemsSnapshot: snapshot
+    })
   },
 
-  /** 删除经历条目 */
-  onDeleteExperienceEntry(e) {
-    const { key } = e.currentTarget.dataset
-    const items = this.data.experienceItems.filter(it => it.key !== key)
+  /** 取消经历管理 → 恢复快照 */
+  cancelExperienceManage() {
+    const snapshot = this.data.experienceItemsSnapshot || []
+    const items = []
+    for (let i = 0; i < snapshot.length; i++) {
+      items.push({ key: snapshot[i].key, label: snapshot[i].label, value: snapshot[i].value })
+    }
+    this.setData({
+      experienceManaging: false,
+      experienceItems: items
+    })
+  },
+
+  /** 保存经历 → 持久化到 store */
+  saveExperienceManage() {
+    const items = this.data.experienceItems
     const fd = { ...this.data.card.formData }
     fd.experiences = items.map(it => ({ key: it.key, label: it.label, value: it.value }))
     store.updateCardFormData(this.cardId, fd)
+    this.setData({ experienceManaging: false })
+  },
+
+  /** 删除经历条目（仅本地状态） */
+  onDeleteExperienceEntry(e) {
+    const { key } = e.currentTarget.dataset
+    const items = this.data.experienceItems.filter(it => it.key !== key)
     this.setData({ experienceItems: items })
   },
 
@@ -1298,13 +2090,1883 @@ Page({
       }
       return it
     })
-    const fd = { ...this.data.card.formData }
-    fd.experiences = items.map(it => ({ key: it.key, label: it.label, value: it.value }))
-    store.updateCardFormData(this.cardId, fd)
     this.setData({ experienceDialogVisible: false, experienceDialogEditing: false, experienceItems: items })
-    wx.showToast({ title: '已保存', icon: 'success' })
+  },
+
+  // === 武器模块 ===
+  buildWeaponItems(card) {
+    try {
+      const fd = card.formData || {}
+      const weapons = fd.weapons
+      if (weapons && Array.isArray(weapons) && weapons.length > 0) {
+        return weapons.map((w, i) => ({
+          key: w.key || 'wpn_' + i,
+          name: w.name || '',
+          attuned: !!w.attuned,
+          properties: w.properties || '',
+          ability: w.ability || '',
+          hitBonus: w.hitBonus || '',
+          damage: w.damage || '',
+          damageType: w.damageType || '',
+        }))
+      }
+      return [
+        { key: 'wpn_0', name: '', attuned: false, properties: '', ability: '', hitBonus: '', damage: '', damageType: '' },
+        { key: 'wpn_1', name: '', attuned: false, properties: '', ability: '', hitBonus: '', damage: '', damageType: '' },
+      ]
+    } catch (err) {
+      console.error('[weapon] buildWeaponItems ERROR:', err)
+      return [
+        { key: 'wpn_0', name: '', attuned: false, properties: '', ability: '', hitBonus: '', damage: '', damageType: '' },
+        { key: 'wpn_1', name: '', attuned: false, properties: '', ability: '', hitBonus: '', damage: '', damageType: '' },
+      ]
+    }
+  },
+
+  startEditWeapons() {
+    this.setData({
+      weaponItemsSnapshot: JSON.parse(JSON.stringify(this.data.weaponItems)),
+      editingWeapons: true
+    })
+  },
+
+  cancelEditWeapons() {
+    this.setData({
+      weaponItems: JSON.parse(JSON.stringify(this.data.weaponItemsSnapshot)),
+      editingWeapons: false
+    })
+  },
+
+  applyEditWeapons() {
+    const fd = { ...this.data.card.formData }
+    fd.weapons = this.data.weaponItems.map(it => ({
+      key: it.key, name: it.name, attuned: it.attuned,
+      properties: it.properties, ability: it.ability,
+      hitBonus: it.hitBonus, damage: it.damage, damageType: it.damageType,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingWeapons: false })
+  },
+
+  onWeaponTap(e) {
+    if (this.data.editingWeapons) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.weaponItems.find(it => it.key === key)
+    if (!item) { wx.showToast({ title: '武器未找到', icon: 'none' }); return }
+    this.setData({
+      weaponDialogVisible: true,
+      weaponDialogEditing: false,
+      weaponDialogKey: key,
+      weaponDialogName: item.name,
+      weaponDialogAttuned: item.attuned,
+      weaponDialogProperties: item.properties,
+      weaponDialogAbility: item.ability,
+      weaponDialogHitBonus: item.hitBonus,
+      weaponDialogDamage: item.damage,
+      weaponDialogDamageType: item.damageType,
+    })
+  },
+
+  onAddWeaponEntry() {
+    const items = [...this.data.weaponItems]
+    const nextIdx = items.length
+    items.push({
+      key: 'wpn_' + nextIdx,
+      name: '',
+      attuned: false,
+      properties: '',
+      ability: '',
+      hitBonus: '',
+      damage: '',
+      damageType: '',
+    })
+    if (!this.data.editingWeapons) {
+      const fd = { ...this.data.card.formData }
+      fd.weapons = items.map(it => ({
+        key: it.key, name: it.name, attuned: it.attuned,
+        properties: it.properties, ability: it.ability,
+        hitBonus: it.hitBonus, damage: it.damage, damageType: it.damageType,
+      }))
+      store.updateCardFormData(this.cardId, fd)
+    }
+    this.setData({ weaponItems: items })
+  },
+
+  onDeleteWeaponEntry(e) {
+    const { key } = e.currentTarget.dataset
+    const items = this.data.weaponItems.filter(it => it.key !== key)
+    this.setData({ weaponItems: items })
+  },
+
+  onCopyWeapon(e) {
+    if (this.data.editingWeapons) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.weaponItems.find(it => it.key === key)
+    if (!item) return
+    const parts = []
+    if (item.name) parts.push(item.name)
+    if (item.attuned) parts.push('同调')
+    if (item.properties) parts.push(item.properties)
+    if (item.ability) parts.push(item.ability)
+    if (item.hitBonus) parts.push(item.hitBonus)
+    if (item.damage) parts.push(item.damage)
+    if (item.damageType) parts.push(item.damageType)
+    const text = parts.join(' · ')
+    if (!text) return
+    wx.setClipboardData({ data: text })
+  },
+
+  closeWeaponDialog() {
+    this.setData({ weaponDialogVisible: false })
+  },
+
+  startWeaponEdit() {
+    this.setData({ weaponDialogEditing: true })
+  },
+
+  cancelWeaponEdit() {
+    const item = this.data.weaponItems.find(it => it.key === this.data.weaponDialogKey)
+    if (item) {
+      this.setData({
+        weaponDialogEditing: false,
+        weaponDialogName: item.name,
+        weaponDialogAttuned: item.attuned,
+        weaponDialogProperties: item.properties,
+        weaponDialogAbility: item.ability,
+        weaponDialogHitBonus: item.hitBonus,
+        weaponDialogDamage: item.damage,
+        weaponDialogDamageType: item.damageType,
+      })
+    } else {
+      this.setData({ weaponDialogEditing: false })
+    }
+  },
+
+  applyWeaponEdit() {
+    const items = this.data.weaponItems.map(it => {
+      if (it.key === this.data.weaponDialogKey) {
+        return {
+          ...it,
+          name: this.data.weaponDialogName,
+          attuned: this.data.weaponDialogAttuned,
+          properties: this.data.weaponDialogProperties,
+          ability: this.data.weaponDialogAbility,
+          hitBonus: this.data.weaponDialogHitBonus,
+          damage: this.data.weaponDialogDamage,
+          damageType: this.data.weaponDialogDamageType,
+        }
+      }
+      return it
+    })
+    const fd = { ...this.data.card.formData }
+    fd.weapons = items.map(it => ({
+      key: it.key, name: it.name, attuned: it.attuned,
+      properties: it.properties, ability: it.ability,
+      hitBonus: it.hitBonus, damage: it.damage, damageType: it.damageType,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ weaponDialogVisible: false, weaponDialogEditing: false, weaponItems: items })
+  },
+
+  onWeaponDialogInput(e) {
+    const field = e.currentTarget.dataset.field
+    const key = 'weaponDialog' + field.charAt(0).toUpperCase() + field.slice(1)
+    this.setData({ [key]: e.detail.value })
+  },
+
+  onWeaponAttuneToggle() {
+    if (!this.data.weaponDialogEditing) return
+    this.setData({ weaponDialogAttuned: !this.data.weaponDialogAttuned })
+  },
+
+  onWeaponAttuneDirect(e) {
+    if (this.data.editingWeapons) return
+    const { key } = e.currentTarget.dataset
+    const items = this.data.weaponItems.map(it => {
+      if (it.key === key) return { ...it, attuned: !it.attuned }
+      return it
+    })
+    const fd = { ...this.data.card.formData }
+    fd.weapons = items.map(it => ({
+      key: it.key, name: it.name, attuned: it.attuned,
+      properties: it.properties, ability: it.ability,
+      hitBonus: it.hitBonus, damage: it.damage, damageType: it.damageType,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ weaponItems: items })
+  },
+
+  onDeleteWeaponFromDialog() {
+    const key = this.data.weaponDialogKey
+    const items = this.data.weaponItems.filter(it => it.key !== key)
+    const fd = { ...this.data.card.formData }
+    fd.weapons = items.map(it => ({
+      key: it.key, name: it.name, attuned: it.attuned,
+      properties: it.properties, ability: it.ability,
+      hitBonus: it.hitBonus, damage: it.damage, damageType: it.damageType,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ weaponDialogVisible: false, weaponItems: items })
+  },
+
+  // === 装备模块 ===
+  buildEquipmentItems(card) {
+    try {
+      const fd = card.formData || {}
+      const equipment = fd.equipment
+      if (equipment && Array.isArray(equipment) && equipment.length > 0) {
+        return equipment.map((eq, i) => ({
+          key: eq.key || 'equip_' + i,
+          name: eq.name || '',
+          attuned: !!eq.attuned,
+          properties: eq.properties || '',
+          weight: eq.weight || '',
+          slot: eq.slot || '',
+        }))
+      }
+      return [
+        { key: 'equip_0', name: '', attuned: false, properties: '', weight: '', slot: '' },
+        { key: 'equip_1', name: '', attuned: false, properties: '', weight: '', slot: '' },
+      ]
+    } catch (err) {
+      console.error('[equipment] buildEquipmentItems ERROR:', err)
+      return [
+        { key: 'equip_0', name: '', attuned: false, properties: '', weight: '', slot: '' },
+        { key: 'equip_1', name: '', attuned: false, properties: '', weight: '', slot: '' },
+      ]
+    }
+  },
+
+  startEditEquipment() {
+    this.setData({
+      equipmentItemsSnapshot: JSON.parse(JSON.stringify(this.data.equipmentItems)),
+      editingEquipment: true
+    })
+  },
+
+  cancelEditEquipment() {
+    this.setData({
+      equipmentItems: JSON.parse(JSON.stringify(this.data.equipmentItemsSnapshot)),
+      editingEquipment: false
+    })
+  },
+
+  applyEditEquipment() {
+    const fd = { ...this.data.card.formData }
+    fd.equipment = this.data.equipmentItems.map(it => ({
+      key: it.key, name: it.name, attuned: it.attuned,
+      properties: it.properties, weight: it.weight, slot: it.slot,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingEquipment: false })
+  },
+
+  onEquipmentTap(e) {
+    if (this.data.editingEquipment) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.equipmentItems.find(it => it.key === key)
+    if (!item) { wx.showToast({ title: '装备未找到', icon: 'none' }); return }
+    this.setData({
+      equipmentDialogVisible: true,
+      equipmentDialogEditing: false,
+      equipmentDialogKey: key,
+      equipmentDialogName: item.name,
+      equipmentDialogAttuned: item.attuned,
+      equipmentDialogProperties: item.properties,
+      equipmentDialogWeight: item.weight,
+      equipmentDialogSlot: item.slot,
+    })
+  },
+
+  onAddEquipmentEntry() {
+    const items = [...this.data.equipmentItems]
+    const nextIdx = items.length
+    items.push({
+      key: 'equip_' + nextIdx,
+      name: '',
+      attuned: false,
+      properties: '',
+      weight: '',
+      slot: '',
+    })
+    if (!this.data.editingEquipment) {
+      const fd = { ...this.data.card.formData }
+      fd.equipment = items.map(it => ({
+        key: it.key, name: it.name, attuned: it.attuned,
+        properties: it.properties, weight: it.weight, slot: it.slot,
+      }))
+      store.updateCardFormData(this.cardId, fd)
+    }
+    this.setData({ equipmentItems: items })
+  },
+
+  onDeleteEquipmentEntry(e) {
+    const { key } = e.currentTarget.dataset
+    const items = this.data.equipmentItems.filter(it => it.key !== key)
+    this.setData({ equipmentItems: items })
+  },
+
+  onCopyEquipment(e) {
+    if (this.data.editingEquipment) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.equipmentItems.find(it => it.key === key)
+    if (!item) return
+    const parts = []
+    if (item.name) parts.push(item.name)
+    if (item.attuned) parts.push('同调')
+    if (item.properties) parts.push(item.properties)
+    if (item.weight) parts.push(item.weight)
+    if (item.slot) parts.push(item.slot)
+    const text = parts.join(' · ')
+    if (!text) return
+    wx.setClipboardData({ data: text })
+  },
+
+  closeEquipmentDialog() {
+    this.setData({ equipmentDialogVisible: false })
+  },
+
+  startEquipmentEdit() {
+    this.setData({ equipmentDialogEditing: true })
+  },
+
+  cancelEquipmentEdit() {
+    const item = this.data.equipmentItems.find(it => it.key === this.data.equipmentDialogKey)
+    if (item) {
+      this.setData({
+        equipmentDialogEditing: false,
+        equipmentDialogName: item.name,
+        equipmentDialogAttuned: item.attuned,
+        equipmentDialogProperties: item.properties,
+        equipmentDialogWeight: item.weight,
+        equipmentDialogSlot: item.slot,
+      })
+    } else {
+      this.setData({ equipmentDialogEditing: false })
+    }
+  },
+
+  applyEquipmentEdit() {
+    const items = this.data.equipmentItems.map(it => {
+      if (it.key === this.data.equipmentDialogKey) {
+        return {
+          ...it,
+          name: this.data.equipmentDialogName,
+          attuned: this.data.equipmentDialogAttuned,
+          properties: this.data.equipmentDialogProperties,
+          weight: this.data.equipmentDialogWeight,
+          slot: this.data.equipmentDialogSlot,
+        }
+      }
+      return it
+    })
+    const fd = { ...this.data.card.formData }
+    fd.equipment = items.map(it => ({
+      key: it.key, name: it.name, attuned: it.attuned,
+      properties: it.properties, weight: it.weight, slot: it.slot,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ equipmentDialogVisible: false, equipmentDialogEditing: false, equipmentItems: items })
+  },
+
+  onEquipmentDialogInput(e) {
+    const field = e.currentTarget.dataset.field
+    const key = 'equipmentDialog' + field.charAt(0).toUpperCase() + field.slice(1)
+    this.setData({ [key]: e.detail.value })
+  },
+
+  onEquipmentAttuneToggle() {
+    if (!this.data.equipmentDialogEditing) return
+    this.setData({ equipmentDialogAttuned: !this.data.equipmentDialogAttuned })
+  },
+
+  onEquipmentAttuneDirect(e) {
+    if (this.data.editingEquipment) return
+    const { key } = e.currentTarget.dataset
+    const items = this.data.equipmentItems.map(it => {
+      if (it.key === key) return { ...it, attuned: !it.attuned }
+      return it
+    })
+    const fd = { ...this.data.card.formData }
+    fd.equipment = items.map(it => ({
+      key: it.key, name: it.name, attuned: it.attuned,
+      properties: it.properties, weight: it.weight, slot: it.slot,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ equipmentItems: items })
+  },
+
+  onDeleteEquipmentFromDialog() {
+    const key = this.data.equipmentDialogKey
+    const items = this.data.equipmentItems.filter(it => it.key !== key)
+    const fd = { ...this.data.card.formData }
+    fd.equipment = items.map(it => ({
+      key: it.key, name: it.name, attuned: it.attuned,
+      properties: it.properties, weight: it.weight, slot: it.slot,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ equipmentDialogVisible: false, equipmentItems: items })
+  },
+
+  stopPropagation() {},
+
+  // === 法术模块 ===
+  buildSpellItems(card) {
+    try {
+      const fd = card.formData || {}
+      const spells = fd.spells
+      if (spells && Array.isArray(spells) && spells.length > 0) {
+        return spells.map((s, i) => {
+          const key = s.key || 'spell_' + i
+          return {
+            key,
+            name: s.name || '',
+            attackBonus: s.attackBonus || '',
+            damage: s.damage || '',
+            damageType: s.damageType || '',
+            ability: s.ability || '',
+            ritual: !!s.ritual,
+            verbal: !!s.verbal,
+            somatic: !!s.somatic,
+            material: !!s.material,
+            level: s.level || '',
+            school: s.school || '',
+            castingTime: s.castingTime || '',
+            range: s.range || '',
+            duration: s.duration || '',
+            effect: s.effect || '',
+            materials: s.materials || '',
+          }
+        })
+      }
+      return []
+    } catch (err) {
+      console.error('[spell] buildSpellItems ERROR:', err)
+      return []
+    }
+  },
+
+  startEditSpells() {
+    this.setData({
+      spellItemsSnapshot: JSON.parse(JSON.stringify(this.data.spellItems)),
+      editingSpells: true
+    })
+  },
+
+  cancelEditSpells() {
+    this.setData({
+      spellItems: JSON.parse(JSON.stringify(this.data.spellItemsSnapshot)),
+      editingSpells: false
+    })
+  },
+
+  applyEditSpells() {
+    const fd = { ...this.data.card.formData }
+    fd.spells = this.data.spellItems.map(it => ({
+      key: it.key, name: it.name, attackBonus: it.attackBonus,
+      damage: it.damage, damageType: it.damageType, ability: it.ability,
+      ritual: it.ritual || false,
+      verbal: it.verbal || false,
+      somatic: it.somatic || false,
+      material: it.material || false,
+      level: it.level, school: it.school, castingTime: it.castingTime,
+      range: it.range, duration: it.duration, effect: it.effect, materials: it.materials,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingSpells: false })
+  },
+
+  onSpellTap(e) {
+    if (this.data.editingSpells) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.spellItems.find(it => it.key === key)
+    if (!item) { wx.showToast({ title: '法术未找到', icon: 'none' }); return }
+    this.setData({
+      spellDialogVisible: true,
+      spellDialogEditing: false,
+      spellDialogKey: key,
+      spellDialogName: item.name,
+      spellDialogAttackBonus: item.attackBonus,
+      spellDialogDamage: item.damage,
+      spellDialogDamageType: item.damageType,
+      spellDialogAbility: item.ability,
+      spellDialogRitual: item.ritual || false,
+      spellDialogVerbal: item.verbal || false,
+      spellDialogSomatic: item.somatic || false,
+      spellDialogMaterial: item.material || false,
+      spellDialogLevel: item.level,
+      spellDialogSchool: item.school,
+      spellDialogCastingTime: item.castingTime,
+      spellDialogRange: item.range,
+      spellDialogDuration: item.duration,
+      spellDialogEffect: item.effect,
+      spellDialogMaterials: item.materials,
+    })
+  },
+
+  onAddSpellEntry() {
+    const items = [...this.data.spellItems]
+    const nextIdx = items.length
+    const newKey = 'spell_' + nextIdx
+    items.push({
+      key: newKey,
+      name: '', attackBonus: '', damage: '', damageType: '', ability: '',
+      ritual: false, verbal: false, somatic: false, material: false,
+      level: '', school: '', castingTime: '', range: '', duration: '',
+      effect: '', materials: '',
+    })
+    if (!this.data.editingSpells) {
+      const fd = { ...this.data.card.formData }
+      fd.spells = items.map(it => ({
+        key: it.key, name: it.name, attackBonus: it.attackBonus,
+        damage: it.damage, damageType: it.damageType, ability: it.ability,
+        ritual: it.ritual || false,
+        verbal: it.verbal || false,
+        somatic: it.somatic || false,
+        material: it.material || false,
+        level: it.level, school: it.school, castingTime: it.castingTime,
+        range: it.range, duration: it.duration, effect: it.effect, materials: it.materials,
+      }))
+      store.updateCardFormData(this.cardId, fd)
+    }
+    this.setData({ spellItems: items })
+  },
+
+  onDeleteSpellEntry(e) {
+    const { key } = e.currentTarget.dataset
+    const items = this.data.spellItems.filter(it => it.key !== key)
+    this.setData({ spellItems: items })
+  },
+
+  onCopySpell(e) {
+    if (this.data.editingSpells) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.spellItems.find(it => it.key === key)
+    if (!item) return
+    const parts = []
+    if (item.name) parts.push(item.name)
+    if (item.level) parts.push(item.level + '环')
+    if (item.school) parts.push(item.school)
+    const text = parts.join(' · ')
+    if (!text) return
+    wx.setClipboardData({ data: text })
+  },
+
+  closeSpellDialog() {
+    this.setData({ spellDialogVisible: false })
+  },
+
+  startSpellEdit() {
+    this.setData({ spellDialogEditing: true })
+  },
+
+  cancelSpellEdit() {
+    const key = this.data.spellDialogKey
+    const item = this.data.spellItems.find(it => it.key === key)
+    if (item) {
+      this.setData({
+        spellDialogEditing: false,
+        spellDialogName: item.name,
+        spellDialogAttackBonus: item.attackBonus,
+        spellDialogDamage: item.damage,
+        spellDialogDamageType: item.damageType,
+        spellDialogAbility: item.ability,
+        spellDialogRitual: item.ritual || false,
+        spellDialogVerbal: item.verbal || false,
+        spellDialogSomatic: item.somatic || false,
+        spellDialogMaterial: item.material || false,
+        spellDialogLevel: item.level,
+        spellDialogSchool: item.school,
+        spellDialogCastingTime: item.castingTime,
+        spellDialogRange: item.range,
+        spellDialogDuration: item.duration,
+        spellDialogEffect: item.effect,
+        spellDialogMaterials: item.materials,
+      })
+    } else {
+      this.setData({ spellDialogEditing: false })
+    }
+  },
+
+  applySpellEdit() {
+    const key = this.data.spellDialogKey
+    const items = this.data.spellItems.map(it => {
+      if (it.key === key) {
+        return {
+          ...it,
+          name: this.data.spellDialogName,
+          attackBonus: this.data.spellDialogAttackBonus,
+          damage: this.data.spellDialogDamage,
+          damageType: this.data.spellDialogDamageType,
+          ability: this.data.spellDialogAbility,
+          ritual: this.data.spellDialogRitual,
+          verbal: this.data.spellDialogVerbal,
+          somatic: this.data.spellDialogSomatic,
+          material: this.data.spellDialogMaterial,
+          level: this.data.spellDialogLevel,
+          school: this.data.spellDialogSchool,
+          castingTime: this.data.spellDialogCastingTime,
+          range: this.data.spellDialogRange,
+          duration: this.data.spellDialogDuration,
+          effect: this.data.spellDialogEffect,
+          materials: this.data.spellDialogMaterials,
+        }
+      }
+      return it
+    })
+    const fd = { ...this.data.card.formData }
+    fd.spells = items.map(it => ({
+      key: it.key, name: it.name, attackBonus: it.attackBonus,
+      damage: it.damage, damageType: it.damageType, ability: it.ability,
+      ritual: it.ritual || false,
+      verbal: it.verbal || false,
+      somatic: it.somatic || false,
+      material: it.material || false,
+      level: it.level, school: it.school, castingTime: it.castingTime,
+      range: it.range, duration: it.duration, effect: it.effect, materials: it.materials,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ spellDialogVisible: false, spellDialogEditing: false, spellItems: items })
+  },
+
+  onSpellDialogInput(e) {
+    const field = e.currentTarget.dataset.field
+    const key = 'spellDialog' + field.charAt(0).toUpperCase() + field.slice(1)
+    this.setData({ [key]: e.detail.value })
+  },
+
+  onSpellDialogToggle(e) {
+    if (!this.data.spellDialogEditing) return
+    const field = e.currentTarget.dataset.field
+    const key = 'spellDialog' + field.charAt(0).toUpperCase() + field.slice(1)
+    this.setData({ [key]: !this.data[key] })
+  },
+
+  onSpellToggleDirect(e) {
+    if (this.data.editingSpells) return
+    const { key, field } = e.currentTarget.dataset
+    const idx = this.data.spellItems.findIndex(it => it.key === key)
+    if (idx < 0) return
+    const newVal = !this.data.spellItems[idx][field]
+    this.setData({ [`spellItems[${idx}].${field}`]: newVal })
+    // 同步到 store：用显式 newVal 构建，不依赖 setData 后的 this.data
+    const fd = { ...this.data.card.formData }
+    fd.spells = this.data.spellItems.map((it, i) => ({
+      key: it.key, name: it.name, attackBonus: it.attackBonus,
+      damage: it.damage, damageType: it.damageType, ability: it.ability,
+      ritual: (i === idx && field === 'ritual') ? newVal : (it.ritual || false),
+      verbal: (i === idx && field === 'verbal') ? newVal : (it.verbal || false),
+      somatic: (i === idx && field === 'somatic') ? newVal : (it.somatic || false),
+      material: (i === idx && field === 'material') ? newVal : (it.material || false),
+      level: it.level, school: it.school, castingTime: it.castingTime,
+      range: it.range, duration: it.duration, effect: it.effect, materials: it.materials,
+    }))
+    setTimeout(() => {
+      store.updateCardFormData(this.cardId, fd)
+    }, 0)
+  },
+
+  toggleSpellDetail(e) {
+    const { key } = e.currentTarget.dataset
+    const collapsed = { ...this.data.spellCollapsed }
+    collapsed[key] = !collapsed[key]
+    this.setData({ spellCollapsed: collapsed })
+  },
+
+  onDeleteSpellFromDialog() {
+    const key = this.data.spellDialogKey
+    const items = this.data.spellItems.filter(it => it.key !== key)
+    const fd = { ...this.data.card.formData }
+    fd.spells = items.map(it => ({
+      key: it.key, name: it.name, attackBonus: it.attackBonus,
+      damage: it.damage, damageType: it.damageType, ability: it.ability,
+      ritual: it.ritual || false,
+      verbal: it.verbal || false,
+      somatic: it.somatic || false,
+      material: it.material || false,
+      level: it.level, school: it.school, castingTime: it.castingTime,
+      range: it.range, duration: it.duration, effect: it.effect, materials: it.materials,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ spellDialogVisible: false, spellItems: items })
+  },
+
+  // === 特性模块 ===
+  buildClassFeatures(card) {
+    try {
+      const fd = card.formData || {}
+      const items = fd.classFeatures
+      if (items && Array.isArray(items) && items.length > 0) {
+        return items.map((f, i) => ({
+          key: f.key || 'cf_' + i,
+          level: f.level || '',
+          name: f.name || '',
+          description: f.description || '',
+        }))
+      }
+      return [
+        { key: 'cf_0', level: '', name: '', description: '' },
+        { key: 'cf_1', level: '', name: '', description: '' },
+      ]
+    } catch (err) {
+      console.error('[feature] buildClassFeatures ERROR:', err)
+      return [{ key: 'cf_0', level: '', name: '', description: '' }, { key: 'cf_1', level: '', name: '', description: '' }]
+    }
+  },
+
+  buildRaceFeatures(card) {
+    try {
+      const fd = card.formData || {}
+      const items = fd.raceFeatures
+      if (items && Array.isArray(items) && items.length > 0) {
+        return items.map((f, i) => ({
+          key: f.key || 'rf_' + i,
+          name: f.name || '',
+          description: f.description || '',
+        }))
+      }
+      return [
+        { key: 'rf_0', name: '', description: '' },
+        { key: 'rf_1', name: '', description: '' },
+      ]
+    } catch (err) {
+      console.error('[feature] buildRaceFeatures ERROR:', err)
+      return [{ key: 'rf_0', name: '', description: '' }, { key: 'rf_1', name: '', description: '' }]
+    }
+  },
+
+  buildFeats(card) {
+    try {
+      const fd = card.formData || {}
+      const items = fd.feats
+      if (items && Array.isArray(items) && items.length > 0) {
+        return items.map((f, i) => ({
+          key: f.key || 'ft_' + i,
+          level: f.level || '',
+          name: f.name || '',
+          description: f.description || '',
+        }))
+      }
+      return [
+        { key: 'ft_0', level: '', name: '', description: '' },
+        { key: 'ft_1', level: '', name: '', description: '' },
+      ]
+    } catch (err) {
+      console.error('[feature] buildFeats ERROR:', err)
+      return [{ key: 'ft_0', level: '', name: '', description: '' }, { key: 'ft_1', level: '', name: '', description: '' }]
+    }
+  },
+
+  // 职业特性
+  startEditClassFeatures() {
+    this.setData({
+      classFeaturesSnapshot: JSON.parse(JSON.stringify(this.data.classFeatures)),
+      editingClassFeatures: true,
+    })
+  },
+
+  cancelEditClassFeatures() {
+    this.setData({
+      classFeatures: JSON.parse(JSON.stringify(this.data.classFeaturesSnapshot)),
+      editingClassFeatures: false,
+    })
+  },
+
+  applyEditClassFeatures() {
+    const fd = { ...this.data.card.formData }
+    fd.classFeatures = this.data.classFeatures.map(it => ({
+      key: it.key, level: it.level, name: it.name, description: it.description,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingClassFeatures: false })
+  },
+
+  onAddClassFeature() {
+    const items = [...this.data.classFeatures]
+    const nextIdx = items.length
+    items.push({ key: 'cf_' + nextIdx, level: '', name: '', description: '' })
+    if (!this.data.editingClassFeatures) {
+      const fd = { ...this.data.card.formData }
+      fd.classFeatures = items.map(it => ({ key: it.key, level: it.level, name: it.name, description: it.description }))
+      store.updateCardFormData(this.cardId, fd)
+    }
+    this.setData({ classFeatures: items })
+  },
+
+  onDeleteClassFeature(e) {
+    const { key } = e.currentTarget.dataset
+    this.setData({ classFeatures: this.data.classFeatures.filter(it => it.key !== key) })
+  },
+
+  onClassFeatureTap(e) {
+    if (this.data.editingClassFeatures) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.classFeatures.find(it => it.key === key)
+    if (!item) return
+    this.setData({
+      featureDialogVisible: true,
+      featureDialogEditing: false,
+      featureDialogKey: key,
+      featureDialogType: 'classFeature',
+      featureDialogLevel: item.level,
+      featureDialogName: item.name,
+      featureDialogDescription: item.description,
+    })
+  },
+
+  onCopyClassFeature(e) {
+    if (this.data.editingClassFeatures) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.classFeatures.find(it => it.key === key)
+    if (!item) return
+    const parts = []
+    if (item.level) parts.push('Lv.' + item.level)
+    if (item.name) parts.push(item.name)
+    if (item.description) parts.push(item.description)
+    const text = parts.join(' · ')
+    if (!text) return
+    wx.setClipboardData({ data: text })
+  },
+
+  // 种族特性
+  startEditRaceFeatures() {
+    this.setData({
+      raceFeaturesSnapshot: JSON.parse(JSON.stringify(this.data.raceFeatures)),
+      editingRaceFeatures: true,
+    })
+  },
+
+  cancelEditRaceFeatures() {
+    this.setData({
+      raceFeatures: JSON.parse(JSON.stringify(this.data.raceFeaturesSnapshot)),
+      editingRaceFeatures: false,
+    })
+  },
+
+  applyEditRaceFeatures() {
+    const fd = { ...this.data.card.formData }
+    fd.raceFeatures = this.data.raceFeatures.map(it => ({
+      key: it.key, name: it.name, description: it.description,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingRaceFeatures: false })
+  },
+
+  onAddRaceFeature() {
+    const items = [...this.data.raceFeatures]
+    const nextIdx = items.length
+    items.push({ key: 'rf_' + nextIdx, name: '', description: '' })
+    if (!this.data.editingRaceFeatures) {
+      const fd = { ...this.data.card.formData }
+      fd.raceFeatures = items.map(it => ({ key: it.key, name: it.name, description: it.description }))
+      store.updateCardFormData(this.cardId, fd)
+    }
+    this.setData({ raceFeatures: items })
+  },
+
+  onDeleteRaceFeature(e) {
+    const { key } = e.currentTarget.dataset
+    this.setData({ raceFeatures: this.data.raceFeatures.filter(it => it.key !== key) })
+  },
+
+  onRaceFeatureTap(e) {
+    if (this.data.editingRaceFeatures) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.raceFeatures.find(it => it.key === key)
+    if (!item) return
+    this.setData({
+      featureDialogVisible: true,
+      featureDialogEditing: false,
+      featureDialogKey: key,
+      featureDialogType: 'raceFeature',
+      featureDialogLevel: '',
+      featureDialogName: item.name,
+      featureDialogDescription: item.description,
+    })
+  },
+
+  onCopyRaceFeature(e) {
+    if (this.data.editingRaceFeatures) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.raceFeatures.find(it => it.key === key)
+    if (!item) return
+    const parts = []
+    if (item.name) parts.push(item.name)
+    if (item.description) parts.push(item.description)
+    const text = parts.join(' · ')
+    if (!text) return
+    wx.setClipboardData({ data: text })
+  },
+
+  // 专长
+  startEditFeats() {
+    this.setData({
+      featsSnapshot: JSON.parse(JSON.stringify(this.data.feats)),
+      editingFeats: true,
+    })
+  },
+
+  cancelEditFeats() {
+    this.setData({
+      feats: JSON.parse(JSON.stringify(this.data.featsSnapshot)),
+      editingFeats: false,
+    })
+  },
+
+  applyEditFeats() {
+    const fd = { ...this.data.card.formData }
+    fd.feats = this.data.feats.map(it => ({
+      key: it.key, level: it.level, name: it.name, description: it.description,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingFeats: false })
+  },
+
+  onAddFeat() {
+    const items = [...this.data.feats]
+    const nextIdx = items.length
+    items.push({ key: 'ft_' + nextIdx, level: '', name: '', description: '' })
+    if (!this.data.editingFeats) {
+      const fd = { ...this.data.card.formData }
+      fd.feats = items.map(it => ({ key: it.key, level: it.level, name: it.name, description: it.description }))
+      store.updateCardFormData(this.cardId, fd)
+    }
+    this.setData({ feats: items })
+  },
+
+  onDeleteFeat(e) {
+    const { key } = e.currentTarget.dataset
+    this.setData({ feats: this.data.feats.filter(it => it.key !== key) })
+  },
+
+  onFeatTap(e) {
+    if (this.data.editingFeats) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.feats.find(it => it.key === key)
+    if (!item) return
+    this.setData({
+      featureDialogVisible: true,
+      featureDialogEditing: false,
+      featureDialogKey: key,
+      featureDialogType: 'feat',
+      featureDialogLevel: item.level,
+      featureDialogName: item.name,
+      featureDialogDescription: item.description,
+    })
+  },
+
+  onCopyFeat(e) {
+    if (this.data.editingFeats) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.feats.find(it => it.key === key)
+    if (!item) return
+    const parts = []
+    if (item.level) parts.push('Lv.' + item.level)
+    if (item.name) parts.push(item.name)
+    if (item.description) parts.push(item.description)
+    const text = parts.join(' · ')
+    if (!text) return
+    wx.setClipboardData({ data: text })
+  },
+
+  // 特性弹窗
+  closeFeatureDialog() {
+    this.setData({ featureDialogVisible: false })
+  },
+
+  startFeatureEdit() {
+    this.setData({ featureDialogEditing: true })
+  },
+
+  cancelFeatureEdit() {
+    const type = this.data.featureDialogType
+    const list = type === 'classFeature' ? this.data.classFeatures : type === 'raceFeature' ? this.data.raceFeatures : this.data.feats
+    const item = list.find(it => it.key === this.data.featureDialogKey)
+    if (item) {
+      this.setData({
+        featureDialogEditing: false,
+        featureDialogLevel: item.level || '',
+        featureDialogName: item.name || '',
+        featureDialogDescription: item.description || '',
+      })
+    } else {
+      this.setData({ featureDialogEditing: false })
+    }
+  },
+
+  saveFeature() {
+    const type = this.data.featureDialogType
+    const listKey = type === 'classFeature' ? 'classFeatures' : type === 'raceFeature' ? 'raceFeatures' : 'feats'
+    const items = this.data[listKey].map(it => {
+      if (it.key === this.data.featureDialogKey) {
+        const base = { key: it.key, name: this.data.featureDialogName, description: this.data.featureDialogDescription }
+        if (type !== 'raceFeature') base.level = this.data.featureDialogLevel
+        return base
+      }
+      return it
+    })
+    const fd = { ...this.data.card.formData }
+    fd[listKey] = items.map(it => {
+      const base = { key: it.key, name: it.name, description: it.description }
+      if (type !== 'raceFeature') base.level = it.level || ''
+      return base
+    })
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ featureDialogVisible: false, featureDialogEditing: false, [listKey]: items })
+  },
+
+  onFeatureDialogInput(e) {
+    const { field } = e.currentTarget.dataset
+    const key = 'featureDialog' + field.charAt(0).toUpperCase() + field.slice(1)
+    this.setData({ [key]: e.detail.value })
+  },
+
+  onDeleteFeatureFromDialog() {
+    const type = this.data.featureDialogType
+    const listKey = type === 'classFeature' ? 'classFeatures' : type === 'raceFeature' ? 'raceFeatures' : 'feats'
+    const key = this.data.featureDialogKey
+    const items = this.data[listKey].filter(it => it.key !== key)
+    const fd = { ...this.data.card.formData }
+    fd[listKey] = items.map(it => {
+      const base = { key: it.key, name: it.name, description: it.description }
+      if (type !== 'raceFeature') base.level = it.level || ''
+      return base
+    })
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ featureDialogVisible: false, [listKey]: items })
+  },
+
+  // ============================================================
+  // Daggerheart 编辑方法
+  // ============================================================
+
+  // === 属性四角星切换 ===
+  onToggleDhAttrFilled(e) {
+    const { key } = e.currentTarget.dataset
+    const filled = { ...this.data.dhAttrFilled }
+    filled[key] = !filled[key]
+    this.setData({ dhAttrFilled: filled })
+    const fd = { ...this.data.card.formData }
+    fd.dh_attr_filled = filled
+    store.updateCardFormData(this.cardId, fd)
+  },
+
+  // === 属性编辑 ===
+  startEditDhAttrs() {
+    const edit = {}
+    this.data.dhAttributes.forEach(a => {
+      edit[a.key] = a.value
+    })
+    this.setData({ editingDhAttrs: true, editDhAttrs: edit })
+  },
+
+  cancelEditDhAttrs() {
+    this.setData({ editingDhAttrs: false, editDhAttrs: {} })
+  },
+
+  saveDhAttrs() {
+    const fd = { ...this.data.card.formData }
+    const edit = this.data.editDhAttrs
+    Object.keys(edit).forEach(key => {
+      fd['dh_' + key] = Number(edit[key]) || 0
+    })
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDhAttrs: false, editDhAttrs: {} })
     this.loadCard()
   },
 
-  stopPropagation() {}
+  onDhAttrInput(e) {
+    const { key } = e.currentTarget.dataset
+    const edit = { ...this.data.editDhAttrs }
+    edit[key] = Number(e.detail.value) || 0
+    this.setData({ editDhAttrs: edit })
+  },
+
+  // === 当前情况编辑 ===
+  startEditDhStatus() {
+    this.setData({
+      editingDhStatus: true,
+      editDhStatus: {
+        mark1HP: this.data.dhMark1HP,
+        mark2HP: this.data.dhMark2HP,
+        mark3HP: this.data.dhMark3HP,
+        evasion: this.data.dhEvasion,
+        proficiency: this.data.dhProficiency,
+        armor: this.data.dhArmor,
+        armorMax: this.data.dhArmorMax,
+        hp: this.data.dhHP,
+        hpMax: this.data.dhHPMax,
+        stress: this.data.dhStress,
+        stressMax: this.data.dhStressMax,
+        hope: this.data.dhHope,
+        hopeMax: this.data.dhHopeMax,
+      }
+    })
+  },
+
+  cancelEditDhStatus() {
+    this.setData({ editingDhStatus: false })
+  },
+
+  saveDhStatus() {
+    const fd = { ...this.data.card.formData }
+    const e = this.data.editDhStatus
+    fd.dh_mark1_hp = parseInt(e.mark1HP) || 0
+    fd.dh_mark2_hp = parseInt(e.mark2HP) || 0
+    fd.dh_mark3_hp = parseInt(e.mark3HP) || 0
+    fd.dh_evasion = parseInt(e.evasion) || 0
+    fd.dh_proficiency = parseInt(e.proficiency) || 0
+    fd.dh_armor = parseInt(e.armor) || 0
+    fd.dh_armor_max = parseInt(e.armorMax) || 0
+    fd.dh_hp = parseInt(e.hp) || 0
+    fd.dh_hp_max = parseInt(e.hpMax) || 0
+    fd.dh_stress = parseInt(e.stress) || 0
+    fd.dh_stress_max = parseInt(e.stressMax) || 0
+    fd.dh_hope = parseInt(e.hope) || 0
+    fd.dh_hope_max = parseInt(e.hopeMax) || 0
+    // 护甲/生命/压力/希望：左侧不能超过右侧
+    if (fd.dh_armor > fd.dh_armor_max) fd.dh_armor = fd.dh_armor_max
+    if (fd.dh_hp > fd.dh_hp_max) fd.dh_hp = fd.dh_hp_max
+    if (fd.dh_stress > fd.dh_stress_max) fd.dh_stress = fd.dh_stress_max
+    if (fd.dh_hope > fd.dh_hope_max) fd.dh_hope = fd.dh_hope_max
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDhStatus: false })
+    this.loadCard()
+  },
+
+  onDhStatusInput(e) {
+    const { field } = e.currentTarget.dataset
+    const edit = { ...this.data.editDhStatus }
+    edit[field] = parseInt(e.detail.value) || 0
+    this.setData({ editDhStatus: edit })
+  },
+
+  onDhStatDelta(e) {
+    const { field, delta } = e.currentTarget.dataset
+    const d = parseInt(delta)
+    const fd = { ...this.data.card.formData }
+    const key = 'dh_' + field
+    const current = fd[key] ?? 0
+    let newVal = Math.max(0, current + d)
+    // 护甲/生命/压力/希望：左侧不能超过右侧
+    const fieldsWithMax = ['armor', 'hp', 'stress', 'hope']
+    if (fieldsWithMax.indexOf(field) !== -1) {
+      const maxVal = fd[key + '_max'] ?? 0
+      newVal = Math.min(newVal, maxVal)
+    }
+    fd[key] = newVal
+    store.updateCardFormData(this.cardId, fd)
+    this.loadCard()
+  },
+
+  // === 经历模块 ===
+  startEditDhExperiences() {
+    const items = this.data.dhExperiences
+    const snapshot = []
+    for (let i = 0; i < items.length; i++) {
+      snapshot.push({ key: items[i].key, label: items[i].label, value: items[i].value })
+    }
+    this.setData({ editingDhExperiences: true, dhExperiencesSnapshot: snapshot })
+  },
+
+  cancelEditDhExperiences() {
+    const snapshot = this.data.dhExperiencesSnapshot || []
+    const items = []
+    for (let i = 0; i < snapshot.length; i++) {
+      items.push({ key: snapshot[i].key, label: snapshot[i].label, value: snapshot[i].value })
+    }
+    this.setData({ editingDhExperiences: false, dhExperiences: items })
+  },
+
+  saveDhExperiences() {
+    const fd = { ...this.data.card.formData }
+    fd.dh_experiences = this.data.dhExperiences.map(it => ({ key: it.key, label: it.label, value: it.value }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDhExperiences: false })
+  },
+
+  onAddDhExperience() {
+    const items = [...this.data.dhExperiences]
+    const nextIdx = items.length
+    items.push({ key: 'dhexp_' + nextIdx, label: '', value: 0 })
+    this.setData({ dhExperiences: items })
+  },
+
+  onDeleteDhExperience(e) {
+    const { key } = e.currentTarget.dataset
+    this.setData({ dhExperiences: this.data.dhExperiences.filter(it => it.key !== key) })
+  },
+
+  onDhExperienceFieldInput(e) {
+    const { key, field } = e.currentTarget.dataset
+    const items = this.data.dhExperiences.map(it => {
+      if (it.key === key) {
+        const val = field === 'value' ? (parseInt(e.detail.value) || 0) : e.detail.value
+        return { ...it, [field]: val }
+      }
+      return it
+    })
+    this.setData({ dhExperiences: items })
+  },
+
+  // === 武器模块 ===
+  startEditDhWeapons() {
+    const items = this.data.dhWeapons
+    const snapshot = []
+    for (let i = 0; i < items.length; i++) {
+      snapshot.push({ key: items[i].key, name: items[i].name, info: items[i].info, dice: items[i].dice, hand: items[i].hand, properties: items[i].properties })
+    }
+    this.setData({ editingDhWeapons: true, dhWeaponsSnapshot: snapshot })
+  },
+
+  cancelEditDhWeapons() {
+    const snapshot = this.data.dhWeaponsSnapshot || []
+    const items = []
+    for (let i = 0; i < snapshot.length; i++) {
+      items.push({ key: snapshot[i].key, name: snapshot[i].name, info: snapshot[i].info, dice: snapshot[i].dice, hand: snapshot[i].hand, properties: snapshot[i].properties })
+    }
+    this.setData({ editingDhWeapons: false, dhWeapons: items })
+  },
+
+  saveDhWeapons() {
+    const fd = { ...this.data.card.formData }
+    fd.dh_weapons = this.data.dhWeapons.map(it => ({
+      key: it.key, name: it.name, info: it.info, dice: it.dice, hand: it.hand, properties: it.properties,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDhWeapons: false })
+  },
+
+  onAddDhWeapon() {
+    const items = [...this.data.dhWeapons]
+    const nextIdx = items.length
+    items.push({ key: 'dhwpn_' + nextIdx, name: '', info: '', dice: '', hand: '主手', properties: '' })
+    this.setData({ dhWeapons: items })
+  },
+
+  onDeleteDhWeapon(e) {
+    const { key } = e.currentTarget.dataset
+    this.setData({ dhWeapons: this.data.dhWeapons.filter(it => it.key !== key) })
+  },
+
+  onDhWeaponTap(e) {
+    if (this.data.editingDhWeapons) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.dhWeapons.find(it => it.key === key)
+    if (!item) return
+    this.setData({
+      dhWeaponDialogVisible: true,
+      dhWeaponDialogEditing: false,
+      dhWeaponDialogKey: key,
+      dhWeaponDialogName: item.name,
+      dhWeaponDialogInfo: item.info,
+      dhWeaponDialogDice: item.dice,
+      dhWeaponDialogHand: item.hand,
+      dhWeaponDialogProperties: item.properties,
+    })
+  },
+
+  closeDhWeaponDialog() {
+    this.setData({ dhWeaponDialogVisible: false })
+  },
+
+  startDhWeaponEdit() {
+    this.setData({ dhWeaponDialogEditing: true })
+  },
+
+  cancelDhWeaponEdit() {
+    const item = this.data.dhWeapons.find(it => it.key === this.data.dhWeaponDialogKey)
+    if (item) {
+      this.setData({
+        dhWeaponDialogEditing: false,
+        dhWeaponDialogName: item.name,
+        dhWeaponDialogInfo: item.info,
+        dhWeaponDialogDice: item.dice,
+        dhWeaponDialogHand: item.hand,
+        dhWeaponDialogProperties: item.properties,
+      })
+    } else {
+      this.setData({ dhWeaponDialogEditing: false })
+    }
+  },
+
+  applyDhWeaponEdit() {
+    const items = this.data.dhWeapons.map(it => {
+      if (it.key === this.data.dhWeaponDialogKey) {
+        return {
+          ...it,
+          name: this.data.dhWeaponDialogName,
+          info: this.data.dhWeaponDialogInfo,
+          dice: this.data.dhWeaponDialogDice,
+          hand: this.data.dhWeaponDialogHand,
+          properties: this.data.dhWeaponDialogProperties,
+        }
+      }
+      return it
+    })
+    const fd = { ...this.data.card.formData }
+    fd.dh_weapons = items.map(it => ({
+      key: it.key, name: it.name, info: it.info, dice: it.dice, hand: it.hand, properties: it.properties,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ dhWeaponDialogVisible: false, dhWeaponDialogEditing: false, dhWeapons: items })
+  },
+
+  onDhWeaponDialogInput(e) {
+    const { field } = e.currentTarget.dataset
+    const key = 'dhWeaponDialog' + field.charAt(0).toUpperCase() + field.slice(1)
+    this.setData({ [key]: e.detail.value })
+  },
+
+  onDeleteDhWeaponFromDialog() {
+    const key = this.data.dhWeaponDialogKey
+    const items = this.data.dhWeapons.filter(it => it.key !== key)
+    const fd = { ...this.data.card.formData }
+    fd.dh_weapons = items.map(it => ({
+      key: it.key, name: it.name, info: it.info, dice: it.dice, hand: it.hand, properties: it.properties,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ dhWeaponDialogVisible: false, dhWeapons: items })
+  },
+
+  // === 护甲模块 ===
+  startEditDhArmors() {
+    const items = this.data.dhArmors
+    const snapshot = []
+    for (let i = 0; i < items.length; i++) {
+      snapshot.push({ key: items[i].key, name: items[i].name, value: items[i].value, threshold: items[i].threshold, thresholdMax: items[i].thresholdMax, properties: items[i].properties })
+    }
+    this.setData({ editingDhArmors: true, dhArmorsSnapshot: snapshot })
+  },
+
+  cancelEditDhArmors() {
+    const snapshot = this.data.dhArmorsSnapshot || []
+    const items = []
+    for (let i = 0; i < snapshot.length; i++) {
+      items.push({ key: snapshot[i].key, name: snapshot[i].name, value: snapshot[i].value, threshold: snapshot[i].threshold, thresholdMax: snapshot[i].thresholdMax, properties: snapshot[i].properties })
+    }
+    this.setData({ editingDhArmors: false, dhArmors: items })
+  },
+
+  saveDhArmors() {
+    const fd = { ...this.data.card.formData }
+    fd.dh_armors = this.data.dhArmors.map(it => ({
+      key: it.key, name: it.name, value: it.value, threshold: it.threshold, thresholdMax: it.thresholdMax, properties: it.properties,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDhArmors: false })
+  },
+
+  onAddDhArmor() {
+    const items = [...this.data.dhArmors]
+    const nextIdx = items.length
+    items.push({ key: 'dharm_' + nextIdx, name: '', value: 0, threshold: 0, thresholdMax: 0, properties: '' })
+    this.setData({ dhArmors: items })
+  },
+
+  onDeleteDhArmor(e) {
+    const { key } = e.currentTarget.dataset
+    this.setData({ dhArmors: this.data.dhArmors.filter(it => it.key !== key) })
+  },
+
+  onDhArmorTap(e) {
+    if (this.data.editingDhArmors) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.dhArmors.find(it => it.key === key)
+    if (!item) return
+    this.setData({
+      dhArmorDialogVisible: true,
+      dhArmorDialogEditing: false,
+      dhArmorDialogKey: key,
+      dhArmorDialogName: item.name,
+      dhArmorDialogValue: item.value,
+      dhArmorDialogThreshold: item.threshold,
+      dhArmorDialogThresholdMax: item.thresholdMax,
+      dhArmorDialogProperties: item.properties,
+    })
+  },
+
+  closeDhArmorDialog() {
+    this.setData({ dhArmorDialogVisible: false })
+  },
+
+  startDhArmorEdit() {
+    this.setData({ dhArmorDialogEditing: true })
+  },
+
+  cancelDhArmorEdit() {
+    const item = this.data.dhArmors.find(it => it.key === this.data.dhArmorDialogKey)
+    if (item) {
+      this.setData({
+        dhArmorDialogEditing: false,
+        dhArmorDialogName: item.name,
+        dhArmorDialogValue: item.value,
+        dhArmorDialogThreshold: item.threshold,
+        dhArmorDialogThresholdMax: item.thresholdMax,
+        dhArmorDialogProperties: item.properties,
+      })
+    } else {
+      this.setData({ dhArmorDialogEditing: false })
+    }
+  },
+
+  applyDhArmorEdit() {
+    const items = this.data.dhArmors.map(it => {
+      if (it.key === this.data.dhArmorDialogKey) {
+        return {
+          ...it,
+          name: this.data.dhArmorDialogName,
+          value: this.data.dhArmorDialogValue,
+          threshold: this.data.dhArmorDialogThreshold,
+          thresholdMax: this.data.dhArmorDialogThresholdMax,
+          properties: this.data.dhArmorDialogProperties,
+        }
+      }
+      return it
+    })
+    const fd = { ...this.data.card.formData }
+    fd.dh_armors = items.map(it => ({
+      key: it.key, name: it.name, value: it.value, threshold: it.threshold, thresholdMax: it.thresholdMax, properties: it.properties,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ dhArmorDialogVisible: false, dhArmorDialogEditing: false, dhArmors: items })
+  },
+
+  onDhArmorDialogInput(e) {
+    const { field } = e.currentTarget.dataset
+    const key = 'dhArmorDialog' + field.charAt(0).toUpperCase() + field.slice(1)
+    const val = (field === 'value' || field === 'threshold' || field === 'thresholdMax') ? (parseInt(e.detail.value) || 0) : e.detail.value
+    this.setData({ [key]: val })
+  },
+
+  onDeleteDhArmorFromDialog() {
+    const key = this.data.dhArmorDialogKey
+    const items = this.data.dhArmors.filter(it => it.key !== key)
+    const fd = { ...this.data.card.formData }
+    fd.dh_armors = items.map(it => ({
+      key: it.key, name: it.name, value: it.value, threshold: it.threshold, thresholdMax: it.thresholdMax, properties: it.properties,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ dhArmorDialogVisible: false, dhArmors: items })
+  },
+
+  // === 库存模块 ===
+  startEditDhInventory() {
+    this.setData({ editingDhInventory: true, editDhInventory: this.data.dhInventory })
+  },
+
+  cancelEditDhInventory() {
+    this.setData({ editingDhInventory: false, editDhInventory: '' })
+  },
+
+  saveDhInventory() {
+    const fd = { ...this.data.card.formData }
+    fd.dh_inventory = this.data.editDhInventory
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDhInventory: false, dhInventory: this.data.editDhInventory })
+  },
+
+  onDhInventoryInput(e) {
+    this.setData({ editDhInventory: e.detail.value })
+  },
+
+  // === 背景故事模块 ===
+  startEditDhBackstory() {
+    this.setData({
+      editingDhBackstory: true,
+      editDhBackstoryIntro: this.data.dhBackstoryIntro,
+      editDhBackstoryTraits: this.data.dhBackstoryTraits,
+      editDhAdventureNote: this.data.dhAdventureNote,
+    })
+  },
+
+  cancelEditDhBackstory() {
+    this.setData({ editingDhBackstory: false })
+  },
+
+  onDhBackstoryIntroInput(e) {
+    this.setData({ editDhBackstoryIntro: e.detail.value })
+  },
+
+  onDhBackstoryTraitsInput(e) {
+    this.setData({ editDhBackstoryTraits: e.detail.value })
+  },
+
+  onDhAdventureNoteInput(e) {
+    this.setData({ editDhAdventureNote: e.detail.value })
+  },
+
+  saveDhBackstoryNotes() {
+    const fd = { ...this.data.card.formData }
+    fd.dh_backstory_intro = this.data.editDhBackstoryIntro
+    fd.dh_backstory_traits = this.data.editDhBackstoryTraits
+    fd.dh_adventure_note = this.data.editDhAdventureNote
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({
+      editingDhBackstory: false,
+      dhBackstoryIntro: this.data.editDhBackstoryIntro,
+      dhBackstoryTraits: this.data.editDhBackstoryTraits,
+      dhAdventureNote: this.data.editDhAdventureNote,
+    })
+  },
+
+  // === 特性模块 ===
+  startEditDhClassFeatures() {
+    const items = this.data.dhClassFeatures
+    const snapshot = []
+    for (let i = 0; i < items.length; i++) {
+      snapshot.push({ key: items[i].key, name: items[i].name, description: items[i].description })
+    }
+    this.setData({ editingDhClassFeatures: true, dhClassFeaturesSnapshot: snapshot })
+  },
+
+  cancelEditDhClassFeatures() {
+    const snapshot = this.data.dhClassFeaturesSnapshot || []
+    const items = []
+    for (let i = 0; i < snapshot.length; i++) {
+      items.push({ key: snapshot[i].key, name: snapshot[i].name, description: snapshot[i].description })
+    }
+    this.setData({ editingDhClassFeatures: false, dhClassFeatures: items })
+  },
+
+  saveDhClassFeatures() {
+    const fd = { ...this.data.card.formData }
+    fd.dh_class_features = this.data.dhClassFeatures.map(it => ({ key: it.key, name: it.name, description: it.description }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDhClassFeatures: false })
+  },
+
+  onAddDhClassFeature() {
+    const items = [...this.data.dhClassFeatures]
+    const nextIdx = items.length
+    items.push({ key: 'dhcf_' + nextIdx, name: '', description: '' })
+    this.setData({ dhClassFeatures: items })
+  },
+
+  onDeleteDhClassFeature(e) {
+    const { key } = e.currentTarget.dataset
+    this.setData({ dhClassFeatures: this.data.dhClassFeatures.filter(it => it.key !== key) })
+  },
+
+  startEditDhRaceFeatures() {
+    const items = this.data.dhRaceFeatures
+    const snapshot = []
+    for (let i = 0; i < items.length; i++) {
+      snapshot.push({ key: items[i].key, name: items[i].name, description: items[i].description })
+    }
+    this.setData({ editingDhRaceFeatures: true, dhRaceFeaturesSnapshot: snapshot })
+  },
+
+  cancelEditDhRaceFeatures() {
+    const snapshot = this.data.dhRaceFeaturesSnapshot || []
+    const items = []
+    for (let i = 0; i < snapshot.length; i++) {
+      items.push({ key: snapshot[i].key, name: snapshot[i].name, description: snapshot[i].description })
+    }
+    this.setData({ editingDhRaceFeatures: false, dhRaceFeatures: items })
+  },
+
+  saveDhRaceFeatures() {
+    const fd = { ...this.data.card.formData }
+    fd.dh_race_features = this.data.dhRaceFeatures.map(it => ({ key: it.key, name: it.name, description: it.description }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDhRaceFeatures: false })
+  },
+
+  onAddDhRaceFeature() {
+    const items = [...this.data.dhRaceFeatures]
+    const nextIdx = items.length
+    items.push({ key: 'dhrf_' + nextIdx, name: '', description: '' })
+    this.setData({ dhRaceFeatures: items })
+  },
+
+  onDeleteDhRaceFeature(e) {
+    const { key } = e.currentTarget.dataset
+    this.setData({ dhRaceFeatures: this.data.dhRaceFeatures.filter(it => it.key !== key) })
+  },
+
+  onDhFeatureTap(e) {
+    const { key, type } = e.currentTarget.dataset
+    const list = type === 'class' ? this.data.dhClassFeatures : this.data.dhRaceFeatures
+    const item = list.find(it => it.key === key)
+    if (!item) return
+    this.setData({
+      dhFeatureDialogVisible: true,
+      dhFeatureDialogEditing: false,
+      dhFeatureDialogKey: key,
+      dhFeatureDialogType: type,
+      dhFeatureDialogName: item.name,
+      dhFeatureDialogDesc: item.description,
+    })
+  },
+
+  closeDhFeatureDialog() {
+    this.setData({ dhFeatureDialogVisible: false })
+  },
+
+  startDhFeatureEdit() {
+    this.setData({ dhFeatureDialogEditing: true })
+  },
+
+  cancelDhFeatureEdit() {
+    const type = this.data.dhFeatureDialogType
+    const list = type === 'class' ? this.data.dhClassFeatures : this.data.dhRaceFeatures
+    const item = list.find(it => it.key === this.data.dhFeatureDialogKey)
+    if (item) {
+      this.setData({
+        dhFeatureDialogEditing: false,
+        dhFeatureDialogName: item.name,
+        dhFeatureDialogDesc: item.description,
+      })
+    } else {
+      this.setData({ dhFeatureDialogEditing: false })
+    }
+  },
+
+  saveDhFeature() {
+    const type = this.data.dhFeatureDialogType
+    const listKey = type === 'class' ? 'dhClassFeatures' : 'dhRaceFeatures'
+    const items = this.data[listKey].map(it => {
+      if (it.key === this.data.dhFeatureDialogKey) {
+        return { key: it.key, name: this.data.dhFeatureDialogName, description: this.data.dhFeatureDialogDesc }
+      }
+      return it
+    })
+    const fd = { ...this.data.card.formData }
+    const storeKey = type === 'class' ? 'dh_class_features' : 'dh_race_features'
+    fd[storeKey] = items.map(it => ({ key: it.key, name: it.name, description: it.description }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ dhFeatureDialogVisible: false, dhFeatureDialogEditing: false, [listKey]: items })
+  },
+
+  onDhFeatureDialogInput(e) {
+    const { field } = e.currentTarget.dataset
+    const key = 'dhFeatureDialog' + field.charAt(0).toUpperCase() + field.slice(1)
+    this.setData({ [key]: e.detail.value })
+  },
+
+  onDeleteDhFeatureFromDialog() {
+    const type = this.data.dhFeatureDialogType
+    const listKey = type === 'class' ? 'dhClassFeatures' : 'dhRaceFeatures'
+    const key = this.data.dhFeatureDialogKey
+    const items = this.data[listKey].filter(it => it.key !== key)
+    const fd = { ...this.data.card.formData }
+    const storeKey = type === 'class' ? 'dh_class_features' : 'dh_race_features'
+    fd[storeKey] = items.map(it => ({ key: it.key, name: it.name, description: it.description }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ dhFeatureDialogVisible: false, [listKey]: items })
+  },
+
+  // === 领域卡模块 ===
+  startEditDhDomainCards() {
+    const items = this.data.dhDomainCards
+    const snapshot = []
+    for (let i = 0; i < items.length; i++) {
+      snapshot.push({ key: items[i].key, name: items[i].name, domain: items[i].domain, ability: items[i].ability, rc: items[i].rc, description: items[i].description })
+    }
+    const treasuryItems = this.data.dhTreasuryCards
+    const treasurySnapshot = []
+    for (let i = 0; i < treasuryItems.length; i++) {
+      treasurySnapshot.push({ key: treasuryItems[i].key, name: treasuryItems[i].name, domain: treasuryItems[i].domain, ability: treasuryItems[i].ability, rc: treasuryItems[i].rc, description: treasuryItems[i].description })
+    }
+    this.setData({ editingDhDomainCards: true, dhDomainCardsSnapshot: snapshot, dhTreasuryCardsSnapshot: treasurySnapshot })
+  },
+
+  cancelEditDhDomainCards() {
+    const snapshot = this.data.dhDomainCardsSnapshot || []
+    const items = []
+    for (let i = 0; i < snapshot.length; i++) {
+      items.push({ key: snapshot[i].key, name: snapshot[i].name, domain: snapshot[i].domain, ability: snapshot[i].ability, rc: snapshot[i].rc, description: snapshot[i].description })
+    }
+    const treasurySnapshot = this.data.dhTreasuryCardsSnapshot || []
+    const treasuryItems = []
+    for (let i = 0; i < treasurySnapshot.length; i++) {
+      treasuryItems.push({ key: treasurySnapshot[i].key, name: treasurySnapshot[i].name, domain: treasurySnapshot[i].domain, ability: treasurySnapshot[i].ability, rc: treasurySnapshot[i].rc, description: treasurySnapshot[i].description })
+    }
+    this.setData({ editingDhDomainCards: false, dhDomainCards: items, dhTreasuryCards: treasuryItems })
+  },
+
+  saveDhDomainCards() {
+    const fd = { ...this.data.card.formData }
+    fd.dh_domain_cards = this.data.dhDomainCards.map(it => ({
+      key: it.key, name: it.name, domain: it.domain, ability: it.ability, rc: it.rc, description: it.description,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDhDomainCards: false })
+  },
+
+  onAddDhDomainCard() {
+    const items = [...this.data.dhDomainCards]
+    items.push({ key: _dhNextKey('dhdc'), name: '', domain: '', ability: '', rc: 0, description: '' })
+    this.setData({ dhDomainCards: items })
+  },
+
+  onDeleteDhDomainCard(e) {
+    const { key } = e.currentTarget.dataset
+    this.setData({ dhDomainCards: this.data.dhDomainCards.filter(it => it.key !== key) })
+  },
+
+  onDhDomainCardTap(e) {
+    if (this.data.editingDhDomainCards) return
+    const { key } = e.currentTarget.dataset
+    const item = this.data.dhDomainCards.find(it => it.key === key)
+    if (!item) return
+    this.setData({
+      dhDomainDialogVisible: true,
+      dhDomainDialogEditing: false,
+      dhDomainDialogKey: key,
+      dhDomainDialogName: item.name,
+      dhDomainDialogDomain: item.domain,
+      dhDomainDialogAbility: item.ability,
+      dhDomainDialogRC: item.rc,
+      dhDomainDialogDesc: item.description,
+    })
+  },
+
+  closeDhDomainDialog() {
+    this.setData({ dhDomainDialogVisible: false })
+  },
+
+  startDhDomainEdit() {
+    this.setData({ dhDomainDialogEditing: true })
+  },
+
+  cancelDhDomainEdit() {
+    const item = this.data.dhDomainCards.find(it => it.key === this.data.dhDomainDialogKey)
+    if (item) {
+      this.setData({
+        dhDomainDialogEditing: false,
+        dhDomainDialogName: item.name,
+        dhDomainDialogDomain: item.domain,
+        dhDomainDialogAbility: item.ability,
+        dhDomainDialogRC: item.rc,
+        dhDomainDialogDesc: item.description,
+      })
+    } else {
+      this.setData({ dhDomainDialogEditing: false })
+    }
+  },
+
+  applyDhDomainEdit() {
+    const items = this.data.dhDomainCards.map(it => {
+      if (it.key === this.data.dhDomainDialogKey) {
+        return {
+          ...it,
+          name: this.data.dhDomainDialogName,
+          domain: this.data.dhDomainDialogDomain,
+          ability: this.data.dhDomainDialogAbility,
+          rc: this.data.dhDomainDialogRC,
+          description: this.data.dhDomainDialogDesc,
+        }
+      }
+      return it
+    })
+    const fd = { ...this.data.card.formData }
+    fd.dh_domain_cards = items.map(it => ({
+      key: it.key, name: it.name, domain: it.domain, ability: it.ability, rc: it.rc, description: it.description,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ dhDomainDialogVisible: false, dhDomainDialogEditing: false, dhDomainCards: items })
+  },
+
+  onDhDomainDialogInput(e) {
+    const { field } = e.currentTarget.dataset
+    const key = 'dhDomainDialog' + field.charAt(0).toUpperCase() + field.slice(1)
+    const val = field === 'RC' ? (parseInt(e.detail.value) || 0) : e.detail.value
+    this.setData({ [key]: val })
+  },
+
+  onDeleteDhDomainFromDialog() {
+    const key = this.data.dhDomainDialogKey
+    const items = this.data.dhDomainCards.filter(it => it.key !== key)
+    const fd = { ...this.data.card.formData }
+    fd.dh_domain_cards = items.map(it => ({
+      key: it.key, name: it.name, domain: it.domain, ability: it.ability, rc: it.rc, description: it.description,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ dhDomainDialogVisible: false, dhDomainCards: items })
+  },
+
+  // === 宝库模块 ===
+  startEditDhTreasuryCards() {
+    const items = this.data.dhTreasuryCards
+    const snapshot = []
+    for (let i = 0; i < items.length; i++) {
+      snapshot.push({ key: items[i].key, name: items[i].name, domain: items[i].domain, ability: items[i].ability, rc: items[i].rc, description: items[i].description })
+    }
+    const domainItems = this.data.dhDomainCards
+    const domainSnapshot = []
+    for (let i = 0; i < domainItems.length; i++) {
+      domainSnapshot.push({ key: domainItems[i].key, name: domainItems[i].name, domain: domainItems[i].domain, ability: domainItems[i].ability, rc: domainItems[i].rc, description: domainItems[i].description })
+    }
+    this.setData({ editingDhTreasuryCards: true, dhTreasuryCardsSnapshot: snapshot, dhDomainCardsSnapshot: domainSnapshot })
+  },
+
+  cancelEditDhTreasuryCards() {
+    const snapshot = this.data.dhTreasuryCardsSnapshot || []
+    const items = []
+    for (let i = 0; i < snapshot.length; i++) {
+      items.push({ key: snapshot[i].key, name: snapshot[i].name, domain: snapshot[i].domain, ability: snapshot[i].ability, rc: snapshot[i].rc, description: snapshot[i].description })
+    }
+    const domainSnapshot = this.data.dhDomainCardsSnapshot || []
+    const domainItems = []
+    for (let i = 0; i < domainSnapshot.length; i++) {
+      domainItems.push({ key: domainSnapshot[i].key, name: domainSnapshot[i].name, domain: domainSnapshot[i].domain, ability: domainSnapshot[i].ability, rc: domainSnapshot[i].rc, description: domainSnapshot[i].description })
+    }
+    this.setData({ editingDhTreasuryCards: false, dhTreasuryCards: items, dhDomainCards: domainItems })
+  },
+
+  saveDhTreasuryCards() {
+    const fd = { ...this.data.card.formData }
+    fd.dh_treasury_cards = this.data.dhTreasuryCards.map(it => ({
+      key: it.key, name: it.name, domain: it.domain, ability: it.ability, rc: it.rc, description: it.description,
+    }))
+    store.updateCardFormData(this.cardId, fd)
+    this.setData({ editingDhTreasuryCards: false })
+  },
+
+  onAddDhTreasuryCard() {
+    const items = [...this.data.dhTreasuryCards]
+    items.push({ key: _dhNextKey('dhtc'), name: '', domain: '', ability: '', rc: 0, description: '' })
+    this.setData({ dhTreasuryCards: items })
+  },
+
+  onDeleteDhTreasuryCard(e) {
+    const { key } = e.currentTarget.dataset
+    this.setData({ dhTreasuryCards: this.data.dhTreasuryCards.filter(it => it.key !== key) })
+  },
+
+  // === 转移 ===
+  onTransferDhToTreasury(e) {
+    const { key } = e.currentTarget.dataset
+    const domainCards = this.data.dhDomainCards
+    const idx = domainCards.findIndex(it => it.key === key)
+    if (idx < 0) return
+    const item = domainCards[idx]
+    const newDomainCards = domainCards.filter(it => it.key !== key)
+    const treasuryCards = this.data.dhTreasuryCards
+    const insertIdx = this._findLastFilledIdx(treasuryCards) + 1
+    treasuryCards.splice(insertIdx, 0, { ...item, key: _dhNextKey('dhtc') })
+    this.setData({ dhDomainCards: newDomainCards, dhTreasuryCards: treasuryCards })
+  },
+
+  onTransferTreasuryToDh(e) {
+    const { key } = e.currentTarget.dataset
+    const treasuryCards = this.data.dhTreasuryCards
+    const idx = treasuryCards.findIndex(it => it.key === key)
+    if (idx < 0) return
+    const item = treasuryCards[idx]
+    const newTreasuryCards = treasuryCards.filter(it => it.key !== key)
+    const domainCards = this.data.dhDomainCards
+    const insertIdx = this._findLastFilledIdx(domainCards) + 1
+    domainCards.splice(insertIdx, 0, { ...item, key: _dhNextKey('dhdc') })
+    this.setData({ dhDomainCards: domainCards, dhTreasuryCards: newTreasuryCards })
+  },
+
+  _findLastFilledIdx(items) {
+    for (let i = items.length - 1; i >= 0; i--) {
+      if (items[i].name || items[i].domain || items[i].ability || items[i].description) return i
+    }
+    return -1
+  },
 })

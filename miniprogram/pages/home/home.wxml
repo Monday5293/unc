@@ -44,7 +44,7 @@
     </view>
 
     <view wx:if="{{filteredCards.length > 0}}" class="card-grid">
-      <view wx:for="{{filteredCards}}" wx:key="id" class="card-grid-item">
+      <view wx:for="{{filteredCards}}" wx:key="id" class="card-grid-item" hover-class="none">
         <card-item
           card="{{item}}"
           system="{{currentSystemInfo}}"

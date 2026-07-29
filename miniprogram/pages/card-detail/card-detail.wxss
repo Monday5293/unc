@@ -1,3 +1,7 @@
+page {
+  background-color: #1A1714;
+}
+
 .detail-page {
   min-height: 100vh;
   background-color: #1A1714;
@@ -146,6 +150,11 @@
   display: block;
   font-size: 32rpx;
   font-weight: 700;
+}
+
+.stat-value-small {
+  font-size: 22rpx;
+  line-height: 1.3;
 }
 
 .stat-label {
@@ -934,9 +943,19 @@
 }
 
 .spell-slot-val {
-  font-size: 22rpx;
+  font-size: 28rpx;
   color: #E8DCC4;
   font-weight: 600;
+  flex: 1;
+  text-align: center;
+}
+
+.spell-slot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 20rpx;
 }
 
 .spell-slot-inputs {
@@ -952,6 +971,20 @@
   line-height: 40rpx;
 }
 
+.spell-slot-btn {
+  width: 36rpx;
+  height: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: #E8DCC4;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(232, 220, 196, 0.15);
+  border-radius: 6rpx;
+  flex-shrink: 0;
+}
+
 .spell-slot-input {
   width: 56rpx;
   font-size: 20rpx;
@@ -965,6 +998,98 @@
   padding: 0;
   box-sizing: border-box;
   vertical-align: middle;
+}
+
+/* ===== DND 技能网格 ===== */
+.dnd-skills-grid {
+  display: flex;
+  gap: 6rpx;
+}
+
+.dnd-skills-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dnd-skill-cell {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 12rpx;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 4rpx solid transparent;
+  border-bottom: 1rpx solid rgba(232, 220, 196, 0.05);
+}
+
+.dnd-skill-cell:last-child {
+  border-bottom: none;
+}
+
+.dnd-skill-first {
+  border-top-left-radius: 6rpx;
+  border-top-right-radius: 6rpx;
+}
+
+.dnd-skill-last {
+  border-bottom-left-radius: 6rpx;
+  border-bottom-right-radius: 6rpx;
+}
+
+.dnd-skill-name {
+  flex: 1;
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.65);
+}
+
+.dnd-skill-mod {
+  width: 64rpx;
+  text-align: center;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.dnd-skill-edit-inputs {
+  display: flex;
+  align-items: center;
+  gap: 9rpx;
+}
+
+.dnd-skill-mod-input {
+  width: 56rpx;
+  text-align: center;
+  font-size: 19rpx;
+  font-weight: 600;
+  color: #E8DCC4;
+  height: 36rpx;
+  line-height: 36rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(232, 220, 196, 0.15);
+  border-radius: 4rpx;
+  padding: 0 2rpx;
+  box-sizing: border-box;
+}
+
+.dnd-skill-total-input {
+  width: 56rpx;
+  text-align: center;
+  font-size: 19rpx;
+  font-weight: 700;
+  color: #E8DCC4;
+  height: 36rpx;
+  line-height: 36rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(232, 220, 196, 0.15);
+  border-radius: 4rpx;
+  padding: 0 2rpx;
+  box-sizing: border-box;
+}
+
+.dnd-skill-total {
+  width: 64rpx;
+  text-align: center;
+  font-size: 20rpx;
+  font-weight: 700;
+  color: #E8DCC4;
 }
 
 /* ===== 标签区域 ===== */
@@ -996,43 +1121,380 @@
   font-size: 20rpx;
 }
 
-/* ===== Daggerheart 3列属性 ===== */
-.dh-attr-grid {
+/* ===== Daggerheart 3x2 属性网格 ===== */
+.dh-attr-grid-3x2 {
   display: flex;
   flex-wrap: wrap;
   gap: 16rpx;
 }
 
-.dh-attr-cell {
-  width: calc(33.33% - 11rpx);
+.dh-attr-cell-v2 {
+  width: calc((100% - 32rpx) / 3);
   padding: 16rpx;
   border-radius: 12rpx;
   background-color: rgba(255, 255, 255, 0.03);
   box-sizing: border-box;
-}
-
-.dh-attr-top {
+  text-align: center;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
-.dh-attr-label {
+.dh-attr-star {
+  position: absolute;
+  top: 6rpx;
+  right: 6rpx;
+  font-size: 24rpx;
+  padding: 4rpx;
+}
+
+.dh-attr-label-v2 {
   font-size: 20rpx;
   color: rgba(232, 220, 196, 0.4);
+  margin-top: 8rpx;
 }
 
-.dh-attr-abbr {
+.dh-attr-abbr-v2 {
   font-size: 16rpx;
   letter-spacing: 2rpx;
   color: rgba(232, 220, 196, 0.15);
+  margin-bottom: 8rpx;
 }
 
-.dh-attr-val {
-  display: block;
+.dh-attr-val-v2 {
   font-size: 40rpx;
   font-weight: 700;
+  line-height: 1;
+}
+
+.dh-attr-input-v2 {
+  width: 80%;
+  height: 48rpx;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #E8DCC4;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(232, 220, 196, 0.15);
+  border-radius: 8rpx;
+}
+
+.dh-attr-subs {
+  display: flex;
+  justify-content: center;
+  gap: 12rpx;
+  margin: 8rpx 0;
+}
+
+.dh-attr-sub {
+  font-size: 16rpx;
+  color: rgba(232, 220, 196, 0.3);
+}
+
+/* ===== Daggerheart 当前情况模块 ===== */
+.dh-threshold-section {
+  margin-bottom: 24rpx;
+}
+
+.dh-threshold-row {
+  display: flex;
+  gap: 8rpx;
+  align-items: stretch;
+}
+
+.dh-threshold-label-cell {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8rpx 4rpx;
+  border-radius: 8rpx;
+  background-color: rgba(255, 255, 255, 0.03);
+  text-align: center;
+}
+
+.dh-threshold-zh {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.5);
+  line-height: 1.4;
+}
+
+.dh-threshold-en {
+  font-size: 16rpx;
+  color: rgba(232, 220, 196, 0.2);
+  line-height: 1.4;
+}
+
+.dh-threshold-num-cell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rpx 4rpx;
+  border-radius: 8rpx;
+  background-color: rgba(255, 255, 255, 0.05);
+  text-align: center;
+}
+
+.dh-threshold-input {
+  width: 100%;
+  height: 48rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #E8DCC4;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(232, 220, 196, 0.1);
+  border-radius: 8rpx;
+}
+
+.dh-threshold-val {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #E8DCC4;
+}
+
+.dh-stat-row {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.dh-stat-box {
+  flex: 1;
+  padding: 16rpx;
+  border-radius: 12rpx;
+  background-color: rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dh-stat-label {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.4);
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.dh-stat-input {
+  width: 80%;
+  height: 48rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #E8DCC4;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(232, 220, 196, 0.1);
+  border-radius: 8rpx;
+}
+
+.dh-stat-val {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #E8DCC4;
+}
+
+.dh-sub-section {
+  margin-bottom: 24rpx;
+}
+
+.dh-sub-section:last-child {
+  margin-bottom: 0;
+}
+
+.dh-sub-title {
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.5);
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.dh-bar-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+}
+
+.dh-bar-input {
+  width: 100rpx;
+  height: 48rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #E8DCC4;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(232, 220, 196, 0.1);
+  border-radius: 8rpx;
+}
+
+.dh-bar-sep {
+  font-size: 24rpx;
+  color: rgba(232, 220, 196, 0.3);
+}
+
+.dh-bar-row {
   margin-top: 8rpx;
+}
+
+.dh-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.dh-bar-val {
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.dh-bar-btns {
+  display: flex;
+  gap: 8rpx;
+}
+
+.dh-bar-btn {
+  width: 36rpx;
+  height: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: #E8DCC4;
+  background: rgba(232, 220, 196, 0.08);
+  border: 1px solid rgba(232, 220, 196, 0.15);
+  border-radius: 6rpx;
+}
+
+.dh-bar-btn:active {
+  background: rgba(232, 220, 196, 0.18);
+  color: rgba(232, 220, 196, 0.95);
+}
+
+.dh-bar-bg {
+  height: 12rpx;
+  border-radius: 100rpx;
+  background-color: rgba(232, 220, 196, 0.08);
+  overflow: hidden;
+}
+
+.dh-bar-fill {
+  height: 100%;
+  border-radius: 100rpx;
+}
+
+.dh-bar-dots {
+  display: flex;
+  gap: 8rpx;
+  margin-top: 8rpx;
+}
+
+.dh-bar-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 220, 196, 0.2);
+  box-sizing: border-box;
+}
+
+.dh-bar-dot.filled {
+  border-color: transparent;
+}
+
+/* ===== Daggerheart 经历输入 ===== */
+.dh-exp-input {
+  font-size: 22rpx;
+  color: #E8DCC4;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(232, 220, 196, 0.1);
+  border-radius: 6rpx;
+  padding: 6rpx 12rpx;
+  height: 40rpx;
+  flex: 1;
+}
+
+.dh-exp-val-input {
+  width: 100rpx;
+  flex: none;
+  text-align: center;
+  margin-left: 12rpx;
+}
+
+/* ===== Daggerheart 库存模块 ===== */
+.dh-inventory-edit {
+  width: 100%;
+}
+
+.dh-inventory-textarea {
+  width: 100%;
+  height: 300rpx;
+  font-size: 22rpx;
+  line-height: 1.6;
+  color: #E8DCC4;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(232, 220, 196, 0.1);
+  border-radius: 12rpx;
+  padding: 16rpx;
+  box-sizing: border-box;
+}
+
+.dh-inventory-view {
+  min-height: 120rpx;
+  padding: 16rpx;
+  border-radius: 12rpx;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(232, 220, 196, 0.06);
+}
+
+.dh-inventory-text {
+  font-size: 22rpx;
+  line-height: 1.6;
+  color: rgba(232, 220, 196, 0.6);
+  white-space: pre-wrap;
+}
+
+.dh-inventory-placeholder {
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.2);
+  font-style: italic;
+}
+
+/* ===== Daggerheart 背景故事模块 ===== */
+.dh-backstory-block {
+  margin-bottom: 20rpx;
+}
+
+.dh-backstory-block:last-child {
+  margin-bottom: 0;
+}
+
+.dh-backstory-text {
+  font-size: 22rpx;
+  line-height: 1.6;
+  color: rgba(232, 220, 196, 0.55);
+  padding: 12rpx 16rpx;
+  border-radius: 8rpx;
+  background: rgba(255, 255, 255, 0.03);
+  display: block;
+  white-space: pre-wrap;
+}
+
+.dh-note-entry {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 16rpx;
+  border-radius: 8rpx;
+  border: 1px solid;
+  margin-bottom: 8rpx;
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.5);
+  line-height: 1.5;
+}
+
+.dh-note-entry:last-child {
+  margin-bottom: 0;
 }
 
 /* ===== 故事文本 ===== */
@@ -1118,37 +1580,113 @@
   height: 100%;
 }
 
-/* 新增条目按钮 */
-.add-entry-btn {
-  margin-top: 16rpx;
-  padding: 14rpx;
-  border-radius: 8rpx;
-  border: 1px dashed;
-  text-align: center;
-  font-size: 22rpx;
+/* 财富网格 */
+.wealth-grid {
+  display: flex;
+  gap: 8rpx;
 }
 
-.add-entry-btn:active {
-  background: rgba(232, 220, 196, 0.04);
+.wealth-item {
+  flex: 1;
+  padding: 12rpx 6rpx;
+  border-radius: 8rpx;
+  border: 1px solid;
+  text-align: center;
+}
+
+.wealth-label {
+  display: block;
+  font-size: 16rpx;
+  color: rgba(232, 220, 196, 0.4);
+  margin-bottom: 6rpx;
+}
+
+.wealth-value {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: rgba(232, 220, 196, 0.7);
+}
+
+.wealth-input {
+  width: 100%;
+  font-size: 24rpx;
+  font-weight: 700;
+  text-align: center;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.wealth-total {
+  margin-top: 16rpx;
+  padding: 14rpx 20rpx;
+  border-radius: 10rpx;
+  border: 1px solid;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wealth-total-label {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.5);
+}
+
+.wealth-total-value {
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+/* DND 背包物品预览 */
+.dnd-backpack-preview {
+  margin-top: 8rpx;
+  border-radius: 10rpx;
+  border: 1px solid;
+  overflow: hidden;
+}
+
+.dnd-backpack-scroll {
+  height: 267rpx;
+  padding: 16rpx;
+  box-sizing: border-box;
+}
+
+.dnd-backpack-text {
+  display: block;
+  font-size: 22rpx;
+  line-height: 1.6;
+  color: rgba(232, 220, 196, 0.7);
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+.dnd-backpack-placeholder {
+  display: block;
+  padding: 24rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.25);
 }
 
 /* 经历条目删除按钮 */
 .exp-delete-btn {
   position: absolute;
-  right: 12rpx;
+  right: 8rpx;
   top: 50%;
   transform: translateY(-50%);
-  width: 32rpx;
-  height: 32rpx;
-  border-radius: 6rpx;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 8rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 22rpx;
+  font-size: 24rpx;
   color: #fff;
   font-weight: 700;
   line-height: 1;
+  z-index: 10;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.3);
 }
 
 .exp-delete-btn:active {
@@ -1170,13 +1708,13 @@
 }
 
 .experience-header-label:first-child {
-  width: 140rpx;
-  flex-shrink: 0;
+  flex: 1;
 }
 
 .experience-header-label:last-child {
-  flex: 1;
-  margin-left: 25rpx;
+  width: 100rpx;
+  flex-shrink: 0;
+  margin-left: 0;
 }
 
 /* 经历条目内竖线分隔 */
@@ -1190,8 +1728,7 @@
 
 /* 经历条目：左右列与表头对齐 */
 .experience-entry-label {
-  width: 140rpx;
-  flex-shrink: 0;
+  flex: 1;
   font-size: 22rpx;
   font-weight: 500;
   color: rgba(232, 220, 196, 0.7);
@@ -1204,14 +1741,17 @@
   color: rgba(232, 220, 196, 0.25);
 }
 
-.experience-entry-value {
-  flex: 1;
+.dh-exp-header-right {
+  text-align: right;
+}
+
+.dh-exp-value {
+  width: 100rpx;
+  flex-shrink: 0;
+  text-align: right;
   font-size: 22rpx;
   color: rgba(232, 220, 196, 0.35);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-left: 0;
 }
 
 /* 经历弹窗编辑表单 */
@@ -1416,24 +1956,14 @@
   min-width: 0;
 }
 
-/* 区域编辑按钮 */
-.section-edit-btns {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
+.collapse-btn {
+  font-size: 20rpx;
+  padding: 4rpx 8rpx;
+  margin-right: 4rpx;
+  opacity: 0.5;
 }
-
-.section-edit-btn {
-  padding: 4rpx 12rpx;
-  border-radius: 6rpx;
-  font-size: 18rpx;
-  border: 1rpx solid;
-  opacity: 0.7;
-}
-
-.section-edit-btn.primary {
-  font-weight: 600;
-  opacity: 1;
+.collapse-btn:active {
+  opacity: 0.8;
 }
 
 /* 基本信息编辑输入 */
@@ -1446,6 +1976,24 @@
   background: rgba(255, 255, 255, 0.06);
   border-radius: 4rpx;
   padding: 0 8rpx;
+  min-width: 0;
+}
+
+.info-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex: 1;
+}
+
+.info-input-plus {
+  font-size: 22rpx;
+  color: rgba(200, 160, 70, 0.6);
+  flex-shrink: 0;
+}
+
+.info-input-half {
+  flex: 1;
   min-width: 0;
 }
 
@@ -1637,4 +2185,611 @@
 
 .input-placeholder {
   color: rgba(232, 220, 196, 0.2);
+}
+
+/* ===== 武器模块 ===== */
+.weapon-header {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 16rpx;
+  margin-bottom: 4rpx;
+}
+
+.weapon-header-info {
+  flex: 1.5;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.35);
+}
+
+.weapon-header-name {
+  flex: 1.5;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.35);
+}
+
+.weapon-header-attune {
+  flex: 1;
+  text-align: center;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.35);
+}
+
+.weapon-header-ability {
+  flex: 1;
+  text-align: center;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.35);
+}
+
+.weapon-header-hit {
+  flex: 1;
+  text-align: center;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.35);
+}
+
+.weapon-header-damage {
+  flex: 1;
+  text-align: center;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.35);
+}
+
+.weapon-header-type {
+  flex: 1;
+  text-align: center;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.35);
+}
+
+.weapon-entry {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 16rpx;
+  border-bottom: 1rpx solid rgba(232, 220, 196, 0.05);
+  position: relative;
+}
+
+.weapon-entry:active {
+  background: rgba(232, 220, 196, 0.03);
+}
+
+.weapon-entry-info {
+  flex: 1.5;
+  font-size: 22rpx;
+  color: #E8DCC4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weapon-entry-info.empty {
+  color: rgba(232, 220, 196, 0.25);
+}
+
+.weapon-entry-name {
+  flex: 1.5;
+  font-size: 22rpx;
+  color: #E8DCC4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weapon-entry-name.empty {
+  color: rgba(232, 220, 196, 0.25);
+}
+
+.weapon-entry-attune {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weapon-attune-dot {
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(232, 220, 196, 0.2);
+  box-sizing: border-box;
+}
+
+.weapon-entry-ability {
+  flex: 1;
+  text-align: center;
+  font-size: 20rpx;
+  color: #E8DCC4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weapon-entry-hit {
+  flex: 1;
+  text-align: center;
+  font-size: 20rpx;
+  color: #E8DCC4;
+}
+
+.weapon-entry-damage {
+  flex: 1;
+  text-align: center;
+  font-size: 20rpx;
+  color: #E8DCC4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weapon-entry-type {
+  flex: 1;
+  text-align: center;
+  font-size: 20rpx;
+  color: #E8DCC4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weapon-props-sub {
+  padding: 6rpx 16rpx 8rpx 16rpx;
+  margin-bottom: 2rpx;
+  border-bottom: 1rpx solid rgba(232, 220, 196, 0.05);
+}
+
+.weapon-props-text {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.5);
+  line-height: 1.5;
+  max-height: 90rpx;
+  overflow-y: auto;
+}
+
+.weapon-props-placeholder {
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.25);
+}
+
+/* 武器弹窗 */
+.weapon-dialog-btns {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.weapon-edit-form {
+  padding: 16rpx 0;
+}
+
+.weapon-edit-row {
+  margin-bottom: 16rpx;
+}
+
+.weapon-edit-label {
+  display: block;
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.5);
+  margin-bottom: 8rpx;
+}
+
+.weapon-edit-input {
+  width: 100%;
+  height: 48rpx;
+  line-height: 48rpx;
+  font-size: 24rpx;
+  color: #E8DCC4;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1rpx solid rgba(232, 220, 196, 0.1);
+  border-radius: 8rpx;
+  padding: 0 16rpx;
+  box-sizing: border-box;
+}
+
+.weapon-attune-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
+  border: 1rpx solid rgba(232, 220, 196, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 22rpx;
+}
+
+.weapon-attune-toggle.active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(232, 220, 196, 0.3);
+}
+
+.weapon-detail-view {
+  padding: 16rpx 0;
+}
+
+.weapon-detail-row {
+  display: flex;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid rgba(232, 220, 196, 0.05);
+}
+
+.weapon-detail-row:last-child {
+  border-bottom: none;
+}
+
+.weapon-detail-label {
+  width: 120rpx;
+  font-size: 22rpx;
+  color: rgba(232, 220, 196, 0.4);
+  flex-shrink: 0;
+}
+
+.weapon-detail-value {
+  flex: 1;
+  font-size: 22rpx;
+  color: #E8DCC4;
+  line-height: 1.5;
+}
+
+/* ===== 法术模块 ===== */
+.spell-empty {
+  padding: 32rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: rgba(232, 220, 196, 0.3);
+}
+
+.spell-entry {
+  border-bottom: 1rpx solid rgba(232, 220, 196, 0.05);
+  position: relative;
+  padding: 12rpx 16rpx;
+}
+
+.spell-entry-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6rpx;
+}
+
+.spell-name-wrap {
+  min-width: 0;
+  max-width: calc(100% - 170rpx);
+  display: flex;
+  align-items: center;
+  flex-shrink: 1;
+  border-radius: 6rpx;
+}
+
+.spell-name-wrap:active {
+  background: rgba(232, 220, 196, 0.04);
+}
+
+.spell-entry-name {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #E8DCC4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spell-entry-name.empty {
+  color: rgba(232, 220, 196, 0.25);
+  font-weight: 400;
+}
+
+.spell-entry-tags {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  flex-shrink: 0;
+  margin-left: 8rpx;
+}
+
+.spell-collapse-btn {
+  font-size: 18rpx;
+  padding: 4rpx 6rpx;
+  margin-left: 4rpx;
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+.spell-collapse-btn:active {
+  opacity: 0.8;
+}
+
+.spell-tag-ritual {
+  font-size: 20rpx;
+  font-weight: 700;
+  padding: 8rpx 0;
+  width: 44rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  border: 1rpx solid rgba(232, 220, 196, 0.15);
+  color: rgba(232, 220, 196, 0.2);
+  margin-right: 4rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spell-tag-ritual.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(232, 220, 196, 0.06);
+}
+
+.spell-tag-vsm {
+  font-size: 20rpx;
+  font-weight: 700;
+  padding: 8rpx 0;
+  width: 44rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  border: 1rpx solid rgba(232, 220, 196, 0.15);
+  color: rgba(232, 220, 196, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spell-tag-vsm.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(232, 220, 196, 0.06);
+}
+
+.spell-entry-info {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 4rpx;
+  border-radius: 6rpx;
+}
+
+.spell-entry-info:active {
+  background: rgba(232, 220, 196, 0.04);
+}
+
+.spell-entry-level {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.5);
+}
+
+.spell-entry-school {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.5);
+}
+
+.spell-entry-time {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.4);
+}
+
+.spell-entry-range {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.4);
+}
+
+.spell-entry-duration {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.4);
+}
+
+.spell-entry-effect {
+  margin-top: 4rpx;
+}
+
+.spell-effect-text {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.5);
+  line-height: 1.5;
+  max-height: 90rpx;
+  overflow-y: auto;
+}
+
+.spell-entry-materials {
+  margin-top: 4rpx;
+}
+
+.spell-materials-text {
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.4);
+  font-style: italic;
+}
+
+/* 法术弹窗 VSM 切换 */
+.spell-vsm-toggles {
+  display: flex;
+  gap: 12rpx;
+  flex: 1;
+}
+
+.spell-vsm-toggle {
+  flex: 1;
+}
+
+/* ===== 特性模块 ===== */
+.feature-sub-section {
+  margin-bottom: 24rpx;
+}
+
+.feature-sub-section:last-child {
+  margin-bottom: 0;
+}
+
+.feature-sub-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.feature-sub-title {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: rgba(232, 220, 196, 0.5);
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-entry {
+  position: relative;
+  padding: 10rpx 12rpx;
+  border-bottom: 1rpx solid;
+  border-radius: 6rpx;
+}
+
+.feature-entry:active {
+  background: rgba(232, 220, 196, 0.03);
+}
+
+.feature-entry-header {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.feature-entry-level {
+  font-size: 18rpx;
+  font-weight: 600;
+  color: rgba(232, 220, 196, 0.35);
+  flex-shrink: 0;
+}
+
+.feature-entry-name {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #E8DCC4;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.feature-entry-name.empty {
+  color: rgba(232, 220, 196, 0.25);
+  font-style: italic;
+}
+
+.feature-entry-desc {
+  display: block;
+  font-size: 20rpx;
+  color: rgba(232, 220, 196, 0.45);
+  line-height: 1.5;
+  margin-top: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* ===== 头像裁剪弹窗 ===== */
+.crop-dialog-box {
+  width: 85vw;
+  background: #1A1714;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.crop-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24rpx;
+  overflow: hidden;
+}
+
+.crop-canvas-area {
+  position: relative;
+  overflow: hidden;
+  background: #000;
+}
+
+.crop-image {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.crop-movable-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+}
+
+.crop-movable-box {
+  border: 2rpx solid #C8A046;
+  box-sizing: border-box;
+}
+
+.crop-grid-line-h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1rpx;
+  background: rgba(200, 160, 70, 0.5);
+}
+
+.crop-grid-line-h1 {
+  top: 33.33%;
+}
+
+.crop-grid-line-h2 {
+  top: 66.66%;
+}
+
+.crop-grid-line-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1rpx;
+  background: rgba(200, 160, 70, 0.5);
+}
+
+.crop-grid-line-v1 {
+  left: 33.33%;
+}
+
+.crop-grid-line-v2 {
+  left: 66.66%;
+}
+
+.crop-actions {
+  padding: 0 28rpx 24rpx;
+}
+
+.crop-resize-handle {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crop-resize-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid #C8A046;
+  background: rgba(26, 23, 20, 0.8);
+}
+
+.crop-canvas-hidden {
+  position: fixed;
+  top: -9999rpx;
+  left: -9999rpx;
+  width: 300px;
+  height: 300px;
 }
