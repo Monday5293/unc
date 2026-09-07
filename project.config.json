@@ -52,6 +52,7 @@
   "appid": "wx107d07d8d5ee759a",
   "projectname": "trpg-character-card",
   "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "miniprogram/cloudfunctions/",
   "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",

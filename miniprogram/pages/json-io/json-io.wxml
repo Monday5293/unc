@@ -1,4 +1,4 @@
-<view class="json-io-page">
+<view class="json-io-page {{theme === 'light' ? 'theme-light' : ''}}">
   <view class="section">
     <view class="section-title">📥 导入 JSON</view>
 

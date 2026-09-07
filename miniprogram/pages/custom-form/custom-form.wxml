@@ -1,4 +1,4 @@
-<view class="custom-form-page" wx:if="{{card && systemInfo}}">
+<view class="custom-form-page {{theme === 'light' ? 'theme-light' : ''}}" wx:if="{{card && systemInfo}}">
   <view class="detail-header" style="background: linear-gradient(180deg, {{accentColor}}22 0%, transparent 100%);">
     <view class="header-decoration">{{systemInfo.logo}}</view>
 

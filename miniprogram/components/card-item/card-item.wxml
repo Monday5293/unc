@@ -11,7 +11,7 @@
 
   <view class="fav-btn" catchtap="onToggleFav">
     <text wx:if="{{card.favorite}}" class="fav-icon active" style="color: {{system.accentColor}}">★</text>
-    <text wx:else class="fav-icon" style="color: rgba(232,220,196,0.25)">☆</text>
+    <text wx:else class="fav-icon" style="color: var(--text-25)">☆</text>
   </view>
 
   <view class="card-header">

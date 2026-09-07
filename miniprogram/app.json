@@ -5,7 +5,11 @@
     "pages/card-detail/card-detail",
     "pages/import-list/import-list",
     "pages/custom-form/custom-form",
-    "pages/json-io/json-io"
+    "pages/json-io/json-io",
+    "pages/card-list/card-list",
+    "pages/settings/settings",
+    "pages/about/about",
+    "pages/todo/todo"
   ],
   "window": {
     "backgroundTextStyle": "dark",

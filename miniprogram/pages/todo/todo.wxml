@@ -1,0 +1,41 @@
+<view class="todo-page {{theme === 'light' ? 'theme-light' : ''}}">
+  <view class="todo-header">
+    <view class="todo-input-wrap">
+      <input
+        class="todo-input"
+        placeholder="添加新的待办事项..."
+        placeholder-class="todo-input-placeholder"
+        value="{{inputValue}}"
+        bindinput="onInput"
+        bindconfirm="addTodo"
+        maxlength="100"
+      />
+      <view class="todo-add-btn {{inputValue ? '' : 'disabled'}}" bindtap="addTodo">
+        <text>添加</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="todo-stats" wx:if="{{todos.length > 0}}">
+    <text class="todo-stats-text">共 {{todos.length}} 项</text>
+    <text class="todo-stats-text done">已完成 {{completedCount}} 项</text>
+  </view>
+
+  <view wx:if="{{todos.length > 0}}" class="todo-list">
+    <view wx:for="{{todos}}" wx:key="_id" class="todo-item {{item.completed ? 'done' : ''}}">
+      <view class="todo-check" bindtap="toggleTodo" data-id="{{item._id}}">
+        <text class="todo-check-icon">{{item.completed ? '✓' : ''}}</text>
+      </view>
+      <text class="todo-title">{{item.title}}</text>
+      <view class="todo-delete" bindtap="deleteTodo" data-id="{{item._id}}">
+        <text class="todo-delete-icon">✕</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:else class="todo-empty">
+    <text class="todo-empty-icon">📋</text>
+    <text class="todo-empty-text">暂无待办事项</text>
+    <text class="todo-empty-hint">在上方输入框中添加</text>
+  </view>
+</view>

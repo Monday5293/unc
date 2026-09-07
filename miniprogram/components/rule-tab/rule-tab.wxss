@@ -25,13 +25,13 @@
   gap: 4rpx;
   padding: 16rpx 32rpx;
   border-radius: 16rpx;
-  background-color: rgba(26, 23, 20, 0.2);
+  background-color: transparent;
   color: #6B6560;
 }
 
 .tab-item.active {
-  background-color: #1A1714;
-  color: #E8DCC4;
+  background-color: var(--page-bg);
+  color: var(--text-main);
 }
 
 .tab-logo {

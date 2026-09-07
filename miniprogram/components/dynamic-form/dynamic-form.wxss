@@ -11,7 +11,7 @@
   margin-bottom: 8rpx;
   font-size: 24rpx;
   font-weight: 500;
-  color: #2A2724;
+  color: var(--card-bg-2);
 }
 
 .required-mark {
@@ -295,7 +295,7 @@
 .group-title {
   font-size: 26rpx;
   font-weight: 600;
-  color: #2A2724;
+  color: var(--card-bg-2);
 }
 
 .group-body {
@@ -326,7 +326,7 @@
 .table-title {
   font-size: 26rpx;
   font-weight: 600;
-  color: #2A2724;
+  color: var(--card-bg-2);
 }
 
 .table-add-btn {
@@ -380,7 +380,7 @@
 .table-head-cell {
   font-size: 22rpx;
   font-weight: 600;
-  color: #2A2724;
+  color: var(--card-bg-2);
 }
 
 .table-action-cell {
@@ -464,7 +464,7 @@
 }
 .grid-cell-text {
   font-size: 26rpx;
-  color: #2A2724;
+  color: var(--card-bg-2);
   font-weight: 500;
 }
 /* ===== 字段描述 ===== */

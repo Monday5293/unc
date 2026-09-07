@@ -1,4 +1,5 @@
 const store = require('../../utils/store.js')
+const themeUtil = require('../../utils/theme.js')
 
 Page({
   data: {
@@ -12,6 +13,10 @@ Page({
   onLoad() {
     const systems = store.getSystems()
     this.setData({ systems })
+  },
+
+  onShow() {
+    themeUtil.applyToPage(this)
   },
 
   onImportTypeChange(e) {

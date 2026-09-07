@@ -1,0 +1,1467 @@
+{
+  "schemaVersion": 3,
+  "name": "维欣",
+  "characterImage": "",
+  "level": "8",
+  "proficiency": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    false
+  ],
+  "ancestry1": "Clank-PurposefulDesign",
+  "ancestry2": "Human-Adaptability",
+  "profession": "\"门卒\"职业扩展包-滋孽-prof-\"门卒\"",
+  "community": "ORDERBORNE",
+  "subclass": "\"门卒\"职业扩展包-滋孽-subc-“特遣”基石",
+  "professionRef": {
+    "id": "\"门卒\"职业扩展包-滋孽-prof-\"门卒\"",
+    "name": "\"门卒\"  -  腐化&面具"
+  },
+  "ancestry1Ref": {
+    "id": "Clank-PurposefulDesign",
+    "name": "定制设计"
+  },
+  "ancestry2Ref": {
+    "id": "Human-Adaptability",
+    "name": "随机应变"
+  },
+  "communityRef": {
+    "id": "ORDERBORNE",
+    "name": "结社之民"
+  },
+  "subclassRef": {
+    "id": "\"门卒\"职业扩展包-滋孽-subc-“特遣”基石",
+    "name": "“特遣”基石"
+  },
+  "evasion": "10",
+  "agility": {
+    "checked": false,
+    "value": "2",
+    "spellcasting": false
+  },
+  "strength": {
+    "checked": false,
+    "value": "0",
+    "spellcasting": false
+  },
+  "finesse": {
+    "checked": false,
+    "value": "2",
+    "spellcasting": false
+  },
+  "instinct": {
+    "checked": false,
+    "value": "3",
+    "spellcasting": true
+  },
+  "presence": {
+    "checked": false,
+    "value": "1",
+    "spellcasting": false
+  },
+  "knowledge": {
+    "checked": false,
+    "value": "1",
+    "spellcasting": false
+  },
+  "gold": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "experience": [
+    "狂热信徒（使命）",
+    "独行者",
+    "福音传播者",
+    "勇往直前",
+    "时间之证"
+  ],
+  "experienceValues": [
+    "3",
+    "2",
+    "2",
+    "3",
+    "2"
+  ],
+  "hope": 0,
+  "hopeMax": 6,
+  "hp": [
+    true,
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "stress": [
+    true,
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "hpMax": 12,
+  "stressMax": 6,
+  "armorBoxes": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "armorMax": 4,
+  "minorThreshold": "0",
+  "majorThreshold": "68",
+  "inventory": [
+    "好看的大水袋(2希望换5L水)，",
+    "高效助推棒 x1  《如何鼓励你的盔甲》",
+    "*一个装有自己照片的怀表（已遗失）*",
+    "一把银钥匙，一本（已翻译？）的古籍 酒神邀请函 x1",
+    "软糖（1d2+3STR）x1"
+  ],
+  "characterBackground": "在又一次失业后，被“门”收容，“面具”哄骗了维欣加入“门”，而“腐化”将维欣的退路完全、截断断。无法选择的沉沦之后，维欣被进行了机械改造，以便与“门”更进一步接触，靠近“门”不仅需要强韧的精神，更需要坚固的肉体。",
+  "characterAppearance": "时常身着灰袍大衣，脸上覆盖着圆滑的机械面具，留出了黑色的长直发。说话会伴随着电台般的噪音。身体依旧保留了人类的样貌，但维欣不会过多妆扮自己。",
+  "characterMotivation": "",
+  "cards": [
+    {
+      "standarized": true,
+      "id": "\"门卒\"职业扩展包-滋孽-prof-\"门卒\"",
+      "name": "\"门卒\"",
+      "type": "profession",
+      "description": "*__孤卒__*：当你成为一名盟友希望特性、职业特性以及领域卡特性的目标时，改为该盟友成为此目标。\n\n*__升变__*：本职业特性**无法通过兼职获取**。你的**兼职**选项和你的**升级子职**选项不再移除选项。\n\n*__异语__*：将【低语量表】加入你的配置中。",
+      "hint": "[记录佚失]",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/05/695b6930410db.png",
+      "class": "\"门卒\"",
+      "headerDisplay": "\"门卒\"",
+      "cardSelectDisplay": {
+        "item1": "腐化",
+        "item2": "面具"
+      },
+      "professionSpecial": {
+        "起始生命": 7,
+        "起始闪避": 9,
+        "起始物品": "一件自制防具或一件自制工具",
+        "希望特性": "**行备**：花费**3希望点**，你清除**1护甲槽**和**1压力点**。"
+      },
+      "batchId": "batch_1769689723838_cqcx5",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_0__________-__-prof-____"
+    },
+    {
+      "standarized": true,
+      "id": "\"门卒\"职业扩展包-滋孽-subc-“特遣”基石",
+      "name": "“特遣”基石",
+      "type": "subclass",
+      "description": "*__炬火__*: 你化作炬火。你可以标记**3生命点**以使用你的一项希望特性或替代**邻近范围**内一名盟友**1-3希望点**的花费。\n\n*__往声__*:耳畔的声音被再度扭曲，却成为了狂热的正言。每当你聆听低语后，你可以标记**1生命点**，移除你【低语量表】上的一个指示物并获得**1希望点**。",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/05/695b692ee799d.png",
+      "class": "\"门卒\"",
+      "level": 1,
+      "headerDisplay": "“特遣”",
+      "cardSelectDisplay": {
+        "item1": "\"门卒\"",
+        "item2": "基石",
+        "item3": "本能"
+      },
+      "batchId": "batch_1769689723838_cqcx5",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_1__________-__-subc-______"
+    },
+    {
+      "standarized": true,
+      "id": "Clank-PurposefulDesign",
+      "name": "定制设计",
+      "type": "ancestry",
+      "description": "决定你是由谁创造以及为何目的而创造的。在创建角色时，选择一个最符合此目的的经历，永久获得 +1 加值。",
+      "hint": "械灵是具有感知能力的机械生命体，其由包括金属、木头、石头和陶土在内的多种材料构建而成，外观可以与类人生物、动物，甚至是无生命的物体相似",
+      "imageUrl": "/builtin-cards/ancestry/clank.webp",
+      "hasLocalImage": false,
+      "level": 1,
+      "class": "械灵",
+      "headerDisplay": "定制设计",
+      "cardSelectDisplay": {
+        "item1": "械灵"
+      },
+      "automation": {
+        "format": "daggerheart.card-automation.ir.v1",
+        "abilities": [
+          {
+            "id": "purposeful-design",
+            "label": "定制设计",
+            "lifetime": {
+              "kind": "permanentOnceClaimed"
+            },
+            "choices": [
+              {
+                "id": "boostedExperience",
+                "label": "选择一项经历获得+1",
+                "kind": "targetSelectMany",
+                "cardinality": {
+                  "min": 1,
+                  "max": 1,
+                  "unique": true
+                },
+                "domain": {
+                  "kind": "modifierTargetGroup",
+                  "group": "experiences"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "kind": "emitEachSelectedTarget",
+                "id": "purposeful-design-experience",
+                "choiceId": "boostedExperience",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "revision": "stable32:f42d2478"
+      },
+      "source": "builtin",
+      "batchId": "SYSTEM_BUILTIN_CARDS",
+      "batchName": "系统内置卡牌",
+      "instanceId": "cardinst_07e2e37c-258e-468d-9558-4bb0706c992f",
+      "automationSource": {
+        "templateId": "Clank-PurposefulDesign",
+        "packId": "SYSTEM_BUILTIN_CARDS",
+        "templateAutomationRevision": "stable32:f42d2478",
+        "copiedAt": "2026-07-12T13:31:03.397Z"
+      },
+      "automationState": {
+        "version": 1,
+        "abilities": {
+          "purposeful-design": {
+            "choiceValues": {
+              "boostedExperience": [
+                "experienceValues.3"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "standarized": true,
+      "id": "Human-Adaptability",
+      "name": "随机应变",
+      "type": "ancestry",
+      "description": "当你在运用某个经历进行的掷骰失败时，你可以**标记 1 压力点**进行重掷。",
+      "hint": "人类最容易辨识的特征是灵巧的双手、圆圆的耳朵以及超强的耐力",
+      "imageUrl": "/builtin-cards/ancestry/human.webp",
+      "hasLocalImage": false,
+      "level": 2,
+      "class": "人类",
+      "headerDisplay": "随机应变",
+      "cardSelectDisplay": {
+        "item1": "人类"
+      },
+      "source": "builtin",
+      "batchId": "SYSTEM_BUILTIN_CARDS",
+      "batchName": "系统内置卡牌",
+      "instanceId": "cardinst_ec950260-a678-46a6-8f61-11e4b96f8f2f"
+    },
+    {
+      "standarized": true,
+      "id": "ORDERBORNE",
+      "name": "结社之民",
+      "type": "community",
+      "description": "记录三个你的成长经历灌输给你的格言或价值观。每次休息一次，当你描述你如何通过当前行动来体现这些原则之一时，你可以将一个**d20**作为你的希望骰，而不是d12。",
+      "hint": "作为结社之民的一分子，意味着你来自一个注重纪律或信仰的集体，并且秉持着一套原则，这些原则通常在你的经历中所体现",
+      "imageUrl": "/builtin-cards/community/orderborne.webp",
+      "hasLocalImage": false,
+      "class": "结社之民",
+      "headerDisplay": "结社之民",
+      "cardSelectDisplay": {
+        "item1": "恪守不渝"
+      },
+      "source": "builtin",
+      "batchId": "SYSTEM_BUILTIN_CARDS",
+      "batchName": "系统内置卡牌",
+      "instanceId": "cardinst_d4c3f940-b7e6-41fe-8264-d782389cec19"
+    },
+    {
+      "standarized": true,
+      "id": "腐化领域扩展包-滋孽-doma-深渊回响",
+      "name": "深渊回响",
+      "type": "domain",
+      "description": "当你对一个敌人造成伤害时，你可以聆听低语来迫使**邻近范围**内的一个敌人标记**1生命点**。",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/04/695a630e15c32.png",
+      "class": "腐化",
+      "level": 7,
+      "cardSelectDisplay": {
+        "item1": "腐化",
+        "item2": "法术",
+        "item3": "RC.2",
+        "item4": "LV.7"
+      },
+      "batchId": "batch_1769689671396_d2e8m",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_5________-__-doma-____"
+    },
+    {
+      "standarized": true,
+      "id": "腐化领域扩展包-滋孽-doma-蒙尘刻印",
+      "name": "蒙尘刻印",
+      "type": "domain",
+      "description": "你可以花费**2希望点**或聆听低语两次，来让**邻近范围**内的一个自愿目标的近战武器附上旧印，直至武器持有者在一次攻击掷骰中获得**恐惧失败**为止。\n\n被附上旧印的武器允许使用**本能**属性进行攻击投掷且使用**本能**属性进行攻击投掷时获得+4加值。",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/04/695a630e15c32.png",
+      "class": "腐化",
+      "level": 3,
+      "cardSelectDisplay": {
+        "item1": "腐化",
+        "item2": "法术",
+        "item3": "RC.1",
+        "item4": "LV.3"
+      },
+      "batchId": "batch_1769689671396_d2e8m",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_6________-__-doma-____"
+    },
+    {
+      "standarized": true,
+      "id": "面具领域扩展包-滋孽-doma-感性调停者",
+      "name": "感性调停者",
+      "type": "domain",
+      "description": "*__情感洞察__*：你洞悉着他人的情感。你在尝试缓和暴力局势或说服某人听从某一建议/命令的动作掷骰中获得**优势**。\n\n*__崩溃预知__*：你明白谁将濒临崩溃。你始终可知视野内哪些生物的所有**压力槽**都被标记。你的视野内存在这样的生物时，你在伤害掷骰中熟练值+1。\n\n*__压力掩盖__*：你知道如何掩盖压力，每场景一次，当你的**压力槽**被恰好标记满时，你可以清除**1压力点**。",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/04/695a630e4508f.png",
+      "class": "面具",
+      "level": 4,
+      "cardSelectDisplay": {
+        "item1": "面具",
+        "item2": "能力",
+        "item3": "RC.1",
+        "item4": "LV.4"
+      },
+      "batchId": "batch_1769689671396_d2e8m",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_7________-__-doma-_____"
+    },
+    {
+      "standarized": true,
+      "id": "腐化领域扩展包-滋孽-doma-憎恶烙印",
+      "name": "憎恶烙印",
+      "type": "domain",
+      "description": "每长休一次，你掌握了一种特殊的印记以暂时阻断某些存在的影响，你标记**1生命点**，描述你在身体的何处刻画该印记，而后选择一项：\n\n- 你暂时不受**低语量表**的影响，直至战斗结束时\n- 移除**低语量表**上至多两个指示物\n- 消除自身处于的一个或多个状态",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/04/695a630e15c32.png",
+      "class": "腐化",
+      "level": 5,
+      "cardSelectDisplay": {
+        "item1": "腐化",
+        "item2": "法术",
+        "item3": "RC.2",
+        "item4": "LV.5"
+      },
+      "batchId": "batch_1769689671396_d2e8m",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_8________-__-doma-____"
+    },
+    {
+      "standarized": true,
+      "id": "腐化领域扩展包-滋孽-doma-银钥之启",
+      "name": "银钥之启",
+      "type": "domain",
+      "description": "你拥有一把来历不明的银色钥匙，你可以聆听低语、使用这把钥匙并进行一次施法掷骰（15）。成功时，你暂时将幻梦境的一部分投射而出，并迫使**远距离范围**内的所有不持有银色钥匙的生物暂时处于*紊乱*状态。处于*紊乱*状态的生物在消耗**希望点**、标记**护甲槽**、**生命点**、**压力点**时，都必须加倍其消耗量或标记量。",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/04/695a630e15c32.png",
+      "class": "腐化",
+      "level": 6,
+      "cardSelectDisplay": {
+        "item1": "腐化",
+        "item2": "法术",
+        "item3": "RC.1",
+        "item4": "LV.6"
+      },
+      "batchId": "batch_1769689671396_d2e8m",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_9________-__-doma-____"
+    },
+    {
+      "standarized": true,
+      "id": "empty-p54bwur",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-vbmneo1",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-wyyqa3l",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "协同动体职业扩展包-滋孽-subc-肌械啡生基石",
+      "name": "肌械啡生基石",
+      "type": "subclass",
+      "description": "*__异悖施法//肌械啡生__*：你具有施法属性，但你的施法属性为*你的严重伤害阈值的十位数*。\n\n*__生灵奇点__*：你看起来似乎有着超出生物定义的“部件”。和游戏主持人以及其他玩家共同商讨你身体存在的“非生物部件”。你的严重伤害阈值获得你重度伤害阈值的加值，但你的重度伤害阈值失效。\n\n*__苦痛增生__*：你承受的悖论使你的躯体愈发强健。你**获得三个生命槽**。",
+      "imageUrl": "https://a2.boltp.com/2026/05/20/6a0c9c4fbdc92.png",
+      "class": "协同动体",
+      "level": 1,
+      "headerDisplay": "肌械啡生",
+      "cardSelectDisplay": {
+        "item1": "协同动体",
+        "item2": "基石",
+        "item3": "不可施法"
+      },
+      "batchId": "batch_1784537402045_8vd9ov",
+      "batchName": "滋孽void-奇孽世纪·领域&职业扩展包",
+      "source": "custom",
+      "instanceId": "cardinst_a6f1c408-7374-455b-ad92-c291f375aeb6"
+    },
+    {
+      "standarized": true,
+      "id": "命运领域扩展包-滋孽-doma-命运掷骰",
+      "name": "命运掷骰",
+      "type": "domain",
+      "description": "这是机制说明卡，选择该领域时自动获取。\n\n命运领域存在一种特殊的掷骰机制，叫做命运掷骰。\n\n当一个特性要求你进行命运掷骰时，你只能投掷希望骰和恐惧骰，且命运掷骰不计入任何加值与减值影响（包含优势和劣势）。\n\n命运掷骰只存在三个结果：\n\n·希望骰大于恐惧骰，希望成功\n·恐惧骰大于希望骰，恐惧失败\n·希望骰等于恐惧骰，关键成功",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/04/695a630e56192.png",
+      "class": "命运",
+      "level": 1,
+      "cardSelectDisplay": {
+        "item1": "命运",
+        "item2": "说明",
+        "item3": "RC.0",
+        "item4": "LV.1"
+      },
+      "batchId": "batch_1769689671396_d2e8m",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_14________-__-doma-____"
+    },
+    {
+      "standarized": true,
+      "id": "命定之王职业扩展包-滋孽-prof-命定之王",
+      "name": "命定之王",
+      "type": "profession",
+      "description": "*__奔赴命途__*：当你在一次命运掷骰中获得**关键成功**时，你可以进行一次**近距离范围**内的移动。\n\n*__注定之事__*：每场游戏限一次，你可以在一次掷骰中给予游戏主持人**1恐惧点**，将你或一名自愿盟友的一枚骰子的点数调整为最大值。",
+      "hint": "命定之王是一批借由命运获取\"权冕\"的人。他们要么被命运选中，要么将命运攥入手中——看似存在的选择，实质上都无法摆脱命运。命定之王注定奔向那座无比冷峻的权力山峰。",
+      "imageUrl": "https://youke3.picui.cn/s1/2025/12/21/69472f1601674.png",
+      "class": "命定之王",
+      "headerDisplay": "命定之王",
+      "cardSelectDisplay": {
+        "item1": "权冕",
+        "item2": "命运"
+      },
+      "professionSpecial": {
+        "起始生命": 7,
+        "起始闪避": 10,
+        "起始物品": "一把佩剑或一根手杖",
+        "希望特性": "**终竟之愿**：当你骰出**恐惧**结果时，你可以花费**3希望点**将其改为**希望**结果，因此产生的**希望成功**结果不会使你获得**希望点**。"
+      },
+      "batchId": "batch_1769689671417_g3u4c",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_15__________-__-prof-____"
+    },
+    {
+      "standarized": true,
+      "id": "命定之王职业扩展包-滋孽-subc-勇者基石",
+      "name": "勇者基石",
+      "type": "subclass",
+      "description": "*__勇气锋芒__*：你使用武器进行攻击时，你可以标记**1压力点**并使此次攻击掷骰获得等同你当前位阶的加值。**邻近范围**内存在盟友时无需标记**压力点**。",
+      "imageUrl": "https://youke3.picui.cn/s1/2025/12/21/69472f15c0654.png",
+      "class": "命定之王",
+      "level": 1,
+      "headerDisplay": "勇者",
+      "cardSelectDisplay": {
+        "item1": "命定之王",
+        "item2": "基石",
+        "item3": "力量"
+      },
+      "batchId": "batch_1769689671417_g3u4c",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_16__________-__-subc-____"
+    },
+    {
+      "standarized": true,
+      "id": "疯狂机制扩展包-滋孽-vari-fengkuang00",
+      "name": "疯狂机制说明",
+      "type": "variant",
+      "class": "说明",
+      "description": "在玩家标记最后的压力点时或面临一些特殊的场景时（如目睹恐怖场景、重要之人死亡和直面外神等），游戏主持人可以要求对应玩家投掷一枚d12骰，称为【疯狂掷骰】：\n - 若结果不大于玩家此时已标记压力点数量或结果为1，游戏主持人抽取三张疯狂卡并公开其中两张，该玩家须决定将其中一张叠放至自己配置的一张领域卡上（未公开的在被选择时公开）。\n - 【疯狂掷骰】在一个场景内发生的次数由游戏主持人决定。 \n - 在部分极端场景或符合叙事的场景内，游戏主持人可以要求玩家使用两枚d12骰进行【疯狂掷骰】，双骰结果取低。\n\n >疯狂机制的相关结算<\n 1）其上被叠放了疯狂卡的领域卡视为暂时移出配置，不会影响其上已有的指示物以及其下已叠放的卡牌，不视为处于配置或宝库中，且不能用于交换，但仍占据配置上限。\n 2）疯狂卡在满足条件后将被洗回，此时对应领域卡恢复正常配置。\n 3）玩家在进行长休时，可以放弃休整行动，若如此做，玩家可以洗回至多1张疯狂卡。\n 4）当一名玩家没有可以用于叠放疯狂卡的领域卡时，其将跨越疯狂的帷幕，和游戏主持人商讨一个合适该角色的离场方式。\n\n >疯狂机制的注意事项<\n 1）不计入配置上限的领域卡不能被疯狂卡叠放。\n 2）玩家不能在疯狂卡上再次叠放疯狂卡。\n 3）请注意，在实际流程中，游戏主持人应使用此疯狂卡的复制卡进行叠放，原卡会被重新洗回（疯狂的种类不会此消彼长）。复制卡被洗回时，游戏主持人应将其收至预先指定的复制卡堆处，而非与原卡洗混。",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/05/695b3e3fa91d6.png",
+      "headerDisplay": "疯狂机制说明",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      },
+      "variantSpecial": {
+        "realType": "疯狂",
+        "subCategory": "说明"
+      },
+      "batchId": "batch_1769689671405_09hg7",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_17________-__-vari-fengkuang00"
+    },
+    {
+      "standarized": true,
+      "id": "\"门卒\"职业扩展包-滋孽-subc-“特遣”专精",
+      "name": "“特遣”专精",
+      "type": "subclass",
+      "description": "*__无前__*: 你绝不退缩。你在死亡行动中不能选择**回避死亡**。作为你一往无前的嘉奖，每场游戏限一次，在你执行**荣光就义**后，你不会跨越死亡的帷幕，而是划去**1个希望槽**、**1个生命槽**、**1个压力槽**，并获得**3希望点**、恢复**3生命点**、清除**3压力点**。",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/05/695b692ee799d.png",
+      "class": "\"门卒\"",
+      "level": 2,
+      "headerDisplay": "“特遣”",
+      "cardSelectDisplay": {
+        "item1": "\"门卒\"",
+        "item2": "专精",
+        "item3": "本能"
+      },
+      "batchId": "batch_1769689723838_cqcx5",
+      "source": "custom",
+      "instanceId": "cardinst_loadout_18__________-__-subc-______"
+    },
+    {
+      "standarized": true,
+      "id": "腐化领域扩展包-滋孽-doma-低语量表",
+      "name": "低语量表",
+      "type": "domain",
+      "description": "每当一个效果迫使你\"聆听低语\"时，将1个指示物放置在本卡牌上。\n\n根据本卡牌上具有的指示物数量，你具有对应效果：\n\n- *__1个或更多__*：你偶尔会觉得有股莫名的视线在盯着自己看。\n- *__3个或更多__*：你似乎和某些存在产生了接触，游戏主持人可以在需要的时候花费**1恐惧点**以暂时令你分神，使你在一次动作掷骰中获得**劣势**。\n- *__5个或更多__*：你的身体有一部分产生了不对的变化，游戏主持人可以在需要的时候花费**1恐惧点**以暂时激活你身体的变化，这种突变往往是不可控的。\n- *__7个或更多__*：进行长休时，立即移除本卡牌上的7个指示物，你 得 以 升 华 ！与游戏主持人讨论你的身体发生了哪些永久性的变化，这些变化往往是更进一步的。\n 【本领域卡为0级卡】",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/04/695a630e15c32.png",
+      "class": "腐化",
+      "level": 1,
+      "cardSelectDisplay": {
+        "item1": "腐化",
+        "item2": "量表",
+        "item3": "RC.0",
+        "item4": "LV.1"
+      },
+      "batchId": "batch_1769689671396_d2e8m",
+      "source": "custom",
+      "instanceId": "cardinst_838c771c-b87f-42f2-b21d-eb0d834bd6c3"
+    }
+  ],
+  "inventory_cards": [
+    {
+      "standarized": true,
+      "id": "面具领域扩展包-滋孽-doma-理念交锋",
+      "name": "理念交锋",
+      "type": "domain",
+      "description": "对**近距离范围**内的一个目标进行一次**风度**掷骰。成功时，选择下列选项之一：\n\n- *__位置操控__*：你迫使目标进入你的**近战范围**，或迫使目标远离你直至你不处于其的**近战范围**\n- *__理念压制__*：你在某个理念上胜过了目标，迫使其标记**2压力点**\n- *__波及影响__*：你与目标之间的所有敌人必须成功进行一次反应掷骰（13），否则会被你们的交锋波及，迫使他们标记**1压力点**并暂时处于*脆弱*状态",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/04/695a630e4508f.png",
+      "class": "面具",
+      "level": 4,
+      "cardSelectDisplay": {
+        "item1": "面具",
+        "item2": "能力",
+        "item3": "RC.1",
+        "item4": "LV.4"
+      },
+      "batchId": "batch_1769689671396_d2e8m",
+      "source": "custom",
+      "instanceId": "cardinst_vault_0________-__-doma-____"
+    },
+    {
+      "standarized": true,
+      "id": "面具领域扩展包-滋孽-doma-粉饰温柔",
+      "name": "粉饰温柔",
+      "type": "domain",
+      "description": "当**邻近范围**内的盟友即将受到伤害时，你可以标记**1压力点**进行阻挡，使自己成为该次攻击的目标。当你因此次攻击受到伤害时，你可以标记该盟友的**护甲槽**以降低此次伤害。",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/04/695a630e4508f.png",
+      "class": "面具",
+      "level": 1,
+      "cardSelectDisplay": {
+        "item1": "面具",
+        "item2": "能力",
+        "item3": "RC.1",
+        "item4": "LV.1"
+      },
+      "batchId": "batch_1769689671396_d2e8m",
+      "source": "custom",
+      "instanceId": "cardinst_vault_1________-__-doma-____"
+    },
+    {
+      "standarized": true,
+      "id": "腐化领域扩展包-滋孽-doma-痛苦屏障",
+      "name": "痛苦屏障",
+      "type": "domain",
+      "description": "你可以标记**1生命点**或聆听低语，来减少**远距离范围**内一个目标即将承受的伤害，数值为1d8。如果骰出的结果是8，则将本卡牌放回你的宝库。",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/04/695a630e15c32.png",
+      "class": "腐化",
+      "level": 2,
+      "cardSelectDisplay": {
+        "item1": "腐化",
+        "item2": "法术",
+        "item3": "RC.1",
+        "item4": "LV.2"
+      },
+      "batchId": "batch_1769689671396_d2e8m",
+      "source": "custom",
+      "instanceId": "cardinst_vault_2________-__-doma-____"
+    },
+    {
+      "standarized": true,
+      "id": "腐化领域扩展包-滋孽-doma-隐秘占卜",
+      "name": "隐秘占卜",
+      "type": "domain",
+      "description": "每次休息一次，花费**1希望点**并聆听低语，你投掷一枚**希望骰**并记录其点数，你可以在你下一次休息前的一次掷骰中宣言以此记录点数作为你此次掷骰的**希望骰**结果（在你进行掷骰前宣言）。",
+      "imageUrl": "https://youke3.picui.cn/s1/2026/01/04/695a630e15c32.png",
+      "class": "腐化",
+      "level": 1,
+      "cardSelectDisplay": {
+        "item1": "腐化",
+        "item2": "法术",
+        "item3": "RC.1",
+        "item4": "LV.1"
+      },
+      "batchId": "batch_1769689671396_d2e8m",
+      "source": "custom",
+      "instanceId": "cardinst_vault_3________-__-doma-____"
+    },
+    {
+      "standarized": true,
+      "id": "empty-jb8mqe9",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "异悖领域扩展包-滋孽-doma-执行注解",
+      "name": "执行注解",
+      "type": "domain",
+      "description": "每当你通过回想将本领域卡加入你的配置中时，你和距离你最近的一个敌人一同暂时进入*注解*状态。处于*注解*状态的生物无法进行施法掷骰，但也无法成为施法掷骰的目标。",
+      "imageUrl": "https://a2.boltp.com/2026/05/20/6a0c9b714ee28.png",
+      "class": "异悖",
+      "level": 6,
+      "cardSelectDisplay": {
+        "item1": "异悖",
+        "item2": "能力",
+        "item3": "RC.4",
+        "item4": "LV.6"
+      },
+      "batchId": "batch_1784537402045_8vd9ov",
+      "batchName": "滋孽void-奇孽世纪·领域&职业扩展包",
+      "source": "custom",
+      "instanceId": "cardinst_ba802612-ba89-4f2b-a5ac-0ebd5fa39cf6"
+    },
+    {
+      "standarized": true,
+      "id": "empty-1e96tcd",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-ks8ue5s",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-tguzuy8",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-5og2u1w",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-ro0d4f1",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-h79kbge",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-vzz7pqv",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-gqsjq63",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-aq4sbbt",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-uwoqnix",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-vwo8d4a",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-loe3taj",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-r8fxy9b",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    },
+    {
+      "standarized": true,
+      "id": "empty-4zuv40u",
+      "name": "",
+      "class": "",
+      "description": "",
+      "imageUrl": "",
+      "type": "unknown",
+      "cardSelectDisplay": {
+        "item1": "",
+        "item2": "",
+        "item3": ""
+      }
+    }
+  ],
+  "modifierState": {
+    "targetStates": {
+      "evasion": {
+        "activeBaseId": "profession:current:evasion"
+      },
+      "armorMax": {
+        "activeBaseId": "equipment:armor:current:armorMax"
+      },
+      "minorThreshold": {
+        "activeBaseId": "equipment:armor:current:minorThreshold"
+      },
+      "majorThreshold": {
+        "activeBaseId": "equipment:armor:current:majorThreshold"
+      },
+      "hpMax": {
+        "activeBaseId": "profession:current:hpMax"
+      },
+      "stressMax": {
+        "activeBaseId": "level:base:stressMax"
+      },
+      "proficiency": {
+        "activeBaseId": "level:base:proficiency"
+      },
+      "agility.value": {
+        "activeBaseId": "user:agility.value:estimated-base"
+      },
+      "strength.value": {
+        "activeBaseId": "user:strength.value:estimated-base"
+      },
+      "finesse.value": {
+        "activeBaseId": "user:finesse.value:estimated-base"
+      },
+      "instinct.value": {
+        "activeBaseId": "user:instinct.value:estimated-base"
+      },
+      "presence.value": {
+        "activeBaseId": "user:presence.value:estimated-base"
+      },
+      "knowledge.value": {
+        "activeBaseId": "user:knowledge.value:estimated-base"
+      },
+      "experienceValues.0": {
+        "activeBaseId": "user:experienceValues.0:estimated-base"
+      },
+      "experienceValues.1": {
+        "activeBaseId": "user:experienceValues.1:estimated-base"
+      },
+      "experienceValues.2": {
+        "activeBaseId": "user:experienceValues.2:estimated-base"
+      },
+      "experienceValues.3": {
+        "activeBaseId": "user:experienceValues.3:estimated-base"
+      },
+      "experienceValues.4": {
+        "activeBaseId": "user:experienceValues.4:manual-base"
+      }
+    },
+    "entryStates": {}
+  },
+  "userModifierContributions": [
+    {
+      "id": "user:agility.value:estimated-base",
+      "definition": {
+        "target": "agility.value",
+        "kind": "base"
+      },
+      "editable": {
+        "label": "估算基础值",
+        "value": 2
+      }
+    },
+    {
+      "id": "user:strength.value:estimated-base",
+      "definition": {
+        "target": "strength.value",
+        "kind": "base"
+      },
+      "editable": {
+        "label": "估算基础值",
+        "value": 0
+      }
+    },
+    {
+      "id": "user:finesse.value:estimated-base",
+      "definition": {
+        "target": "finesse.value",
+        "kind": "base"
+      },
+      "editable": {
+        "label": "估算基础值",
+        "value": 2
+      }
+    },
+    {
+      "id": "user:instinct.value:estimated-base",
+      "definition": {
+        "target": "instinct.value",
+        "kind": "base"
+      },
+      "editable": {
+        "label": "估算基础值",
+        "value": 3
+      }
+    },
+    {
+      "id": "user:presence.value:estimated-base",
+      "definition": {
+        "target": "presence.value",
+        "kind": "base"
+      },
+      "editable": {
+        "label": "估算基础值",
+        "value": 1
+      }
+    },
+    {
+      "id": "user:knowledge.value:estimated-base",
+      "definition": {
+        "target": "knowledge.value",
+        "kind": "base"
+      },
+      "editable": {
+        "label": "估算基础值",
+        "value": 1
+      }
+    },
+    {
+      "id": "user:experienceValues.0:estimated-base",
+      "definition": {
+        "target": "experienceValues.0",
+        "kind": "base"
+      },
+      "editable": {
+        "label": "估算基础值",
+        "value": 2
+      }
+    },
+    {
+      "id": "user:experienceValues.1:estimated-base",
+      "definition": {
+        "target": "experienceValues.1",
+        "kind": "base"
+      },
+      "editable": {
+        "label": "估算基础值",
+        "value": 2
+      }
+    },
+    {
+      "id": "user:experienceValues.2:estimated-base",
+      "definition": {
+        "target": "experienceValues.2",
+        "kind": "base"
+      },
+      "editable": {
+        "label": "估算基础值",
+        "value": 2
+      }
+    },
+    {
+      "id": "user:experienceValues.3:estimated-base",
+      "definition": {
+        "target": "experienceValues.3",
+        "kind": "base"
+      },
+      "editable": {
+        "label": "估算基础值",
+        "value": 2
+      }
+    },
+    {
+      "id": "user:experienceValues.4:manual-base",
+      "definition": {
+        "target": "experienceValues.4",
+        "kind": "base"
+      },
+      "editable": {
+        "label": "手动基础值",
+        "value": 2
+      }
+    }
+  ],
+  "otherAdjustments": [
+    {
+      "id": "other:hpMax:unknown-migration-difference",
+      "target": "hpMax",
+      "kind": "unknownMigrationDifference",
+      "value": -1
+    },
+    {
+      "id": "other:stressMax:unknown-migration-difference",
+      "target": "stressMax",
+      "kind": "unknownMigrationDifference",
+      "value": -1
+    },
+    {
+      "id": "other:experienceValues.0:unknown-migration-difference",
+      "target": "experienceValues.0",
+      "kind": "unknownMigrationDifference",
+      "value": 1
+    },
+    {
+      "id": "other:majorThreshold:manual-final-adjustment",
+      "target": "majorThreshold",
+      "kind": "manualFinalAdjustment",
+      "value": 24
+    },
+    {
+      "id": "other:minorThreshold:manual-final-adjustment",
+      "target": "minorThreshold",
+      "kind": "manualFinalAdjustment",
+      "value": -24
+    },
+    {
+      "id": "other:hpMax:manual-final-adjustment",
+      "target": "hpMax",
+      "kind": "manualFinalAdjustment",
+      "value": 4
+    },
+    {
+      "id": "other:stressMax:manual-final-adjustment",
+      "target": "stressMax",
+      "kind": "manualFinalAdjustment",
+      "value": 1
+    }
+  ],
+  "upgradeStates": {
+    "tier1-5-0": {
+      "checked": true,
+      "params": {
+        "target": "evasion"
+      }
+    },
+    "tier1-4-0": {
+      "checked": true
+    },
+    "tier1-1-0": {
+      "checked": true,
+      "params": {
+        "target": "hpMax"
+      }
+    },
+    "tier1-0-0": {
+      "checked": true
+    },
+    "tier1-0-1": {
+      "checked": true
+    },
+    "tier1-0-2": {
+      "checked": true
+    },
+    "tier2-1-0": {
+      "checked": true,
+      "params": {
+        "target": "hpMax"
+      }
+    },
+    "tier2-6-0": {
+      "checked": true
+    },
+    "tier2-8": {
+      "checked": true
+    },
+    "tier2-7": {
+      "checked": true,
+      "params": {
+        "target": "proficiency"
+      }
+    },
+    "tier3-8": {
+      "checked": true
+    }
+  },
+  "equipment": {
+    "weaponSlots": {
+      "primary": {
+        "name": "黄铜火炬大棒",
+        "trait": "物理/双手/近战",
+        "damage": "本能: d10+6",
+        "feature": "【薪火不息】你的攻击获得成功结果时，目标暂时处于点燃状态。处于点燃状态的目标结束聚焦时受到2d6点魔法伤害。",
+        "modifierContributions": []
+      },
+      "secondary": {
+        "name": "",
+        "trait": "",
+        "damage": "",
+        "feature": "",
+        "modifierContributions": []
+      },
+      "inventory": [
+        {
+          "name": "菲娅的送客长棍",
+          "trait": "物理/双手/近距离",
+          "damage": "本能：d10+4",
+          "feature": "【送你出门！】攻击获得希望成功时，若远距离范围内有门，则可以花费1希望点，将目标击退至那扇门外的位置。",
+          "modifierContributions": []
+        },
+        {
+          "name": "",
+          "trait": "",
+          "damage": "",
+          "feature": "",
+          "modifierContributions": []
+        }
+      ]
+    },
+    "armorSlot": {
+      "name": "最佳帮手制服",
+      "baseArmorMax": 4,
+      "baseThresholds": {
+        "minor": 16,
+        "major": 36
+      },
+      "feature": "【万用之物】你的护甲值可以作为任何可被标记或被花费的资源使用！（阈值原24/44）（施法属性改为6）",
+      "modifierContributions": []
+    }
+  },
+  "companionImage": "",
+  "companionName": "",
+  "companionDescription": "",
+  "companionRange": "",
+  "companionStress": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "companionEvasion": "",
+  "companionStressMax": 0,
+  "companionWeapon": "",
+  "companionExperience": [
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "companionExperienceValue": [
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "trainingOptions": {
+    "intelligent": [
+      false,
+      false,
+      false
+    ],
+    "radiantInDarkness": [
+      false
+    ],
+    "creatureComfort": [
+      false
+    ],
+    "armored": [
+      false
+    ],
+    "vicious": [
+      false,
+      false,
+      false
+    ],
+    "resilient": [
+      false,
+      false,
+      false
+    ],
+    "bonded": [
+      false
+    ],
+    "aware": [
+      false,
+      false,
+      false
+    ]
+  },
+  "pageVisibility": {
+    "rangerCompanion": false,
+    "armorTemplate": false,
+    "adventureNotes": true
+  },
+  "armorTemplate": {
+    "weaponName": "",
+    "description": "",
+    "upgradeSlots": [
+      {
+        "checked": false,
+        "text": ""
+      },
+      {
+        "checked": false,
+        "text": ""
+      },
+      {
+        "checked": false,
+        "text": ""
+      },
+      {
+        "checked": false,
+        "text": ""
+      },
+      {
+        "checked": false,
+        "text": ""
+      }
+    ],
+    "upgrades": {
+      "basic": {},
+      "tier2": {},
+      "tier3": {},
+      "tier4": {}
+    },
+    "scrapMaterials": {
+      "fragments": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "metals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "components": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "relics": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "electronicCoins": 0
+  },
+  "adventureNotes": {
+    "characterProfile": {
+      "race": "械灵/人类",
+      "age": "27",
+      "gender": "女",
+      "height": "168",
+      "weight": "？？",
+      "skinColor": "白",
+      "eyeColor": "无",
+      "hairColor": "米白",
+      "birthplace": "时代城",
+      "faith": "推开“门”"
+    },
+    "playerInfo": {
+      "nickname": "周一",
+      "preference": "语音only",
+      "activeTime": "晚上，需要提前约日期"
+    },
+    "backstory": "维欣出生平凡，仅能过着满足温饱的生活，在一次被裁员后，维欣无神的游走在街头，此时，一阵莫名恐怖的低语在她耳边响起，随后，“门”找上了她，“后”亲自邀请她加入“门”，以虚假的优渥条件骗取了维欣的信任，于此同时，低语扰乱了维欣的心智，她同意了加入“门”，去追寻那随时会逸散的飘渺指引。\n“门”生来注定追求辉光，一如火花向上飞舞。\n-你是如何通过“面具”而重构/封闭了“腐化”的？\n“门”通过其技术将一块实体的机械面具固定在维欣的脸上，包裹了包括耳朵在内的大半部分脑袋。低语在通过面具时将受到干扰，转换为狂热的正言。\n-你对于自身和人类社会怀有一种近乎狂热的信念？那是怎样的一个信念？你认为它会带来什么？\n人类是低等落后的种族，我也是，世界上的所有种族都是，他们陷于无趣的纷争，却无视神明的引导。我应当去推开“门”，迎接神明。\n-你的职业物品是出于什么目的被你设计并制作出来的？\n**在接受机械改造前，维欣为自己制作了一个怀表，里面放着自己戴上面具前的照片，这是为了给自己在投身推门的路上设下一个锚点，让自己在被低语完全吞噬之前，能记起自己是为何而战。**\n照片已经丢失，维欣不再有退路，取而代之的是一把银钥匙......\n\n·你和你的社群有一条铁律，严禁成员走到某个时代城的下水道。最近一次有人破戒时，发生了什么事？低语引诱它们前往了下水道，“门”失去了四成的信徒。\n·你曾目睹社区中的一个秘密社团执行家法，他们的刑罚是什么？那条家法为什么不能被主流社会知晓？“后”曾放大一位“门卒”的五感，让他沉沦于低语，随后破坏掉他所有的感官，让他再无法聆听低语。这种极端残酷的刑罚不会致人死亡，但他们会一直活着，带着消失的感官，一直去寻找能再次聆听低语的方法。\n·你的社群在来到时代城前来自哪个地区？你们还在坚守的规矩或者信条是什么？你是否发自内心的认同？\n时代被计算之前，“门”就在奥铁帝国的土地上存在了，无尽的黄金吸引了“王”，来到了时代城，潜伏于暗流之下。“王”为门”写下信条——前赴后继，洞悉门扉。我认同信条，并将其融入我的人生。",
+    "milestones": "【底线之前】[伏笔]\n卒在触及底线前，唯有前进，而你知道，终有一日，你会抵达那扇门前的底线......\n\n【塞西莉亚】\n可以从低语中提取有意义的关于门的东西",
+    "adventureLog": [
+      {
+        "name": "",
+        "levelRange": "",
+        "trauma": "",
+        "date": ""
+      },
+      {
+        "name": "",
+        "levelRange": "",
+        "trauma": "",
+        "date": ""
+      },
+      {
+        "name": "",
+        "levelRange": "",
+        "trauma": "",
+        "date": ""
+      },
+      {
+        "name": "",
+        "levelRange": "",
+        "trauma": "",
+        "date": ""
+      },
+      {
+        "name": "",
+        "levelRange": "",
+        "trauma": "",
+        "date": ""
+      },
+      {
+        "name": "",
+        "levelRange": "",
+        "trauma": "",
+        "date": ""
+      },
+      {
+        "name": "",
+        "levelRange": "",
+        "trauma": "",
+        "date": ""
+      },
+      {
+        "name": "",
+        "levelRange": "",
+        "trauma": "",
+        "date": ""
+      }
+    ]
+  },
+  "notebook": {
+    "pages": [
+      {
+        "id": "page-1",
+        "lines": []
+      }
+    ],
+    "currentPageIndex": 0,
+    "isOpen": false
+  }
+}

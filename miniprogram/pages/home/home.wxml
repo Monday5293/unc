@@ -1,4 +1,4 @@
-<view class="home-page">
+<view class="home-page {{theme === 'light' ? 'theme-light' : ''}}">
   <view class="header" style="box-shadow: inset 0 -2px 0 {{currentSystemInfo.accentColor}}55">
     <view class="header-top">
       <view class="header-title-row">
@@ -92,10 +92,10 @@
           />
         </view>
         <view class="form-item">
-          <text class="form-label">粘贴st指令</text>
+          <text class="form-label">{{currentSystem === 'DAGGERHEART' ? '粘贴JSON/导入文件' : '粘贴st指令'}}</text>
           <textarea
             class="form-textarea"
-            placeholder="粘贴 .st 指令，自动识别填入角色数据..."
+            placeholder="{{currentSystem === 'DAGGERHEART' ? '从 DHSheet (dhsheet.site) 导出 JSON 粘贴至此...' : '粘贴 .st 指令，自动识别填入角色数据...'}}"
             placeholder-class="input-placeholder"
             maxlength="-1"
             value="{{newCardSt}}"
@@ -185,6 +185,37 @@
         <view class="bottom-btn" bindtap="cancelDeleteSystemDialog">取消</view>
         <view class="bottom-btn danger" bindtap="confirmDeleteSystem">
           {{systemToDelete.isCustom ? '删除' : '隐藏'}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 未登录提示弹窗 -->
+  <view wx:if="{{loginDialogVisible}}" class="dialog-mask">
+    <view class="dialog-box login-dialog" catchtap="stopPropagation">
+      <view class="dialog-header">
+        <text class="dialog-title">{{isRegisterMode ? '注册' : '登录'}}</text>
+        <text class="dialog-close" bindtap="cancelLoginDialog">✕</text>
+      </view>
+      <view class="dialog-body">
+        <text class="dialog-desc login-dialog-desc">登录后才能创建和管理角色卡</text>
+        <view class="login-field">
+          <text class="login-field-label">昵称</text>
+          <input class="login-field-input" type="nickname" value="{{loginName}}" bindinput="onLoginNameInput" bindblur="onLoginNameBlur" placeholder="请输入昵称" />
+        </view>
+        <view class="login-field">
+          <text class="login-field-label">密码</text>
+          <input class="login-field-input" type="password" value="{{loginPassword}}" bindinput="onLoginPasswordInput" placeholder="请输入密码" />
+        </view>
+        <view class="login-field" wx:if="{{isRegisterMode}}">
+          <text class="login-field-label">邀请码</text>
+          <input class="login-field-input" value="{{loginInviteCode}}" bindinput="onLoginInviteInput" placeholder="请输入邀请码" />
+        </view>
+        <view class="login-dialog-btn-wrap">
+          <button class="login-dialog-confirm-btn" bindtap="doLoginSubmit">{{isRegisterMode ? '注册' : '登录'}}</button>
+        </view>
+        <view class="login-toggle" bindtap="toggleLoginMode">
+          <text>{{isRegisterMode ? '已有账号？去登录' : '没有账号？去注册'}}</text>
         </view>
       </view>
     </view>

@@ -1,5 +1,6 @@
 const api = require('../../utils/api.js')
 const store = require('../../utils/store.js')
+const themeUtil = require('../../utils/theme.js')
 
 const CACHE_KEY_PREFIX = 'custom-form-'
 
@@ -18,6 +19,10 @@ Page({
   onLoad(options) {
     this.formId = options.formId
     this.loadForm()
+  },
+
+  onShow() {
+    themeUtil.applyToPage(this)
   },
 
   async loadForm() {

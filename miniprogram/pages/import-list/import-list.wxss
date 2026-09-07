@@ -1,18 +1,18 @@
 .import-page {
   min-height: 100vh;
-  background-color: #1A1714;
+  background-color: var(--page-bg);
 }
 
 .info-banner {
   padding: 24rpx 32rpx;
   background-color: rgba(59, 107, 74, 0.1);
-  border-bottom: 1rpx solid rgba(232, 220, 196, 0.1);
+  border-bottom: 1rpx solid var(--text-10);
 }
 
 .info-text {
   font-size: 22rpx;
   line-height: 1.6;
-  color: rgba(232, 220, 196, 0.7);
+  color: var(--text-70);
 }
 
 .info-title {
@@ -51,7 +51,7 @@
 
 .loading-text {
   font-size: 24rpx;
-  color: rgba(232, 220, 196, 0.4);
+  color: var(--text-40);
 }
 
 .error-icon {
@@ -66,7 +66,7 @@
 
 .error-hint {
   font-size: 20rpx;
-  color: rgba(232, 220, 196, 0.4);
+  color: var(--text-40);
   margin-bottom: 24rpx;
 }
 
@@ -84,13 +84,13 @@
 
 .empty-text {
   font-size: 28rpx;
-  color: rgba(232, 220, 196, 0.4);
+  color: var(--text-40);
   margin-bottom: 8rpx;
 }
 
 .empty-hint {
   font-size: 20rpx;
-  color: rgba(232, 220, 196, 0.3);
+  color: var(--text-30);
 }
 
 .form-list {
@@ -170,13 +170,13 @@
   flex-shrink: 0;
   padding: 12rpx 20rpx;
   border-radius: 12rpx;
-  background-color: #1A1714;
+  background-color: var(--page-bg);
 }
 
 .import-text {
   font-size: 20rpx;
   font-weight: 500;
-  color: #E8DCC4;
+  color: var(--text-main);
   white-space: nowrap;
 }
 
@@ -188,7 +188,7 @@
 
 .import-actions {
   padding: 24rpx 32rpx;
-  border-bottom: 1rpx solid rgba(232, 220, 196, 0.1);
+  border-bottom: 1rpx solid var(--text-10);
 }
 
 .import-action-btn {
@@ -222,7 +222,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(26, 23, 20, 0.8);
+  background-color: var(--surface-80);
   padding: 48rpx;
 }
 
@@ -231,8 +231,8 @@
   max-width: 600rpx;
   overflow: hidden;
   border-radius: 24rpx;
-  border: 1rpx solid rgba(232, 220, 196, 0.15);
-  background-color: #221F1C;
+  border: 1rpx solid var(--text-15);
+  background-color: var(--card-bg);
   box-shadow: 0 32rpx 64rpx -16rpx rgba(0, 0, 0, 0.5);
 }
 
@@ -241,18 +241,18 @@
   align-items: center;
   justify-content: space-between;
   padding: 24rpx 40rpx;
-  border-bottom: 1rpx solid rgba(232, 220, 196, 0.1);
+  border-bottom: 1rpx solid var(--text-10);
 }
 
 .dialog-title {
   font-size: 28rpx;
   font-weight: 600;
-  color: #E8DCC4;
+  color: var(--text-main);
 }
 
 .dialog-close {
   font-size: 28rpx;
-  color: rgba(232, 220, 196, 0.4);
+  color: var(--text-40);
 }
 
 .dialog-body {
@@ -273,8 +273,8 @@
   gap: 8rpx;
   padding: 20rpx;
   border-radius: 12rpx;
-  border: 1rpx solid rgba(232, 220, 196, 0.15);
-  background-color: rgba(26, 23, 20, 0.4);
+  border: 1rpx solid var(--text-15);
+  background-color: var(--surface-40);
 }
 
 .json-source-icon {
@@ -283,7 +283,7 @@
 
 .json-source-text {
   font-size: 24rpx;
-  color: rgba(232, 220, 196, 0.7);
+  color: var(--text-70);
 }
 
 .input-section {
@@ -299,7 +299,7 @@
 
 .input-label {
   font-size: 24rpx;
-  color: rgba(232, 220, 196, 0.6);
+  color: var(--text-60);
 }
 
 .input-clear {
@@ -312,17 +312,17 @@
   min-height: 200rpx;
   padding: 20rpx;
   border-radius: 12rpx;
-  background-color: #1A1714;
-  border: 1rpx solid rgba(232, 220, 196, 0.15);
+  background-color: var(--page-bg);
+  border: 1rpx solid var(--text-15);
   font-size: 22rpx;
-  color: #E8DCC4;
+  color: var(--text-main);
   font-family: monospace;
   line-height: 1.6;
   box-sizing: border-box;
 }
 
 .textarea-placeholder {
-  color: rgba(232, 220, 196, 0.3);
+  color: var(--text-30);
 }
 
 .dialog-actions {
@@ -334,9 +334,9 @@
 .btn-cancel {
   padding: 16rpx 32rpx;
   border-radius: 12rpx;
-  border: 1rpx solid rgba(232, 220, 196, 0.2);
+  border: 1rpx solid var(--text-20);
   font-size: 24rpx;
-  color: rgba(232, 220, 196, 0.7);
+  color: var(--text-70);
 }
 
 .btn-primary {
@@ -359,8 +359,8 @@
   max-height: 85vh;
   overflow: hidden;
   border-radius: 24rpx;
-  border: 1rpx solid rgba(232, 220, 196, 0.15);
-  background-color: #221F1C;
+  border: 1rpx solid var(--text-15);
+  background-color: var(--card-bg);
   box-shadow: 0 32rpx 64rpx -16rpx rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
@@ -371,14 +371,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 24rpx 40rpx;
-  border-bottom: 1rpx solid rgba(232, 220, 196, 0.1);
+  border-bottom: 1rpx solid var(--text-10);
   flex-shrink: 0;
 }
 
 .preview-dialog-title {
   font-size: 28rpx;
   font-weight: 600;
-  color: #E8DCC4;
+  color: var(--text-main);
 }
 
 .preview-scroll {
@@ -387,13 +387,13 @@
 }
 
 .preview-card {
-  background-color: #1A1714;
+  background-color: var(--page-bg);
   border-radius: 0;
 }
 
 .preview-card-header {
   padding: 32rpx 32rpx 24rpx;
-  border-bottom: 1rpx solid rgba(232, 220, 196, 0.08);
+  border-bottom: 1rpx solid var(--text-08);
 }
 
 .preview-header-deco {
@@ -419,7 +419,7 @@
   justify-content: center;
   border-radius: 50%;
   font-size: 40rpx;
-  color: #E8DCC4;
+  color: var(--text-main);
 }
 
 .preview-card-info {
@@ -430,14 +430,14 @@
 .preview-card-name {
   font-size: 32rpx;
   font-weight: 600;
-  color: #E8DCC4;
+  color: var(--text-main);
   display: block;
   margin-bottom: 4rpx;
 }
 
 .preview-card-player {
   font-size: 22rpx;
-  color: rgba(232, 220, 196, 0.5);
+  color: var(--text-50);
 }
 
 .preview-system-badge {
@@ -487,6 +487,6 @@
   justify-content: flex-end;
   gap: 16rpx;
   padding: 24rpx 40rpx;
-  border-top: 1rpx solid rgba(232, 220, 196, 0.1);
+  border-top: 1rpx solid var(--text-10);
   flex-shrink: 0;
 }

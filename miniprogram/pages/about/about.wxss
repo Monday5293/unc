@@ -1,0 +1,215 @@
+page {
+  background-color: var(--page-bg);
+}
+
+.about-page {
+  min-height: 100vh;
+  background-color: var(--page-bg);
+  padding: 48rpx 32rpx 64rpx;
+  box-sizing: border-box;
+}
+
+/* ===== 头部 ===== */
+.about-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 48rpx;
+}
+
+.about-logo {
+  width: 128rpx;
+  height: 128rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 32rpx;
+  font-size: 64rpx;
+  background: #C8A04622;
+  box-shadow: 0 0 0 2rpx #C8A04655 inset;
+  margin-bottom: 20rpx;
+}
+
+.about-name {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.about-version {
+  font-size: 22rpx;
+  color: var(--text-40);
+  margin-top: 6rpx;
+}
+
+/* ===== 区块 ===== */
+.section {
+  margin-bottom: 40rpx;
+}
+
+.section-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #C8A046;
+  margin-bottom: 16rpx;
+  padding-left: 8rpx;
+}
+
+/* 作者的话 */
+.note-card {
+  padding: 28rpx;
+  border-radius: 20rpx;
+  background: var(--card-bg-60);
+  border: 1rpx solid var(--text-10);
+}
+
+.note-text {
+  font-size: 26rpx;
+  color: var(--text-70);
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+/* 更新日志 */
+.changelog-card {
+  overflow: hidden;
+  border-radius: 20rpx;
+  background: var(--card-bg-60);
+  border: 1rpx solid var(--text-10);
+}
+
+.changelog-item {
+  padding: 24rpx 28rpx;
+  border-bottom: 1rpx solid var(--text-08);
+}
+
+.changelog-item:last-child {
+  border-bottom: none;
+}
+
+.changelog-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.changelog-version {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.changelog-date {
+  font-size: 20rpx;
+  color: var(--text-40);
+}
+
+.changelog-line {
+  display: flex;
+  gap: 10rpx;
+  margin-bottom: 6rpx;
+}
+
+.changelog-dot {
+  color: #C8A046;
+  flex-shrink: 0;
+}
+
+.changelog-text {
+  font-size: 24rpx;
+  color: var(--text-60);
+  line-height: 1.6;
+}
+
+/* ===== 底部小字 ===== */
+.about-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20rpx;
+  margin-top: 16rpx;
+}
+
+.footer-link {
+  font-size: 20rpx;
+  color: var(--text-40);
+  text-decoration: underline;
+}
+
+.footer-sep {
+  font-size: 20rpx;
+  color: var(--text-25);
+}
+
+/* ===== 法律文本弹窗 ===== */
+.dialog-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.dialog-box {
+  width: 85vw;
+  max-height: 75vh;
+  background: var(--card-bg);
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 28rpx;
+  border-bottom: 1px solid var(--text-08);
+}
+
+.dialog-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #C8A046;
+}
+
+.dialog-close {
+  font-size: 32rpx;
+  color: var(--text-40);
+  padding: 0 8rpx;
+}
+
+.legal-scroll {
+  max-height: 55vh;
+  padding: 24rpx 32rpx;
+  box-sizing: border-box;
+}
+
+.legal-text {
+  font-size: 24rpx;
+  color: var(--text-70);
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.dialog-footer {
+  padding: 16rpx 32rpx 24rpx;
+}
+
+.dialog-confirm {
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  border-radius: 12rpx;
+  background: #C8A046;
+  color: #1A1714;
+  font-size: 28rpx;
+  font-weight: 600;
+}

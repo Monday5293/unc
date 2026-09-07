@@ -1,4 +1,4 @@
-<view class="import-page">
+<view class="import-page {{theme === 'light' ? 'theme-light' : ''}}">
   <view class="info-banner">
     <text class="info-text">
       <text class="info-title">ℹ️ 说明：</text>

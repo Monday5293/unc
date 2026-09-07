@@ -1,5 +1,158 @@
-# Vue 3 + TypeScript + Vite
+# 跑团角色卡 · 微信小程序
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+为 TRPG（桌上角色扮演游戏）玩家打造的随身角色卡管理工具，支持 COC（克苏鲁的呼唤）、DND（龙与地下城）、DAGGERHEART（匕首之心）三大规则系统及自定义规则，角色卡数据云端同步、跨设备使用。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## 功能概览
+
+- **多规则系统**：COC / DND / DAGGERHEART 预置模板，支持导入自定义规则表单
+- **快速建卡**：支持粘贴 `.st` 指令（COC）、DHSheet JSON（DAGGERHEART）自动填充
+- **云端同步**：昵称 + 密码登录，角色卡数据跨设备同步
+- **邀请码注册**：注册需要邀请码，控制用户规模（详见下文）
+- **深色 / 浅色模式**：设置页一键切换
+- **收藏 / 搜索**：按名称、属性值、模组名、人物变化等全文搜索
+
+## 目录结构
+
+```
+miniprogram/               # 微信小程序源码
+├── app.js / app.json / app.wxss
+├── pages/
+│   ├── home/              # 首页（卡面列表）
+│   ├── profile/           # 我的（登录 / 昵称 / 头像）
+│   ├── card-detail/       # 角色卡详情编辑
+│   ├── card-list/         # 全部 / 收藏列表
+│   ├── settings/          # 设置（主题 / 邀请码管理）
+│   ├── about/             # 关于（更新日志 / 作者的话）
+│   ├── import-list/       # 规则导入
+│   ├── custom-form/       # 自定义表单渲染
+│   ├── json-io/           # JSON 导入导出
+│   └── todo/              # 待办事项
+├── components/            # card-item / rule-tab / dynamic-form
+├── custom-tab-bar/        # 自定义底部导航
+├── utils/                 # store.js（状态管理）/ theme.js（主题）等
+└── cloudfunctions/
+    ├── auth/              # 注册 / 登录 / 改名 / 邀请码管理
+    └── cards/             # 角色卡云端增删改查
+```
+
+## 云开发环境配置
+
+### 1. 集合
+
+在云开发控制台 → 数据库中创建以下集合：
+
+| 集合名 | 用途 | 推荐权限 |
+|--------|------|----------|
+| `users` | 用户账号（昵称、密码哈希、userId） | 仅创建者可读写 |
+| `cards` | 角色卡数据 | 仅创建者可读写 |
+| `invite_codes` | 邀请码 | 仅创建者可读写 |
+
+> 所有数据读写均通过云函数完成，云函数始终拥有全部权限，上述权限仅约束小程序端直连访问，作为双保险。
+
+### 2. 云函数部署
+
+在微信开发者工具中，分别右键以下目录 → **上传并部署：云端安装依赖**：
+
+- `cloudfunctions/auth`
+- `cloudfunctions/cards`
+
+### 3. 初始化邀请码
+
+部署完成后，先在设置页生成一批邀请码，或直接在云开发控制台向 `invite_codes` 集合手动插入文档（格式见下文）。
+
+---
+
+## 邀请码机制详解
+
+### 这是什么？
+
+邀请码（Invite Code）是一种**注册门槛**：新用户注册账号时必须提供一个有效邀请码，否则无法注册。它通常用于：
+
+- 控制用户规模（内测阶段只让熟人进来）
+- 追溯用户来源（每个码可以分给不同圈子，看使用情况）
+- 保持社区氛围（老用户邀请制）
+
+### 工作原理
+
+```
+作者生成邀请码 ──► 存入云数据库 invite_codes 集合
+                          │
+作者把邀请码发给朋友 ──► 朋友在注册弹窗输入邀请码
+                          │
+              auth 云函数校验邀请码：
+              ① 是否存在        ② 是否有效(active)
+              ③ 使用次数是否超限(usedCount < maxUses)
+                          │
+              校验通过 ──► 创建用户 ──► 邀请码使用次数 +1
+```
+
+### 数据结构
+
+`invite_codes` 集合中每个文档：
+
+```json
+{
+  "code": "TRPG-A2K9XZ",       // 邀请码（唯一）
+  "maxUses": 10,               // 最多可被使用次数
+  "usedCount": 3,              // 已被使用次数
+  "usedBy": ["uabc123", ...],  // 已使用该码注册的 userId 列表
+  "active": true,              // 是否有效（手动设为 false 可停用）
+  "createdAt": "2026-09-07T12:00:00.000Z"
+}
+```
+
+### 如何生成邀请码
+
+**方式一：设置页管理界面（推荐）**
+
+1. 修改 `miniprogram/cloudfunctions/auth/index.js` 顶部的 `ADMIN_KEY` 常量，改成自己的密钥（**务必修改，不要用默认值上线**），并重新部署 auth 云函数
+2. 打开小程序 → 我的 → 设置 → 邀请码管理
+3. 输入管理员密钥、生成数量（1-20）、每码可用次数（默认 10）
+4. 点击「生成邀请码」，点击生成的码即可复制发给朋友
+5. 点击「查看已生成」可以看到所有邀请码的使用进度（如 3/10）
+
+**方式二：云开发控制台手动添加**
+
+在云开发控制台 → 数据库 → `invite_codes` 集合 → 添加文档，按上面的数据结构填写即可（`code` 建议使用 `TRPG-` + 6 位大写字母数字组合）。
+
+### 使用流程（玩家视角）
+
+1. 玩家打开小程序，点击未登录的名称，弹出注册弹窗
+2. 填写昵称、密码，以及**邀请码**（注册模式下必填）
+3. 昵称失焦时自动检测：已存在 → 切换为登录模式；不存在 → 保持注册模式
+4. 点击注册，云函数校验邀请码通过后创建账号
+
+### 常见问题
+
+- **提示「邀请码无效」**：码不存在或被停用（`active: false`）
+- **提示「邀请码已达到使用上限」**：`usedCount >= maxUses`，找作者要新码或让作者调大 `maxUses`
+- **想停发注册**：把所有码的 `active` 改为 `false`，或在控制台删除集合内文档
+- **想无限量**：把某个码的 `maxUses` 改成 999 即可
+
+### 安全说明
+
+- 密码采用**客户端 SHA-256 + 服务端加盐（userId）二次哈希**存储，数据库泄露也无法还原明文
+- 邀请码的生成与查询接口需要管理员密钥（`ADMIN_KEY`），密钥只存在于云函数代码中，不会下发到小程序端
+- 改名不会影响密码（盐值基于不变的 userId）
+
+---
+
+## 深色 / 浅色模式
+
+- 主题偏好存储在本地（`trpg-theme`），进入设置页 → 浅色模式开关即可切换
+- 实现方式：全局 CSS 变量（`app.wxss` 中 `page {}` 定义深色默认值，`.theme-light` 覆盖为浅色），各页面根节点动态绑定 `theme-light` 类
+- 新增页面时：根节点绑定 `{{theme === 'light' ? 'theme-light' : ''}}`，JS 的 `onShow` 中调用 `themeUtil.applyToPage(this)`，wxss 使用 `var(--page-bg)`、`var(--text-main)` 等变量即可自动适配双主题
+
+## 账号体系说明
+
+- 账号 = 昵称（全局唯一） + 密码，不绑定微信 OpenID
+- 同一个微信号可以注册/登录多个不同账号；同一账号也可以在不同设备、不同微信号上登录（凭昵称 + 密码）
+- 角色卡按 `userId` 隔离，互不可见
+
+## 版本历史
+
+- **v1.3.0**（2026-09-07）：设置页、浅色模式、关于页、邀请码注册、修复改名相关 bug
+- **v1.2.0**（2026-08-03）：昵称密码登录、角色卡云端同步
+- **v1.0.0**（2026-01-15）：首个版本
+
+详细更新日志见小程序内「关于」页面。

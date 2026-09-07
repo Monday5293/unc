@@ -1,113 +1,57 @@
-<view class="profile-page">
+<view class="profile-page {{theme === 'light' ? 'theme-light' : ''}}">
   <view class="profile-header">
     <view class="header-glow"></view>
+
     <view class="user-section">
-      <view class="user-avatar">
+      <view wx:if="{{isLoggedIn}}" class="user-avatar" bindtap="onChooseAvatar">
+        <image wx:if="{{userAvatar}}" src="{{userAvatar}}" class="avatar-img" mode="aspectFill"></image>
+        <text wx:else class="avatar-placeholder">🧙</text>
+      </view>
+      <view wx:else class="user-avatar">
         <image wx:if="{{userAvatar}}" src="{{userAvatar}}" class="avatar-img" mode="aspectFill"></image>
         <text wx:else class="avatar-placeholder">🧙</text>
       </view>
       <view class="user-info">
-        <text class="user-name">{{userName}}</text>
-        <text class="user-desc">跑团旅人 · ID #TRPG-2026</text>
-        <view class="system-tags">
-          <view
-            wx:for="{{systems}}"
-            wx:key="code"
-            class="system-tag"
-            style="color: {{item.accentColor}}; background-color: {{item.accentColor}}22;"
-          >
-            {{item.logo}} {{item.name}}
+        <view wx:if="{{!editingName}}" class="name-row">
+          <text class="user-name" bindtap="onNameClick">{{isLoggedIn ? userName : '未登录'}}</text>
+          <view wx:if="{{isLoggedIn}}" class="name-edit-btn" bindtap="onEditName">
+            <text class="name-edit-icon">✎</text>
           </view>
         </view>
+        <view wx:else class="name-edit-row">
+          <input class="name-input" value="{{editNameValue}}" bindinput="onNameInput" bindblur="onNameInput" focus="{{true}}" maxlength="20" />
+          <view class="name-confirm-btn" bindtap="confirmEditName">
+            <text>✓</text>
+          </view>
+          <view class="name-cancel-btn" bindtap="cancelEditName">
+            <text>✕</text>
+          </view>
+        </view>
+        <text class="user-desc" wx:if="{{isLoggedIn}}">ID: {{userId}}</text>
+        <text class="user-desc user-desc-hint" wx:else>点击名称登录</text>
       </view>
     </view>
 
     <view class="stats-grid">
-      <view
-        wx:for="{{topStats}}"
-        wx:key="label"
-        class="stat-card"
-      >
-        <text class="stat-value" style="color: {{item.color}}">{{item.value}}</text>
-        <text class="stat-label">{{item.label}}</text>
+      <view class="stat-card" bindtap="goAllCards">
+        <text class="stat-value stat-value-all">{{stats.total}}</text>
+        <text class="stat-label">总卡数</text>
+      </view>
+      <view class="stat-card" bindtap="goFavorites">
+        <text class="stat-value stat-value-fav">{{stats.favorites}}</text>
+        <text class="stat-label">收藏</text>
       </view>
     </view>
   </view>
 
   <view class="profile-content">
     <view class="section">
-      <view class="section-header">
-        <text class="section-title">我的角色卡</text>
-        <view class="section-more" bindtap="goHome">
-          查看全部 ›
-        </view>
-      </view>
-
-      <view wx:for="{{groupedMyCards}}" wx:for-item="group" wx:key="system" class="card-group">
-        <view class="group-header" style="color: {{group.accent}}">
-          <text class="group-logo">{{group.logo}}</text>
-          <text class="group-name">{{group.name}}</text>
-          <text class="group-count">· {{group.items.length}}</text>
-        </view>
-        <view class="group-list">
-          <view
-            wx:for="{{group.items}}"
-            wx:for-item="card"
-            wx:key="id"
-            class="card-row"
-            data-id="{{card.id}}"
-            bindtap="openCard"
-          >
-            <view class="card-row-icon" style="background-color: {{group.accent}}22;">
-              {{group.logo}}
-            </view>
-            <view class="card-row-info">
-              <view class="card-row-name-row">
-                <text class="card-row-name">{{card.name}}</text>
-                <text wx:if="{{card.favorite}}" class="card-fav" style="color: {{group.accent}}">★</text>
-              </view>
-              <text class="card-row-desc">{{card.description}}</text>
-            </view>
-            <text class="card-row-arrow">›</text>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <view class="section">
       <view class="menu-list">
-        <view class="menu-item" bindtap="goDesigner">
-          <text class="menu-icon">🛠️</text>
-          <view class="menu-info">
-            <text class="menu-title">网页表单设计器</text>
-            <text class="menu-desc">制作 COC / DND 表单模板</text>
-          </view>
-          <text class="menu-arrow">↗</text>
-        </view>
-
-        <view class="menu-item" bindtap="goImport">
-          <text class="menu-icon">📥</text>
-          <view class="menu-info">
-            <text class="menu-title import">读取服务器表单 JSON</text>
-            <text class="menu-desc">下载设计器保存的表单并渲染</text>
-          </view>
-          <text class="menu-arrow">↗</text>
-        </view>
-
-        <view class="menu-item" bindtap="goJsonIO">
-          <text class="menu-icon">📦</text>
-          <view class="menu-info">
-            <text class="menu-title">导入 / 导出 JSON</text>
-            <text class="menu-desc">规则系统、角色卡数据备份</text>
-          </view>
-          <text class="menu-arrow">↗</text>
-        </view>
-
         <view class="menu-item" bindtap="goSettings">
           <text class="menu-icon">⚙️</text>
           <view class="menu-info">
             <text class="menu-title">设置</text>
-            <text class="menu-desc">主题、字体、深色模式</text>
+            <text class="menu-desc">浅色模式</text>
           </view>
           <text class="menu-arrow">›</text>
         </view>
@@ -116,11 +60,77 @@
           <text class="menu-icon">📖</text>
           <view class="menu-info">
             <text class="menu-title">关于</text>
-            <text class="menu-desc">v1.0.0 · 跑团角色卡</text>
+            <text class="menu-desc">v1.3.0 · 更新日志与作者的话</text>
           </view>
           <text class="menu-arrow">›</text>
         </view>
       </view>
     </view>
+
+    <view class="logout-section" wx:if="{{isLoggedIn}}">
+      <view class="logout-btn" bindtap="doLogout">退出登录</view>
+    </view>
   </view>
+
+  <!-- 手机号登录弹窗 -->
+  <view wx:if="{{loginDialogVisible}}" class="dialog-mask" catchtouchmove="stopPropagation">
+    <view class="dialog-box login-dialog" catchtap="stopPropagation">
+      <view class="dialog-header">
+        <text class="dialog-title">{{isRegisterMode ? '注册' : '登录'}}</text>
+        <text class="dialog-close" bindtap="cancelLoginDialog">✕</text>
+      </view>
+      <view class="dialog-body">
+        <view class="login-field">
+          <text class="login-field-label">昵称</text>
+          <input class="login-field-input" type="nickname" value="{{loginName}}" bindinput="onLoginNameInput" bindblur="onLoginNameBlur" placeholder="请输入昵称" />
+        </view>
+        <view class="login-field">
+          <text class="login-field-label">密码</text>
+          <input class="login-field-input" type="password" value="{{loginPassword}}" bindinput="onLoginPasswordInput" placeholder="请输入密码" />
+        </view>
+        <view class="login-field" wx:if="{{isRegisterMode}}">
+          <text class="login-field-label">邀请码</text>
+          <input class="login-field-input" value="{{loginInviteCode}}" bindinput="onLoginInviteInput" placeholder="请输入邀请码" />
+        </view>
+        <view class="login-dialog-btn-wrap">
+          <button class="login-dialog-confirm-btn" bindtap="doLoginSubmit">{{isRegisterMode ? '注册' : '登录'}}</button>
+        </view>
+        <view class="login-toggle" bindtap="toggleLoginMode">
+          <text>{{isRegisterMode ? '已有账号？去登录' : '没有账号？去注册'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 头像裁剪弹窗 -->
+  <view wx:if="{{cropDialogVisible}}" class="dialog-mask" catchtouchmove="stopPropagation">
+    <view class="crop-dialog-box" catchtap="stopPropagation">
+      <view class="dialog-header">
+        <text class="dialog-title">裁剪头像</text>
+        <text class="dialog-close" bindtap="cancelCrop">✕</text>
+      </view>
+      <view class="crop-body">
+        <view class="crop-canvas-area" style="width: {{cropImageW}}px; height: {{cropImageH}}px;">
+          <image class="crop-image" src="{{cropImageSrc}}" mode="widthFix" style="width: {{cropImageW}}px; height: {{cropImageH}}px;" />
+          <movable-area class="crop-movable-area" style="width: {{cropImageW}}px; height: {{cropImageH}}px;">
+            <movable-view class="crop-movable-box crop-movable-circle" direction="all" x="{{cropX}}" y="{{cropY}}" bindchange="onCropBoxChange" style="width: {{cropBoxSize}}px; height: {{cropBoxSize}}px;">
+              <view class="crop-grid-line-h crop-grid-line-h1"></view>
+              <view class="crop-grid-line-h crop-grid-line-h2"></view>
+              <view class="crop-grid-line-v crop-grid-line-v1"></view>
+              <view class="crop-grid-line-v crop-grid-line-v2"></view>
+            </movable-view>
+            <view class="crop-resize-handle" style="left: {{cropX + cropBoxSize - 16}}px; top: {{cropY + cropBoxSize - 16}}px;" catchtouchstart="onResizeStart" catchtouchmove="onResizeMove" catchtouchend="onResizeEnd">
+              <view class="crop-resize-icon"></view>
+            </view>
+          </movable-area>
+        </view>
+      </view>
+      <view class="dialog-actions crop-actions">
+        <view class="btn-cancel" bindtap="cancelCrop">取消</view>
+        <view class="btn-primary" bindtap="confirmCrop">确定</view>
+      </view>
+    </view>
+  </view>
+
+  <canvas canvas-id="profileCropCanvas" class="crop-canvas-hidden"></canvas>
 </view>

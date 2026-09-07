@@ -1,0 +1,56 @@
+<view class="about-page {{theme === 'light' ? 'theme-light' : ''}}">
+  <!-- 头部 -->
+  <view class="about-header">
+    <view class="about-logo">🎴</view>
+    <text class="about-name">跑团角色卡</text>
+    <text class="about-version">v1.3.0</text>
+  </view>
+
+  <!-- 作者的话 -->
+  <view class="section">
+    <view class="section-title">✉️ 作者的话</view>
+    <view class="note-card">
+      <text class="note-text">{{authorNote}}</text>
+    </view>
+  </view>
+
+  <!-- 更新日志 -->
+  <view class="section">
+    <view class="section-title">📜 更新日志</view>
+    <view class="changelog-card">
+      <view wx:for="{{changelog}}" wx:key="version" class="changelog-item">
+        <view class="changelog-head">
+          <text class="changelog-version">{{item.version}}</text>
+          <text class="changelog-date">{{item.date}}</text>
+        </view>
+        <view wx:for="{{item.items}}" wx:for-item="log" wx:key="*this" class="changelog-line">
+          <text class="changelog-dot">·</text>
+          <text class="changelog-text">{{log}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部小字：隐私政策与用户协议 -->
+  <view class="about-footer">
+    <text class="footer-link" bindtap="showPrivacy">隐私政策</text>
+    <text class="footer-sep">|</text>
+    <text class="footer-link" bindtap="showAgreement">用户协议</text>
+  </view>
+
+  <!-- 法律文本弹窗 -->
+  <view wx:if="{{legalDialogVisible}}" class="dialog-mask" catchtouchmove="stopPropagation" bindtap="closeLegalDialog">
+    <view class="dialog-box" catchtap="stopPropagation">
+      <view class="dialog-header">
+        <text class="dialog-title">{{legalDialogTitle}}</text>
+        <text class="dialog-close" bindtap="closeLegalDialog">✕</text>
+      </view>
+      <scroll-view scroll-y class="legal-scroll">
+        <text class="legal-text">{{legalDialogContent}}</text>
+      </scroll-view>
+      <view class="dialog-footer">
+        <view class="dialog-confirm" bindtap="closeLegalDialog">我知道了</view>
+      </view>
+    </view>
+  </view>
+</view>

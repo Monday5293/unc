@@ -1,5 +1,8 @@
 const store = require('../../utils/store.js')
+const themeUtil = require('../../utils/theme.js')
 const { parseStCommand } = require('../../utils/st-parser.js')
+const { parseDhJson } = require('../../utils/dh-json-parser.js')
+const { sha256 } = require('../../utils/sha256.js')
 
 // Daggerheart Build 工具函数（模块级，避免 WeChat 编译器 "not a function" 错误）
 function buildDhExperiences(card) {
@@ -350,10 +353,16 @@ Page({
     // Daggerheart 背景故事
     dhBackstoryIntro: '',
     dhBackstoryTraits: '',
+    dhBackstoryBio: '',
+    dhBackstoryMilestones: '',
+    dhAdventureLog: '',
     dhAdventureNote: '',
     editingDhBackstory: false,
     editDhBackstoryIntro: '',
     editDhBackstoryTraits: '',
+    editDhBackstoryBio: '',
+    editDhBackstoryMilestones: '',
+    editDhAdventureLog: '',
     editDhAdventureNote: '',
     dhBackstoryDialogVisible: false,
     dhBackstoryDialogType: '',
@@ -401,6 +410,11 @@ Page({
     cropX: 0,
     cropY: 0,
     cropBoxSize: 200,
+    // 登录弹窗
+    loginDialogVisible: false,
+    loginName: '',
+    loginPassword: '',
+    isRegisterMode: false,
   },
 
   onLoad(options) {
@@ -414,6 +428,7 @@ Page({
   },
 
   onShow() {
+    themeUtil.applyToPage(this)
     if (this.cardId && this._ready) {
       this.loadCard()
     }
@@ -455,65 +470,104 @@ Page({
       // 构建手动属性表数据
       const sheetData = this.buildSheetData(card, system)
 
+      // 将所有函数调用提前到 setData 外部，避免 WeChat 编译器 "not a function" 错误
+      const createdAtText = this.formatDate(card.createdAt)
+      const updatedAtText = this.formatDate(card.updatedAt)
+      const experienceItems = this.buildExperienceItems(card)
+      const weaponItems = this.buildWeaponItems(card)
+      const classFeatures = this.buildClassFeatures(card)
+      const raceFeatures = this.buildRaceFeatures(card)
+      const feats = this.buildFeats(card)
+      const spellItems = this.buildSpellItems(card)
+
+      const cardFd = card.formData || {}
+      const equipmentRaw = cardFd.equipment
+      var equipmentItems
+      if (equipmentRaw && Array.isArray(equipmentRaw) && equipmentRaw.length > 0) {
+        equipmentItems = equipmentRaw.map((eq, i) => ({
+          key: eq.key || 'equip_' + i,
+          name: eq.name || '',
+          attuned: !!eq.attuned,
+          properties: eq.properties || '',
+          weight: eq.weight || '',
+          slot: eq.slot || '',
+        }))
+      } else {
+        equipmentItems = [
+          { key: 'equip_0', name: '', attuned: false, properties: '', weight: '', slot: '' },
+          { key: 'equip_1', name: '', attuned: false, properties: '', weight: '', slot: '' },
+        ]
+      }
+
+      var editWealth = {}
+      ;['pp','ep','gp','sp','cp'].forEach(function(k) { editWealth[k] = parseInt(cardFd['wealth_' + k]) || 0 })
+      const wealthPP = parseInt(cardFd.wealth_pp) || 0
+      const wealthEP = parseInt(cardFd.wealth_ep) || 0
+      const wealthGP = parseInt(cardFd.wealth_gp) || 0
+      const wealthSP = parseInt(cardFd.wealth_sp) || 0
+      const wealthCP = parseInt(cardFd.wealth_cp) || 0
+      const wealthTotalGP = Math.round((wealthPP * 100 + wealthEP * 10 + wealthGP * 1 + wealthSP * 0.1 + wealthCP * 0.01) * 100) / 100
+      const dndBackpackContent = cardFd.dndBackpack || ''
+
+      // Daggerheart 数据
+      const dhExperiences = buildDhExperiences(card)
+      const dhWeapons = buildDhWeapons(card)
+      const dhArmors = buildDhArmors(card)
+      const dhInventory = cardFd.dh_inventory || ''
+      const dhBackstoryIntro = cardFd.dh_backstory_intro || ''
+      const dhBackstoryTraits = cardFd.dh_backstory_traits || ''
+      const dhBackstoryBio = cardFd.dh_backstory_bio || ''
+      const dhBackstoryMilestones = cardFd.dh_backstory_milestones || ''
+      const dhAdventureLog = cardFd.dh_adventure_log || ''
+      const dhAdventureNote = buildDhAdventureNote(card)
+      const dhClassFeatures = buildDhClassFeatures(card)
+      const dhRaceFeatures = buildDhRaceFeatures(card)
+      const dhDomainCards = buildDhDomainCards(card)
+      const dhTreasuryCards = buildDhTreasuryCards(card)
+
+      console.log('[loadCard] calling setData, data size ~' +
+        JSON.stringify({ cardId: card.id, system: system }).length + ' chars')
+      // 克隆 card 对象，确保 setData 检测到引用变化
+      var cardForSetData = {}
+      var cardKeys = Object.keys(card)
+      for (var cki = 0; cki < cardKeys.length; cki++) {
+        var ck = cardKeys[cki]
+        cardForSetData[ck] = card[ck]
+      }
       this.setData({
-        card,
+        card: cardForSetData,
         systemInfo,
         system,
         previewStats,
         accentColor,
-        createdAtText: this.formatDate(card.createdAt),
-        updatedAtText: this.formatDate(card.updatedAt),
+        createdAtText,
+        updatedAtText,
         cardNotFound: false,
         ...sheetData,
-        experienceItems: this.buildExperienceItems(card),
-        weaponItems: this.buildWeaponItems(card),
-        equipmentItems: (() => {
-          const fd = card.formData || {}
-          const equipment = fd.equipment
-          if (equipment && Array.isArray(equipment) && equipment.length > 0) {
-            return equipment.map((eq, i) => ({
-              key: eq.key || 'equip_' + i,
-              name: eq.name || '',
-              attuned: !!eq.attuned,
-              properties: eq.properties || '',
-              weight: eq.weight || '',
-              slot: eq.slot || '',
-            }))
-          }
-          return [
-            { key: 'equip_0', name: '', attuned: false, properties: '', weight: '', slot: '' },
-            { key: 'equip_1', name: '', attuned: false, properties: '', weight: '', slot: '' },
-          ]
-        })(),
-        classFeatures: this.buildClassFeatures(card),
-        raceFeatures: this.buildRaceFeatures(card),
-        feats: this.buildFeats(card),
-        spellItems: this.buildSpellItems(card),
-        editWealth: (() => {
-          const fd = card.formData || {}
-          const w = {}
-          ;['pp','ep','gp','sp','cp'].forEach(k => { w[k] = parseInt(fd['wealth_' + k]) || 0 })
-          return w
-        })(),
-        wealthTotalGP: (() => {
-          const fd2 = card.formData || {}
-          const w2 = { pp: parseInt(fd2.wealth_pp) || 0, ep: parseInt(fd2.wealth_ep) || 0, gp: parseInt(fd2.wealth_gp) || 0, sp: parseInt(fd2.wealth_sp) || 0, cp: parseInt(fd2.wealth_cp) || 0 }
-          const raw = w2.pp * 100 + w2.ep * 10 + w2.gp * 1 + w2.sp * 0.1 + w2.cp * 0.01
-          return Math.round(raw * 100) / 100
-        })(),
-        dndBackpackContent: (card.formData && card.formData.dndBackpack) || '',
-        // Daggerheart 数据
-        dhExperiences: buildDhExperiences(card),
-        dhWeapons: buildDhWeapons(card),
-        dhArmors: buildDhArmors(card),
-        dhInventory: (card.formData && card.formData.dh_inventory) || '',
-        dhBackstoryIntro: (card.formData && card.formData.dh_backstory_intro) || '',
-        dhBackstoryTraits: (card.formData && card.formData.dh_backstory_traits) || '',
-        dhAdventureNote: buildDhAdventureNote(card),
-        dhClassFeatures: buildDhClassFeatures(card),
-        dhRaceFeatures: buildDhRaceFeatures(card),
-        dhDomainCards: buildDhDomainCards(card),
-        dhTreasuryCards: buildDhTreasuryCards(card),
+        experienceItems,
+        weaponItems,
+        equipmentItems,
+        classFeatures,
+        raceFeatures,
+        feats,
+        spellItems,
+        editWealth,
+        wealthTotalGP,
+        dndBackpackContent,
+        dhExperiences,
+        dhWeapons,
+        dhArmors,
+        dhInventory,
+        dhBackstoryIntro,
+        dhBackstoryTraits,
+        dhBackstoryBio,
+        dhBackstoryMilestones,
+        dhAdventureLog,
+        dhAdventureNote,
+        dhClassFeatures,
+        dhRaceFeatures,
+        dhDomainCards,
+        dhTreasuryCards,
       })
 
       wx.setNavigationBarTitle({
@@ -527,9 +581,11 @@ Page({
 
   /** 构建手动属性表数据 */
   buildSheetData(card, system) {
+    console.log('[buildSheetData] start, system:', system)
     const fd = card.formData || {}
 
     if (system === 'COC') {
+      console.log('[buildSheetData] building COC data')
       // 9 项基础属性（3x3网格）
       const attrs = [
         { key: 'str',  label: '力量', abbr: 'STR', value: fd.str  ?? 50 },
@@ -648,6 +704,7 @@ Page({
     }
 
     if (system === 'DND') {
+      console.log('[buildSheetData] building DND data')
       const abilities = [
         { key: 'str', label: '力量', abbr: 'STR', value: fd.str ?? 10 },
         { key: 'dex', label: '敏捷', abbr: 'DEX', value: fd.dex ?? 10 },
@@ -770,6 +827,8 @@ Page({
           })
         : Array.from({ length: 9 }, () => ({ used: 0, total: 0 }))
 
+      const classLabel = this.classLabel(fd.class)
+
       return {
         dndAbilities: abilities,
         dndSavingThrows: saves,
@@ -780,11 +839,12 @@ Page({
         dndAc: ac,
         dndDc: dc,
         dndSpellSlots: spellSlots,
-        dndClassLabel: this.classLabel(fd.class),
+        dndClassLabel: classLabel,
       }
     }
 
     if (system === 'DAGGERHEART') {
+      console.log('[buildSheetData] building DAGGERHEART data, dh_armor:', fd.dh_armor, 'dh_armor_max:', fd.dh_armor_max)
       const attrDefs = [
         { key: 'agility', label: '敏捷', abbr: 'AGI', subs: ['冲刺', '跳跃', '机动'] },
         { key: 'strength', label: '力量', abbr: 'STR', subs: ['举起', '猛击', '擒抱'] },
@@ -802,6 +862,7 @@ Page({
       const attrFilled = fd.dh_attr_filled || {}
       const dhAttrFilled = {}
       attrDefs.forEach(a => { dhAttrFilled[a.key] = !!attrFilled[a.key] })
+      const armorMax = fd.dh_armor_max ?? 0
 
       return {
         dhAttributes: attrs,
@@ -812,7 +873,7 @@ Page({
         dhEvasion: fd.dh_evasion ?? 0,
         dhProficiency: fd.dh_proficiency ?? 0,
         dhArmor: fd.dh_armor ?? 0,
-        dhArmorMax: fd.dh_armor_max ?? 0,
+        dhArmorMax: armorMax,
         dhHP: fd.dh_hp ?? 0,
         dhHPMax: fd.dh_hp_max ?? 0,
         dhStress: fd.dh_stress ?? 0,
@@ -822,6 +883,7 @@ Page({
       }
     }
 
+    console.log('[buildSheetData] done, returning data for system:', system)
     return {}
   },
 
@@ -836,6 +898,7 @@ Page({
   // === DND 编辑处理 ===
   /** 开启/关闭 DND 基本信息编辑 */
   onToggleDndBasicInfoEdit() {
+    if (!this.guardLogin()) return
     if (this.data.editingDndBasicInfo) {
       this.setData({ editingDndBasicInfo: false })
       return
@@ -1187,6 +1250,7 @@ Page({
 
   // === Daggerheart 编辑处理 ===
   onToggleDhBasicInfoEdit() {
+    if (!this.guardLogin()) return
     if (this.data.editingDhBasicInfo) {
       this.setData({ editingDhBasicInfo: false })
       return
@@ -1279,6 +1343,7 @@ Page({
 
   // ===== st 指令 =====
   openStDialog() {
+    if (!this.guardLogin()) return
     this.setData({ stDialogVisible: true, stCommandText: '' })
   },
 
@@ -1293,13 +1358,23 @@ Page({
   applyStCommand() {
     const stText = this.data.stCommandText.trim()
     if (!stText) {
-      wx.showToast({ title: '请粘贴 .st 指令', icon: 'none' })
+      wx.showToast({ title: '请粘贴指令或 JSON', icon: 'none' })
       return
     }
-    const parsed = parseStCommand(stText)
-    if (!parsed || Object.keys(parsed).length === 0) {
-      wx.showToast({ title: '未能解析指令', icon: 'none' })
-      return
+    // DAGGERHEART 系统：检测是否为 DHSheet JSON 导入
+    var parsed
+    if (this.data.system === 'DAGGERHEART' && stText.charAt(0) === '{') {
+      parsed = parseDhJson(stText)
+      if (!parsed) {
+        wx.showToast({ title: 'JSON 格式无效', icon: 'none' })
+        return
+      }
+    } else {
+      parsed = parseStCommand(stText)
+      if (!parsed || Object.keys(parsed).length === 0) {
+        wx.showToast({ title: '未能解析指令', icon: 'none' })
+        return
+      }
     }
     const merged = { ...this.data.card.formData, ...parsed }
     store.updateCardFormData(this.cardId, merged)
@@ -1538,6 +1613,7 @@ Page({
 
   // ===== 基础属性编辑 =====
   startEditBasicInfo() {
+    if (!this.guardLogin()) return
     const fd = this.data.card.formData || {}
     this.setData({
       editingBasicInfo: true,
@@ -1584,6 +1660,7 @@ Page({
 
   // ===== 基础属性编辑 =====
   startEditAttrs() {
+    if (!this.guardLogin()) return
     const fd = this.data.card.formData || {}
     this.setData({
       editingAttrs: true,
@@ -1638,6 +1715,7 @@ Page({
 
   // ===== 当前状态编辑 =====
   startEditStatus() {
+    if (!this.guardLogin()) return
     const fd = this.data.card.formData || {}
     this.setData({
       editingStatus: true,
@@ -2091,6 +2169,10 @@ Page({
       return it
     })
     this.setData({ experienceDialogVisible: false, experienceDialogEditing: false, experienceItems: items })
+    // 持久化到 store
+    const fd = { ...this.data.card.formData }
+    fd.experiences = items.map(it => ({ key: it.key, label: it.label, value: it.value }))
+    store.updateCardFormData(this.cardId, fd)
   },
 
   // === 武器模块 ===
@@ -2506,6 +2588,91 @@ Page({
     }))
     store.updateCardFormData(this.cardId, fd)
     this.setData({ equipmentDialogVisible: false, equipmentItems: items })
+  },
+
+  // ===== 登录守卫 =====
+  guardLogin() {
+    if (!store.isLoggedIn()) {
+      this.setData({
+        loginDialogVisible: true,
+        loginName: '',
+        loginPassword: '',
+        isRegisterMode: true
+      })
+      return false
+    }
+    return true
+  },
+
+  onLoginNameInput(e) {
+    console.log('[card-detail] onLoginNameInput value:', e.detail.value)
+    this.setData({ loginName: e.detail.value })
+  },
+
+  onLoginNameBlur(e) {
+    var name = (e.detail.value || '').trim()
+    console.log('[card-detail] onLoginNameBlur value:', name)
+    this.setData({ loginName: name })
+    if (!name) return
+    var that = this
+    store.cloudCheckAccount(name).then(function (res) {
+      console.log('[card-detail] cloudCheckAccount result:', res)
+      that.setData({ isRegisterMode: !res.exists })
+    })
+  },
+
+  onLoginPasswordInput(e) {
+    this.setData({ loginPassword: e.detail.value })
+  },
+
+  onLoginInviteInput(e) {
+    this.setData({ loginInviteCode: e.detail.value })
+  },
+
+  toggleLoginMode() {
+    this.setData({
+      isRegisterMode: !this.data.isRegisterMode,
+      loginPassword: '',
+      loginInviteCode: ''
+    })
+  },
+
+  doLoginSubmit() {
+    console.log('[card-detail] doLoginSubmit loginName:', this.data.loginName, 'loginPassword:', this.data.loginPassword ? '***' : '')
+    var action = this.data.isRegisterMode ? 'register' : 'login'
+    var name = this.data.loginName.trim()
+    var password = this.data.loginPassword
+    var inviteCode = (this.data.loginInviteCode || '').trim()
+
+    if (!name) {
+      wx.showToast({ title: '请输入昵称', icon: 'none' })
+      return
+    }
+    if (!password || password.length < 4) {
+      wx.showToast({ title: '密码至少4位', icon: 'none' })
+      return
+    }
+    if (action === 'register' && !inviteCode) {
+      wx.showToast({ title: '请输入邀请码', icon: 'none' })
+      return
+    }
+
+    wx.showLoading({ title: '登录中...' })
+    var passwordHash = sha256(password)
+    var that = this
+    store.cloudLogin(action, name, passwordHash, inviteCode).then(function (res) {
+      wx.hideLoading()
+      if (res.success) {
+        that.setData({ loginDialogVisible: false, loginName: '', loginPassword: '', loginInviteCode: '' })
+        wx.showToast({ title: action === 'register' ? '注册成功' : '登录成功', icon: 'success' })
+      } else {
+        wx.showToast({ title: res.errMsg || '登录失败', icon: 'none' })
+      }
+    })
+  },
+
+  cancelLoginDialog() {
+    this.setData({ loginDialogVisible: false, loginName: '', loginPassword: '', loginInviteCode: '' })
   },
 
   stopPropagation() {},
@@ -3248,6 +3415,7 @@ Page({
     const key = 'dh_' + field
     const current = fd[key] ?? 0
     let newVal = Math.max(0, current + d)
+    console.log('[onDhStatDelta] field:', field, 'delta:', d, 'current:', current, 'newVal:', newVal)
     // 护甲/生命/压力/希望：左侧不能超过右侧
     const fieldsWithMax = ['armor', 'hp', 'stress', 'hope']
     if (fieldsWithMax.indexOf(field) !== -1) {
@@ -3576,6 +3744,9 @@ Page({
       editingDhBackstory: true,
       editDhBackstoryIntro: this.data.dhBackstoryIntro,
       editDhBackstoryTraits: this.data.dhBackstoryTraits,
+      editDhBackstoryBio: this.data.dhBackstoryBio,
+      editDhBackstoryMilestones: this.data.dhBackstoryMilestones,
+      editDhAdventureLog: this.data.dhAdventureLog,
       editDhAdventureNote: this.data.dhAdventureNote,
     })
   },
@@ -3596,16 +3767,34 @@ Page({
     this.setData({ editDhAdventureNote: e.detail.value })
   },
 
+  onDhBackstoryBioInput(e) {
+    this.setData({ editDhBackstoryBio: e.detail.value })
+  },
+
+  onDhBackstoryMilestonesInput(e) {
+    this.setData({ editDhBackstoryMilestones: e.detail.value })
+  },
+
+  onDhAdventureLogInput(e) {
+    this.setData({ editDhAdventureLog: e.detail.value })
+  },
+
   saveDhBackstoryNotes() {
     const fd = { ...this.data.card.formData }
     fd.dh_backstory_intro = this.data.editDhBackstoryIntro
     fd.dh_backstory_traits = this.data.editDhBackstoryTraits
+    fd.dh_backstory_bio = this.data.editDhBackstoryBio
+    fd.dh_backstory_milestones = this.data.editDhBackstoryMilestones
+    fd.dh_adventure_log = this.data.editDhAdventureLog
     fd.dh_adventure_note = this.data.editDhAdventureNote
     store.updateCardFormData(this.cardId, fd)
     this.setData({
       editingDhBackstory: false,
       dhBackstoryIntro: this.data.editDhBackstoryIntro,
       dhBackstoryTraits: this.data.editDhBackstoryTraits,
+      dhBackstoryBio: this.data.editDhBackstoryBio,
+      dhBackstoryMilestones: this.data.editDhBackstoryMilestones,
+      dhAdventureLog: this.data.editDhAdventureLog,
       dhAdventureNote: this.data.editDhAdventureNote,
     })
   },

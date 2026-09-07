@@ -1,0 +1,166 @@
+page {
+  background-color: var(--page-bg);
+}
+
+.card-list-page {
+  min-height: 100vh;
+  background-color: var(--page-bg);
+  padding: 32rpx;
+}
+
+.list-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 32rpx;
+  padding: 0 8rpx;
+}
+
+.list-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.list-count {
+  font-size: 22rpx;
+  color: var(--text-40);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 64rpx;
+  margin-bottom: 16rpx;
+  opacity: 0.4;
+}
+
+.empty-text {
+  font-size: 24rpx;
+  color: var(--text-40);
+}
+
+.card-group {
+  margin-bottom: 32rpx;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+  font-size: 22rpx;
+}
+
+.group-logo {
+  font-size: 32rpx;
+  line-height: 1;
+}
+
+.group-name {
+  font-weight: 600;
+}
+
+.group-count {
+  color: var(--text-40);
+}
+
+.group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.card-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background-color: var(--card-bg-60);
+  border: 1rpx solid var(--text-08);
+}
+
+.card-row-icon {
+  width: 80rpx;
+  height: 80rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  overflow: hidden;
+}
+
+.card-row-avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.card-row-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.card-row-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.card-row-name {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-fav {
+  font-size: 24rpx;
+  flex-shrink: 0;
+}
+
+.card-row-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-top: 8rpx;
+}
+
+.card-field-tag {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 6rpx;
+  background: var(--text-05);
+}
+
+.card-field-label {
+  font-size: 18rpx;
+  color: var(--text-35);
+}
+
+.card-field-value {
+  font-size: 18rpx;
+  color: var(--text-70);
+  max-width: 120rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-row-arrow {
+  font-size: 32rpx;
+  color: var(--text-30);
+  flex-shrink: 0;
+}

@@ -1,0 +1,15 @@
+<view class="settings-page {{theme === 'light' ? 'theme-light' : ''}}">
+  <view class="section">
+    <view class="section-title">外观</view>
+    <view class="menu-list">
+      <view class="menu-item">
+        <text class="menu-icon">☀️</text>
+        <view class="menu-info">
+          <text class="menu-title">浅色模式</text>
+          <text class="menu-desc">切换到明亮的纸张配色</text>
+        </view>
+        <switch checked="{{theme === 'light'}}" color="#C8A046" bindchange="onThemeToggle" />
+      </view>
+    </view>
+  </view>
+</view>

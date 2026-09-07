@@ -1,5 +1,6 @@
 const api = require('../../utils/api.js')
 const store = require('../../utils/store.js')
+const themeUtil = require('../../utils/theme.js')
 
 function formatDate(dateStr) {
   if (!dateStr) return ''
@@ -46,6 +47,10 @@ Page({
 
   onLoad() {
     this.refresh()
+  },
+
+  onShow() {
+    themeUtil.applyToPage(this)
   },
 
   async refresh() {

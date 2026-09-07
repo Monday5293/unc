@@ -1,4 +1,4 @@
-<view class="detail-page" hover-class="none">
+<view class="detail-page {{theme === 'light' ? 'theme-light' : ''}}" hover-class="none">
 <view wx:if="{{!cardNotFound && card}}" style="--accent: {{accentColor}};" hover-class="none">
   <view class="detail-header" style="background: linear-gradient(180deg, {{accentColor}}22 0%, transparent 100%);">
     <view class="header-decoration">{{systemInfo.logo}}</view>
@@ -236,11 +236,11 @@
               <view wx:elif="{{cocSkillMode === 'detailed' || item.changed}}" class="skill-table-row" style="border-bottom: 1px solid {{accentColor}}08;">
                 <text class="skill-td-name skill-td-zh">{{item.displayName}}</text>
                 <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.growth || 0}}" data-col="left" data-idx="{{index}}" bindinput="onSkillGrowthInput" />
-                <text wx:else class="skill-td-num" style="color: {{item.growth > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.growth || 0}}</text>
+                <text wx:else class="skill-td-num" style="color: {{item.growth > 0 ? accentColor : 'var(--text-20)'}};">{{item.growth || 0}}</text>
                 <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.occ || 0}}" data-col="left" data-idx="{{index}}" bindinput="onSkillOccInput" />
-                <text wx:else class="skill-td-num" style="color: {{item.occ > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.occ || 0}}</text>
+                <text wx:else class="skill-td-num" style="color: {{item.occ > 0 ? accentColor : 'var(--text-20)'}};">{{item.occ || 0}}</text>
                 <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.int || 0}}" data-col="left" data-idx="{{index}}" bindinput="onSkillIntInput" />
-                <text wx:else class="skill-td-num" style="color: {{item.int > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.int || 0}}</text>
+                <text wx:else class="skill-td-num" style="color: {{item.int > 0 ? accentColor : 'var(--text-20)'}};">{{item.int || 0}}</text>
                 <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.current}}" data-col="left" data-idx="{{index}}" bindinput="onSkillCurrentInput" />
                 <text wx:else class="skill-td-pct" style="color: {{item.color}};">{{item.current}}%</text>
               </view>
@@ -262,11 +262,11 @@
               <view wx:elif="{{cocSkillMode === 'detailed' || item.changed}}" class="skill-table-row" style="border-bottom: 1px solid {{accentColor}}08;">
                 <text class="skill-td-name skill-td-zh">{{item.displayName}}</text>
                 <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.growth || 0}}" data-col="right" data-idx="{{index}}" bindinput="onSkillGrowthInput" />
-                <text wx:else class="skill-td-num" style="color: {{item.growth > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.growth || 0}}</text>
+                <text wx:else class="skill-td-num" style="color: {{item.growth > 0 ? accentColor : 'var(--text-20)'}};">{{item.growth || 0}}</text>
                 <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.occ || 0}}" data-col="right" data-idx="{{index}}" bindinput="onSkillOccInput" />
-                <text wx:else class="skill-td-num" style="color: {{item.occ > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.occ || 0}}</text>
+                <text wx:else class="skill-td-num" style="color: {{item.occ > 0 ? accentColor : 'var(--text-20)'}};">{{item.occ || 0}}</text>
                 <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.int || 0}}" data-col="right" data-idx="{{index}}" bindinput="onSkillIntInput" />
-                <text wx:else class="skill-td-num" style="color: {{item.int > 0 ? accentColor : 'rgba(232,220,196,0.2)'}};">{{item.int || 0}}</text>
+                <text wx:else class="skill-td-num" style="color: {{item.int > 0 ? accentColor : 'var(--text-20)'}};">{{item.int || 0}}</text>
                 <input wx:if="{{cocSkillEditing}}" class="skill-td-input" type="number" value="{{item.current}}" data-col="right" data-idx="{{index}}" bindinput="onSkillCurrentInput" />
                 <text wx:else class="skill-td-pct" style="color: {{item.color}};">{{item.current}}%</text>
               </view>
@@ -821,7 +821,7 @@
             >
               <text class="weapon-entry-name {{item.name ? '' : 'empty'}}">{{item.name || '暂无'}}</text>
               <view class="weapon-entry-attune" catchtap="onWeaponAttuneDirect" data-key="{{item.key}}">
-                <view class="weapon-attune-dot" style="border-color: {{item.attuned ? accentColor : 'rgba(232,220,196,0.2)'}}; background: {{item.attuned ? accentColor : 'transparent'}};"></view>
+                <view class="weapon-attune-dot" style="border-color: {{item.attuned ? accentColor : 'var(--text-20)'}}; background: {{item.attuned ? accentColor : 'transparent'}};"></view>
               </view>
               <text class="weapon-entry-ability">{{item.ability || '—'}}</text>
               <text class="weapon-entry-hit">{{item.hitBonus || '—'}}</text>
@@ -872,7 +872,7 @@
             >
               <text class="weapon-entry-name {{item.name ? '' : 'empty'}}">{{item.name || '暂无'}}</text>
               <view class="weapon-entry-attune" catchtap="onEquipmentAttuneDirect" data-key="{{item.key}}">
-                <view class="weapon-attune-dot" style="border-color: {{item.attuned ? accentColor : 'rgba(232,220,196,0.2)'}}; background: {{item.attuned ? accentColor : 'transparent'}};"></view>
+                <view class="weapon-attune-dot" style="border-color: {{item.attuned ? accentColor : 'var(--text-20)'}}; background: {{item.attuned ? accentColor : 'transparent'}};"></view>
               </view>
               <text class="weapon-entry-hit">{{item.weight || '—'}}</text>
               <text class="weapon-entry-damage">{{item.slot || '—'}}</text>
@@ -1102,7 +1102,7 @@
         <view class="dh-attr-grid-3x2">
           <view wx:for="{{dhAttributes}}" wx:key="key" class="dh-attr-cell-v2">
             <view class="dh-attr-star" catchtap="onToggleDhAttrFilled" data-key="{{item.key}}">
-              <text style="color: {{dhAttrFilled[item.key] ? accentColor : 'rgba(232,220,196,0.15)'}};">{{dhAttrFilled[item.key] ? '✦' : '✧'}}</text>
+              <text style="color: {{dhAttrFilled[item.key] ? accentColor : 'var(--text-15)'}};">{{dhAttrFilled[item.key] ? '✦' : '✧'}}</text>
             </view>
             <text class="dh-attr-label-v2">{{item.label}}</text>
             <input wx:if="{{editingDhAttrs}}" class="dh-attr-input-v2" type="number" value="{{item.value}}" data-key="{{item.key}}" bindinput="onDhAttrInput" />
@@ -1192,9 +1192,6 @@
             </view>
             <view class="dh-bar-bg">
               <view class="dh-bar-fill" style="width: {{dhArmorMax > 0 ? (dhArmor / dhArmorMax * 100) : 0}}%; background: {{accentColor}};"></view>
-            </view>
-            <view class="dh-bar-dots">
-              <view wx:for="{{dhArmorMax}}" wx:key="*this" class="dh-bar-dot {{index < dhArmor ? 'filled' : ''}}" style="{{index < dhArmor ? 'background: ' + accentColor + ';' : ''}}"></view>
             </view>
           </view>
         </view>
@@ -1442,6 +1439,39 @@
             <text wx:else class="dh-inventory-placeholder">暂无冒险笔记</text>
           </view>
         </view>
+        <!-- 人物小传 -->
+        <view class="dh-backstory-block">
+          <text class="dh-sub-title">人物小传</text>
+          <view wx:if="{{editingDhBackstory}}" class="dh-backstory-edit">
+            <textarea class="dh-inventory-textarea" placeholder="输入人物小传..." placeholder-class="input-placeholder" maxlength="-1" value="{{editDhBackstoryBio}}" bindinput="onDhBackstoryBioInput" />
+          </view>
+          <view wx:else class="dh-backstory-preview" style="border-color: {{accentColor}}22; background: {{accentColor}}06;">
+            <text wx:if="{{dhBackstoryBio}}" class="dh-backstory-text">{{dhBackstoryBio}}</text>
+            <text wx:else class="dh-inventory-placeholder">暂无人物小传</text>
+          </view>
+        </view>
+        <!-- 大事记 -->
+        <view class="dh-backstory-block">
+          <text class="dh-sub-title">大事记</text>
+          <view wx:if="{{editingDhBackstory}}" class="dh-backstory-edit">
+            <textarea class="dh-inventory-textarea" placeholder="输入大事记..." placeholder-class="input-placeholder" maxlength="-1" value="{{editDhBackstoryMilestones}}" bindinput="onDhBackstoryMilestonesInput" />
+          </view>
+          <view wx:else class="dh-backstory-preview" style="border-color: {{accentColor}}22; background: {{accentColor}}06;">
+            <text wx:if="{{dhBackstoryMilestones}}" class="dh-backstory-text">{{dhBackstoryMilestones}}</text>
+            <text wx:else class="dh-inventory-placeholder">暂无大事记</text>
+          </view>
+        </view>
+        <!-- 冒险履历 -->
+        <view class="dh-backstory-block">
+          <text class="dh-sub-title">冒险履历</text>
+          <view wx:if="{{editingDhBackstory}}" class="dh-backstory-edit">
+            <textarea class="dh-inventory-textarea" placeholder="冒险名称 | 等级跨度 | 创伤 | 时间" placeholder-class="input-placeholder" maxlength="-1" value="{{editDhAdventureLog}}" bindinput="onDhAdventureLogInput" />
+          </view>
+          <view wx:else class="dh-backstory-preview" style="border-color: {{accentColor}}22; background: {{accentColor}}06;">
+            <text wx:if="{{dhAdventureLog}}" class="dh-backstory-text">{{dhAdventureLog}}</text>
+            <text wx:else class="dh-inventory-placeholder">暂无冒险履历</text>
+          </view>
+        </view>
         </view>
       </view>
 
@@ -1642,20 +1672,20 @@
 </view>
 
 <!-- st 指令对话框 -->
-<view wx:if="{{stDialogVisible}}" class="dialog-mask" bindtap="closeStDialog">
+<view wx:if="{{stDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" bindtap="closeStDialog">
   <view class="dialog-box" catchtap="stopPropagation">
     <view class="dialog-header">
-      <text class="dialog-title">粘贴 .st 指令</text>
+      <text class="dialog-title">{{system === 'DAGGERHEART' ? '导入 DHSheet JSON' : '粘贴 .st 指令'}}</text>
       <text class="dialog-close" bindtap="closeStDialog">✕</text>
     </view>
     <view class="dialog-body">
       <view class="dialog-tip">
-        <text>粘贴 .st 指令，确认后将更新角色卡数据</text>
+        <text>{{system === 'DAGGERHEART' ? '从 DHSheet (dhsheet.site) 导出 JSON 粘贴至此' : '粘贴 .st 指令，确认后将更新角色卡数据'}}</text>
       </view>
       <view class="form-item">
         <textarea
           class="form-textarea st-textarea"
-          placeholder="粘贴 .st 指令..."
+          placeholder="{{system === 'DAGGERHEART' ? '粘贴 DHSheet 导出的 JSON...' : '粘贴 .st 指令...'}}"
           placeholder-class="input-placeholder"
           maxlength="-1"
           value="{{stCommandText}}"
@@ -1671,7 +1701,7 @@
 </view>
 
 <!-- 背景故事弹窗（独立弹窗，不嵌入角色卡内） -->
-<view wx:if="{{backstoryDialogVisible}}" class="dialog-mask" bindtap="closeBackstoryDialog">
+<view wx:if="{{backstoryDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" bindtap="closeBackstoryDialog">
   <view class="dialog-box backstory-dialog" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title">{{backstoryDialogTitle}}</text>
@@ -1701,7 +1731,7 @@
 </view>
 
 <!-- 背包弹窗 -->
-<view wx:if="{{backpackDialogVisible}}" class="dialog-mask" bindtap="closeBackpackDialog">
+<view wx:if="{{backpackDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" bindtap="closeBackpackDialog">
   <view class="dialog-box backstory-dialog" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title">背包</text>
@@ -1731,7 +1761,7 @@
 </view>
 
 <!-- 背包弹窗（DND） -->
-<view wx:if="{{dndBackpackDialogVisible}}" class="dialog-mask" bindtap="closeDndBackpackDialog">
+<view wx:if="{{dndBackpackDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" bindtap="closeDndBackpackDialog">
   <view class="dialog-box backstory-dialog" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title">背包物品</text>
@@ -1761,7 +1791,7 @@
 </view>
 
 <!-- 经历弹窗 -->
-<view wx:if="{{experienceDialogVisible}}" class="dialog-mask" bindtap="closeExperienceDialog">
+<view wx:if="{{experienceDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" bindtap="closeExperienceDialog">
   <view class="dialog-box backstory-dialog" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title">{{experienceDialogType === 'value' ? '人物变化描述' : '经历模组'}}</text>
@@ -1786,7 +1816,7 @@
 </view>
 
 <!-- 武器编辑弹窗 -->
-<view wx:if="{{weaponDialogVisible}}" class="dialog-mask" catchtap="closeWeaponDialog">
+<view wx:if="{{weaponDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" catchtap="closeWeaponDialog">
   <view class="dialog-box backstory-dialog" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title">编辑武器</text>
@@ -1810,7 +1840,7 @@
       <view class="weapon-edit-row">
         <text class="weapon-edit-label">同调</text>
         <view class="weapon-attune-toggle {{weaponDialogAttuned ? 'active' : ''}}" catchtap="onWeaponAttuneToggle" style="border-color: {{accentColor}}33;">
-          <text style="color: {{weaponDialogAttuned ? accentColor : 'rgba(232,220,196,0.2)'}};">{{weaponDialogAttuned ? '● 已同调' : '○ 未同调'}}</text>
+          <text style="color: {{weaponDialogAttuned ? accentColor : 'var(--text-20)'}};">{{weaponDialogAttuned ? '● 已同调' : '○ 未同调'}}</text>
         </view>
       </view>
       <view class="weapon-edit-row">
@@ -1836,7 +1866,7 @@
     </view>
     <view wx:else class="weapon-detail-view">
       <view class="weapon-detail-row"><text class="weapon-detail-label">名称</text><text class="weapon-detail-value">{{weaponDialogName || '暂无'}}</text></view>
-      <view class="weapon-detail-row"><text class="weapon-detail-label">同调</text><text class="weapon-detail-value" style="color: {{weaponDialogAttuned ? accentColor : 'rgba(232,220,196,0.4)'}};">{{weaponDialogAttuned ? '● 已同调' : '○ 未同调'}}</text></view>
+      <view class="weapon-detail-row"><text class="weapon-detail-label">同调</text><text class="weapon-detail-value" style="color: {{weaponDialogAttuned ? accentColor : 'var(--text-40)'}};">{{weaponDialogAttuned ? '● 已同调' : '○ 未同调'}}</text></view>
       <view class="weapon-detail-row"><text class="weapon-detail-label">特性</text><text class="weapon-detail-value">{{weaponDialogProperties || '暂无'}}</text></view>
       <view class="weapon-detail-row"><text class="weapon-detail-label">使用属性</text><text class="weapon-detail-value">{{weaponDialogAbility || '暂无'}}</text></view>
       <view class="weapon-detail-row"><text class="weapon-detail-label">命中加值</text><text class="weapon-detail-value">{{weaponDialogHitBonus || '暂无'}}</text></view>
@@ -1848,7 +1878,7 @@
 </view>
 
 <!-- 装备编辑弹窗 -->
-<view wx:if="{{equipmentDialogVisible}}" class="dialog-mask" catchtap="closeEquipmentDialog">
+<view wx:if="{{equipmentDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" catchtap="closeEquipmentDialog">
   <view class="dialog-box backstory-dialog" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title">编辑装备</text>
@@ -1872,7 +1902,7 @@
       <view class="weapon-edit-row">
         <text class="weapon-edit-label">同调</text>
         <view class="weapon-attune-toggle {{equipmentDialogAttuned ? 'active' : ''}}" catchtap="onEquipmentAttuneToggle" style="border-color: {{accentColor}}33;">
-          <text style="color: {{equipmentDialogAttuned ? accentColor : 'rgba(232,220,196,0.2)'}};">{{equipmentDialogAttuned ? '● 已同调' : '○ 未同调'}}</text>
+          <text style="color: {{equipmentDialogAttuned ? accentColor : 'var(--text-20)'}};">{{equipmentDialogAttuned ? '● 已同调' : '○ 未同调'}}</text>
         </view>
       </view>
       <view class="weapon-edit-row">
@@ -1890,7 +1920,7 @@
     </view>
     <view wx:else class="weapon-detail-view">
       <view class="weapon-detail-row"><text class="weapon-detail-label">名称</text><text class="weapon-detail-value">{{equipmentDialogName || '暂无'}}</text></view>
-      <view class="weapon-detail-row"><text class="weapon-detail-label">同调</text><text class="weapon-detail-value" style="color: {{equipmentDialogAttuned ? accentColor : 'rgba(232,220,196,0.4)'}};">{{equipmentDialogAttuned ? '● 已同调' : '○ 未同调'}}</text></view>
+      <view class="weapon-detail-row"><text class="weapon-detail-label">同调</text><text class="weapon-detail-value" style="color: {{equipmentDialogAttuned ? accentColor : 'var(--text-40)'}};">{{equipmentDialogAttuned ? '● 已同调' : '○ 未同调'}}</text></view>
       <view class="weapon-detail-row"><text class="weapon-detail-label">特性</text><text class="weapon-detail-value">{{equipmentDialogProperties || '暂无'}}</text></view>
       <view class="weapon-detail-row"><text class="weapon-detail-label">重量</text><text class="weapon-detail-value">{{equipmentDialogWeight || '暂无'}}</text></view>
       <view class="weapon-detail-row"><text class="weapon-detail-label">装备部位</text><text class="weapon-detail-value">{{equipmentDialogSlot || '暂无'}}</text></view>
@@ -1900,7 +1930,7 @@
 </view>
 
 <!-- 特性弹窗 -->
-<view wx:if="{{featureDialogVisible}}" class="dialog-mask" catchtap="closeFeatureDialog">
+<view wx:if="{{featureDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" catchtap="closeFeatureDialog">
   <view class="dialog-box backstory-dialog" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title">{{featureDialogType === 'classFeature' ? '编辑职业特性' : featureDialogType === 'raceFeature' ? '编辑种族特性' : '编辑专长'}}</text>
@@ -1940,7 +1970,7 @@
 </view>
 
 <!-- 法术编辑弹窗 -->
-<view wx:if="{{spellDialogVisible}}" class="dialog-mask" catchtap="closeSpellDialog">
+<view wx:if="{{spellDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" catchtap="closeSpellDialog">
   <view class="dialog-box backstory-dialog" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title">编辑法术</text>
@@ -1980,20 +2010,20 @@
         <view class="weapon-edit-row">
           <text class="weapon-edit-label">仪式施法</text>
           <view class="weapon-attune-toggle {{spellDialogRitual ? 'active' : ''}}" catchtap="onSpellDialogToggle" data-field="ritual" style="border-color: {{accentColor}}33;">
-            <text style="color: {{spellDialogRitual ? accentColor : 'rgba(232,220,196,0.2)'}};">{{spellDialogRitual ? '● 是' : '○ 否'}}</text>
+            <text style="color: {{spellDialogRitual ? accentColor : 'var(--text-20)'}};">{{spellDialogRitual ? '● 是' : '○ 否'}}</text>
           </view>
         </view>
         <view class="weapon-edit-row">
           <text class="weapon-edit-label">VSM 成分</text>
           <view class="spell-vsm-toggles">
             <view class="weapon-attune-toggle spell-vsm-toggle {{spellDialogVerbal ? 'active' : ''}}" catchtap="onSpellDialogToggle" data-field="verbal" style="border-color: {{accentColor}}33;">
-              <text style="color: {{spellDialogVerbal ? accentColor : 'rgba(232,220,196,0.2)'}};">V 声音</text>
+              <text style="color: {{spellDialogVerbal ? accentColor : 'var(--text-20)'}};">V 声音</text>
             </view>
             <view class="weapon-attune-toggle spell-vsm-toggle {{spellDialogSomatic ? 'active' : ''}}" catchtap="onSpellDialogToggle" data-field="somatic" style="border-color: {{accentColor}}33;">
-              <text style="color: {{spellDialogSomatic ? accentColor : 'rgba(232,220,196,0.2)'}};">S 姿势</text>
+              <text style="color: {{spellDialogSomatic ? accentColor : 'var(--text-20)'}};">S 姿势</text>
             </view>
             <view class="weapon-attune-toggle spell-vsm-toggle {{spellDialogMaterial ? 'active' : ''}}" catchtap="onSpellDialogToggle" data-field="material" style="border-color: {{accentColor}}33;">
-              <text style="color: {{spellDialogMaterial ? accentColor : 'rgba(232,220,196,0.2)'}};">M 材料</text>
+              <text style="color: {{spellDialogMaterial ? accentColor : 'var(--text-20)'}};">M 材料</text>
             </view>
           </view>
         </view>
@@ -2032,13 +2062,13 @@
         <view class="weapon-detail-row"><text class="weapon-detail-label">伤害</text><text class="weapon-detail-value">{{spellDialogDamage || '暂无'}}</text></view>
         <view class="weapon-detail-row"><text class="weapon-detail-label">伤害类型</text><text class="weapon-detail-value">{{spellDialogDamageType || '暂无'}}</text></view>
         <view class="weapon-detail-row"><text class="weapon-detail-label">关键属性</text><text class="weapon-detail-value">{{spellDialogAbility || '暂无'}}</text></view>
-        <view class="weapon-detail-row"><text class="weapon-detail-label">仪式施法</text><text class="weapon-detail-value" style="color: {{spellDialogRitual ? accentColor : 'rgba(232,220,196,0.4)'}};">{{spellDialogRitual ? '● 是' : '○ 否'}}</text></view>
+        <view class="weapon-detail-row"><text class="weapon-detail-label">仪式施法</text><text class="weapon-detail-value" style="color: {{spellDialogRitual ? accentColor : 'var(--text-40)'}};">{{spellDialogRitual ? '● 是' : '○ 否'}}</text></view>
         <view class="weapon-detail-row"><text class="weapon-detail-label">VSM 成分</text><text class="weapon-detail-value">
-          <text style="color: {{spellDialogVerbal ? accentColor : 'rgba(232,220,196,0.4)'}};">V</text>
+          <text style="color: {{spellDialogVerbal ? accentColor : 'var(--text-40)'}};">V</text>
           <text> </text>
-          <text style="color: {{spellDialogSomatic ? accentColor : 'rgba(232,220,196,0.4)'}};">S</text>
+          <text style="color: {{spellDialogSomatic ? accentColor : 'var(--text-40)'}};">S</text>
           <text> </text>
-          <text style="color: {{spellDialogMaterial ? accentColor : 'rgba(232,220,196,0.4)'}};">M</text>
+          <text style="color: {{spellDialogMaterial ? accentColor : 'var(--text-40)'}};">M</text>
         </text></view>
         <view class="weapon-detail-row"><text class="weapon-detail-label">等级</text><text class="weapon-detail-value">{{spellDialogLevel || '暂无'}}</text></view>
         <view class="weapon-detail-row"><text class="weapon-detail-label">学派</text><text class="weapon-detail-value">{{spellDialogSchool || '暂无'}}</text></view>
@@ -2053,7 +2083,7 @@
 </view>
 
 <!-- 头像裁剪弹窗 -->
-<view wx:if="{{cropDialogVisible}}" class="dialog-mask" catchtouchmove="stopPropagation">
+<view wx:if="{{cropDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" catchtouchmove="stopPropagation">
   <view class="crop-dialog-box" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title">裁剪头像</text>
@@ -2091,7 +2121,7 @@
 <canvas canvas-id="cropCanvas" class="crop-canvas-hidden"></canvas>
 
 <!-- 武器弹窗 -->
-<view wx:if="{{dhWeaponDialogVisible}}" class="dialog-mask" bindtap="closeDhWeaponDialog">
+<view wx:if="{{dhWeaponDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" bindtap="closeDhWeaponDialog">
   <view class="dialog-box" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title" style="color: {{accentColor}};">武器详情</text>
@@ -2141,7 +2171,7 @@
 </view>
 
 <!-- 护甲弹窗 -->
-<view wx:if="{{dhArmorDialogVisible}}" class="dialog-mask" bindtap="closeDhArmorDialog">
+<view wx:if="{{dhArmorDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" bindtap="closeDhArmorDialog">
   <view class="dialog-box" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title" style="color: {{accentColor}};">护甲详情</text>
@@ -2190,7 +2220,7 @@
 </view>
 
 <!-- 特性弹窗 -->
-<view wx:if="{{dhFeatureDialogVisible}}" class="dialog-mask" bindtap="closeDhFeatureDialog">
+<view wx:if="{{dhFeatureDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" bindtap="closeDhFeatureDialog">
   <view class="dialog-box" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title" style="color: {{accentColor}};">特性详情</text>
@@ -2225,7 +2255,7 @@
 </view>
 
 <!-- 领域卡弹窗 -->
-<view wx:if="{{dhDomainDialogVisible}}" class="dialog-mask" bindtap="closeDhDomainDialog">
+<view wx:if="{{dhDomainDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}" bindtap="closeDhDomainDialog">
   <view class="dialog-box" catchtap="stopPropagation">
     <view class="dialog-header">
       <text class="dialog-title" style="color: {{accentColor}};">领域卡详情</text>
@@ -2269,6 +2299,37 @@
         <view class="weapon-detail-row"><text class="weapon-detail-label">属性</text><text class="weapon-detail-value">{{dhDomainDialogAbility || '暂无'}}</text></view>
         <view class="weapon-detail-row"><text class="weapon-detail-label">RC</text><text class="weapon-detail-value">{{dhDomainDialogRC}}</text></view>
         <view class="weapon-detail-row"><text class="weapon-detail-label">描述</text><text class="weapon-detail-value">{{dhDomainDialogDesc || '暂无'}}</text></view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 未登录提示弹窗 -->
+<view wx:if="{{loginDialogVisible}}" class="dialog-mask {{theme === 'light' ? 'theme-light' : ''}}">
+  <view class="dialog-box login-dialog" catchtap="stopPropagation">
+    <view class="dialog-header">
+      <text class="dialog-title">{{isRegisterMode ? '注册' : '登录'}}</text>
+      <text class="dialog-close" bindtap="cancelLoginDialog">✕</text>
+    </view>
+    <view class="dialog-body">
+      <text class="dialog-desc login-dialog-desc">登录后才能修改角色卡</text>
+      <view class="login-field">
+        <text class="login-field-label">昵称</text>
+        <input class="login-field-input" type="nickname" value="{{loginName}}" bindinput="onLoginNameInput" bindblur="onLoginNameBlur" placeholder="请输入昵称" />
+      </view>
+      <view class="login-field">
+          <text class="login-field-label">密码</text>
+          <input class="login-field-input" type="password" value="{{loginPassword}}" bindinput="onLoginPasswordInput" placeholder="请输入密码" />
+        </view>
+        <view class="login-field" wx:if="{{isRegisterMode}}">
+          <text class="login-field-label">邀请码</text>
+          <input class="login-field-input" value="{{loginInviteCode}}" bindinput="onLoginInviteInput" placeholder="请输入邀请码" />
+        </view>
+      <view class="login-dialog-btn-wrap">
+        <button class="login-dialog-confirm-btn" bindtap="doLoginSubmit">{{isRegisterMode ? '注册' : '登录'}}</button>
+      </view>
+      <view class="login-toggle" bindtap="toggleLoginMode">
+        <text>{{isRegisterMode ? '已有账号？去登录' : '没有账号？去注册'}}</text>
       </view>
     </view>
   </view>
